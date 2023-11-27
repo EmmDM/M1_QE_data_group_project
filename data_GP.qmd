@@ -43,16 +43,10 @@ library(readxl)
 Nous avons ici modifié la base de donnée de la World Bank afin de garder les critères interessants pour notre problématique.
 
 ```{r}
-
-library(readxl)
-
 # Spécifier le chemin du fichier Excel
 chemin <- "C:/Users/Victoire/Documents/Data Base Group project - World bank.xls"
-
 # Lire les données à partir du fichier Excel
 donnees <- read_excel(chemin)
-
-
 
 ```
 =======
@@ -98,22 +92,13 @@ Worldbank <- Worldbank %>% select(-`1960`,-`1961`,-`1962`,-`1963`,-`1964`,-`1965
 
 >>>>>>> 0941e0ec656b0f031354ee4303f649d57021e6a
 
-```{r}
-#Nettoyage base de données World Bank
 
-Worldbank <- Worldbank %>% select(-`1961`,-`1962`,-`1963`,-`1964`,-`1965`,-`1966`,-`1967`,-`1968`,-`1969`,-`1970`,-`1971`,-`1972`,-`1973`,-`1974`,-`1975`,-`1976`,-`1977`,-`1978`,-`1979`,-`1980`,-`1981`,-`1982`,-`1983`,-`1984`,-`1985`,-`1986`,-`1987`,-`1988`,-`1989`,-`2021`, -`2022`) #On conserve seulement période de 1990 à 2020 afin de faire des comparaisons avec les données de l'OCDE. On supprime les données 2021 et 2022 car il y a un manque de données
-
-```
 ```{r}
 # Un tableau par fichier de données qui donne des informations basiques sur ce fichier, en incluant le nombre de lignes et de colonnes (description of Raw data file or clean data file ?)
 ```
 
 ```{r} 
 # Tri des variables base de données OCDE 
-
-
-# Charger les bibliothèques
-library(dplyr)
 
 
 Variables_to_select <- c(
@@ -157,11 +142,77 @@ OCDE_data_filtered <- OCDE_GG %>%
   filter(Variable %in% Variables_to_select)
 
 
-# Tri des variables base de données World bank
-library(dplyr)
+# Description des variables séléctionnées OCDE
 
-# Define the variables to select
-library(dplyr)
+# "Productivité CO2 induite par la production": Mesure de l'efficacité dans la réduction des émissions de CO2 pendant les processus de fabrication.
+# 
+# "PIB par unité d'émission de CO2 liée à l'énergie": Évaluation de la performance économique relative à l'émission de CO2 associée à la production d'énergie.
+# 
+# "Intensité CO2 induite par la production, émissions de CO2 liées à l'énergie, par habitant": Indicateur de la quantité de CO2 émise par habitant due à la production et à la consommation d'énergie.
+# 
+# "Émissions de CO2 induites par la production": Mesure totale des gaz à effet de serre générés lors des processus de production.
+# 
+# "Intensité énergétique, ATE par habitant": Évaluation de la consommation énergétique par habitant, ajustée en fonction de l'efficacité énergétique.
+# 
+# "Approvisionnement total en énergie en énergies renouvelables": Quantité globale d'énergie provenant de sources renouvelables.
+# 
+# "Production électrique totale en énergies renouvelables": Évaluation de la production d'électricité issue de sources d'énergie renouvelables.
+# 
+# "Exposition moyenne de la population aux PM2.5": Niveau moyen d'exposition de la population aux particules fines PM2.5.
+# 
+# "Pourcentage de la population exposée à plus de 10 microgrammes/m3": Proportion de la population confrontée à des niveaux élevés de PM2.5.
+# 
+# "Technologie et innovation: Brevets": Nombre de brevets déposés, reflétant l'activité innovante et technologique.
+# 
+# "Recettes provenant des taxes liées à l'environnement": Montant des revenus générés par les taxes environnementales.
+# 
+# "Soutien aux consommateurs de combustibles fossiles": Indicateur des subventions allouées aux consommateurs de combustibles fossiles.
+# 
+# "Soutien au pétrole": Montant des subventions spécifiquement attribuées au secteur pétrolier.
+# 
+# "Soutien à l'électricité": Niveau de soutien financier accordé au secteur de l'électricité.
+# 
+# "Soutien total aux combustibles fossiles": Somme des subventions allouées aux consommateurs et producteurs de combustibles fossiles.
+# 
+# "Zone marine protégée": Étendue océanique légalement préservée pour la conservation de la biodiversité.
+# 
+# "Zone terrestre protégée": Surface terrestre réservée légalement à la protection de la faune et de la flore.
+# 
+# "PIB réel": Mesure ajustée de la production économique, tenant compte de l'inflation.
+# 
+# "PIB réel par habitant": PIB réel divisé par la population, indiquant le niveau de vie moyen.
+# 
+# "Migration nette": Différence entre le nombre d'immigrants et d'émigrants, influençant la croissance démographique.
+# 
+# "Consommation d'énergie": Quantité totale d'énergie consommée dans une économie.
+# 
+# "Émissions de CO2 induites par la production": Mesure des émissions de CO2 attribuables aux activités de production.
+# 
+# "Productivité énergétique": Efficacité dans l'utilisation de l'énergie pour la production économique.
+# 
+# "PIB par unité d'ATE": Évaluation de la productivité économique par unité d'ATE (énergie ajustée au travail).
+# 
+# "Approvisionnements totaux en énergie": Total de l'énergie disponible pour une économie.
+# 
+# "Prélèvements bruts d'eau douce par habitant": Quantité totale d'eau douce prélevée par habitant.
+# 
+# "Stress hydrique, total des prélèvements d'eau douce": Mesure de la pression exercée sur les ressources hydriques en raison des prélèvements totaux d'eau douce.
+# 
+# "Pourcentage de la population exposée à plus de 35 microgrammes/m3": Proportion de la population confrontée à des niveaux élevés de PM2.5.
+# 
+# "Mortalité due à l'exposition aux PM2.5": Nombre de décès attribués à l'exposition aux particules fines PM2.5.
+# 
+# "Coûts en bien-être dus à l'exposition aux PM2.5": Évaluation des impacts économiques négatifs liés à la santé dus à l'exposition aux PM2.5.
+# 
+# "PIB équivalent": Mesure agrégée du bien-être économique, prenant en compte des facteurs tels que l'environnement et la santé.
+# 
+# "Pourcentage de la population exposée aux journées chaudes": Proportion de la population subissant des températures élevées.
+# 
+# "Pourcentage de la population exposée aux inondations fluviales": Part de la population résidant dans des zones exposées aux inondations fluviales.
+
+
+# Tri des variables base de données World bank
+
 
 # Define the variables to select
 indicators_to_select <- c(
@@ -214,7 +265,86 @@ worldbank_filtered <- Worldbank %>%
 ```
 
 ```{r}
-# Description des variables séléctionnées
+# Description des variables séléctionnées Worldbank
+
+# "Population urbaine (% du total)": Pourcentage de la population résidant en milieu urbain par rapport à la population totale.
+# 
+# "Population urbaine": Nombre total d'habitants vivant en milieu urbain.
+# 
+# "Croissance de la population urbaine (% annuel)": Taux de croissance annuel de la population urbaine.
+# 
+# "Population, total": Nombre total d'habitants, incluant les zones urbaines et rurales.
+# 
+# "Croissance de la population (% annuel)": Taux de croissance annuel de la population totale.
+# 
+# "Agriculture, valeur ajoutée (% du PIB)": Contribution de la valeur ajoutée de l'agriculture au produit intérieur brut (PIB).
+# 
+# "Zones terrestres et marines protégées (% du territoire total)": Pourcentage du territoire total réservé aux zones terrestres et marines protégées.
+# 
+# "Zones marines protégées (% des eaux du territoire)": Proportion des eaux territoriales réservée aux zones marines protégées.
+# 
+# "Émissions/éliminations nettes de GES attribuables au changement d'affectation des terres et à la foresterie (Mt d’équivalents CO2)": Quantité nette d'émissions ou de séquestration de gaz à effet de serre résultant des changements dans l'utilisation des terres et de la foresterie.
+# 
+# "Note sur les progrès de réduction des risques de catastrophes (échelle de 1 à 5, 5 étant la meilleure note)": Évaluation des progrès dans la réduction des risques de catastrophes naturelles sur une échelle de 1 à 5.
+# 
+# "Émissions totales de GES (variation depuis 1990, %)": Variation en pourcentage des émissions totales de gaz à effet de serre depuis 1990.
+# 
+# "Émissions totales de GES (kt d’équivalent CO2)": Total des émissions de gaz à effet de serre mesurées en milliers de tonnes d'équivalents CO2.
+# 
+# "Zones protégées à l'échelle nationale (% du territoire total)": Pourcentage du territoire national réservé à des zones protégées.
+# 
+# "Retraits annuels d’eau douce, total (% des ressources internes)": Pourcentage des ressources internes utilisé par les retraits annuels d'eau douce.
+# 
+# "Retraits annuels d’eau douce, total (milliards de mètres cubes)": Volume total des retraits annuels d'eau douce mesuré en milliards de mètres cubes.
+# 
+# "Autres émissions de gaz à effet de serre, HFC, PFC et SF6 (milliers de tonnes métriques d’équivalent CO2)": Émissions de gaz à effet de serre autres que le dioxyde de carbone, mesurées en milliers de tonnes métriques d'équivalent CO2.
+# 
+# "Émissions de CO2 (tonnes métriques par habitant)": Quantité de CO2 émise par habitant, mesurée en tonnes métriques.
+# 
+# "Sécheresses, inondations, températures extrêmes (en % de la population, moyenne de 1990 à 2009)": Pourcentage moyen de la population exposée à des événements climatiques extrêmes entre 1990 et 2009.
+# 
+# "Émissions de CO2 (kg par $ US de 2010 de PIB)": Intensité des émissions de CO2 par unité de PIB, mesurée en kilogrammes par dollar américain de 2010.
+# 
+# "Intensité en CO2 (kg par kg d’utilisation d’énergie en équivalent pétrole)": Mesure de l'intensité des émissions de CO2 par unité d'utilisation d'énergie, convertie en équivalent pétrole.
+# 
+# "Utilisation d’énergie (kg d’équivalent pétrole par habitant)": Quantité d'énergie utilisée par habitant, mesurée en kilogrammes d'équivalent pétrole.
+# 
+# "Consommation d’électricité (KWh par habitant)": Quantité d'électricité consommée par habitant, mesurée en kilowattheures.
+# 
+# "Utilisation d’énergie (en kg d’équivalent pétrole) pour 1 000 $ de PIB (PPA constants de 2011)": Consommation d'énergie par unité de PIB, ajustée en parité de pouvoir d'achat constante de 2011.
+# 
+# "Consommation d’énergies renouvelables (% de la consommation totale d’énergie)": Pourcentage de la consommation totale d'énergie provenant de sources renouvelables.
+# 
+# "Production d’électricité à partir de sources d’énergie renouvelables, hors énergie hydroélectrique (% du total)": Pourcentage de la production totale d'électricité provenant de sources d'énergie renouvelables, excluant l'hydroélectricité.
+# 
+# "Production d’électricité à partir de sources d’énergie renouvelables, hors énergie hydroélectrique (kWh)": Quantité d'électricité produite à partir de sources d'énergie renouvelables, excluant l'hydroélectricité, mesurée en kilowattheures.
+# 
+# "Accès à l’électricité (% de la population)": Pourcentage de la population ayant accès à l'électricité.
+# 
+# "Hauteur moyenne des précipitations (mm par an)": Moyenne annuelle de la hauteur des précipitations mesurée en millimètres.
+# 
+# "Terres agricoles (km carrés)": Surface totale utilisée pour l'agriculture, mesurée en kilomètres carrés.
+# 
+# "Émissions de CO2 (kg par $ PPA de 2011 de PIB)": Intensité des émissions de CO2 par unité de PIB, ajustée en parité de pouvoir d'achat constante de 2011 et mesurée en kilogrammes par dollar.
+# 
+# "Émissions de CO2 (kt)": Total des émissions de CO2 mesuré en milliers de tonnes.
+# 
+# "Production d’électricité renouvelable (% de la production totale d’électricité)": Pourcentage de la production totale d'électricité provenant de sources d'énergie renouvelables.
+# 
+# "Production d’électricité à partir de sources pétrolières (% du total)": Pourcentage de la production totale d'électricité provenant de sources pétrolières.
+# 
+# "Production d’électricité à partir de sources nucléaires (% du total)": Pourcentage de la production totale d'électricité provenant de sources nucléaires.
+# 
+# "Production d’électricité à partir de sources de gaz naturel (% du total)": Pourcentage de la production totale d'électricité provenant de sources de gaz naturel.
+# 
+# "Production d’électricité à partir de sources hydroélectriques (% du total)": Proportion de la production totale d'électricité générée à partir de sources hydroélectriques.
+# 
+# "Production d’électricité à partir de sources de charbon (% du total)": Pourcentage de la production totale d'électricité provenant de sources de charbon.
+# 
+# "Surface forestière (% du territoire)": Pourcentage du territoire couvert par des surfaces forestières.
+# 
+# "Terres agricoles (% du territoire)": Proportion du territoire utilisée à des fins agricoles.
+
 ```
 
 ```{r}
