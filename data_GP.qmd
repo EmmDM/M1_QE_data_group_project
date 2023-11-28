@@ -22,7 +22,7 @@ And for the World Bank : https://donnees.banquemondiale.org/theme/changement-cli
 #Description des sources
 ```
 
->>>>>>> 0941e0ec656b0f031354ee4303f649d57021e6a8
+
 ```{r}
 #Description de la question de recherche
 ```
@@ -49,7 +49,7 @@ chemin <- "C:/Users/Victoire/Documents/Data Base Group project - World bank.xls"
 donnees <- read_excel(chemin)
 
 ```
-=======
+
 
 ```{r}
 here :: i_am("M1_QE_data_group_project.Rproj")
@@ -71,20 +71,6 @@ Worldbank <- Worldbank %>% select(-`1960`,-`1961`,-`1962`,-`1963`,-`1964`,-`1965
 # Un tableau par fichier de données qui donne des informations basiques sur ce fichier, en incluant le nombre de lignes et de colonnes (description of Raw data file or clean data file ?)
 ```
 
-```{r} 
-# Tri des variables base de données OCDE 
-
-
-# Tri des variables base de données World bank
-```
-
-```{r}
-# Description des variables séléctionnées
-```
-
-```{r}
-
-```
 
 ```{r}
 # Description du data cleaning et du data joining
@@ -93,52 +79,48 @@ Worldbank <- Worldbank %>% select(-`1960`,-`1961`,-`1962`,-`1963`,-`1964`,-`1965
 >>>>>>> 0941e0ec656b0f031354ee4303f649d57021e6a
 
 
-```{r}
-# Un tableau par fichier de données qui donne des informations basiques sur ce fichier, en incluant le nombre de lignes et de colonnes (description of Raw data file or clean data file ?)
-```
-
 ```{r} 
 # Tri des variables base de données OCDE 
 
 
 Variables_to_select <- c(
-  "Productivité CO2 induite par la production",
-  "PIB par unité d'émission de CO2 liée à l'énergie",
+  "Productivité CO2 induite par la production, PIB par unité d'émission de CO2 liée à l'énergie",
   "Intensité CO2 induite par la production, émissions de CO2 liées à l'énergie, par habitant",
   "Émissions de CO2 induites par la production",
   "Intensité énergétique, ATE par habitant",
-  "Approvisionnement total en énergie en énergies renouvelables",
-  "Production électrique totale en énergies renouvelables",
+  "Energies renouvalabes,% approvisionnement total en énergie",
+  "Electricité renouvelable, % de la production électrique totale",
   "Exposition moyenne de la population aux PM2.5",
   "Pourcentage de la population exposée à plus de 10 microgrammes/m3",
-  "Technologie et innovation: Brevets",
-  "Recettes provenant des taxes liées à l'environnement",
-  "Soutien aux consommateurs de combustibles fossiles",
-  "Soutien au pétrole",
-  "Soutien à l'électricité",
-  "Soutien total aux combustibles fossiles",
-  "Zone marine protégée",
-  "Zone terrestre protégée",
+  "Développement de technologies liées à l'environnement, % inventions dans le monde",
+  "Développement de technologies liées à l'environnement, inventions par habitant",
+  "Recettes provenant des taxes liées à l'énergie, % recettes des taxes environnementales",
+  "Soutien aux consommateurs de combustibles fossiles, % recettes totales des taxes",
+  "Soutien au pétrole, % soutien total aux combustibles fossiles",
+  "Soutien à l'électricité, % soutien total aux combustibles fossiles",
+  "Soutien total aux combustibles fossiles, % recettes totales des taxes",
+  "Zone marine protégée, % zone économique exclusive totale",
+  "Zone terrestre protégée, % surface terrestre",
   "PIB réel",
   "PIB réel par habitant",
   "Migration nette",
-  "Consommation d'énergie",
-  "Émissions de CO2 induites par la production",
-  "Productivité énergétique",
+  "Consommation d'énergie par l'industrie, % consommation totale d'énergie",
+  "Consommation d'énergie par l'agriculture, % consommation totale d'énergie",
+  "Consommation d'énergie par les autres secteurs, % consommation totale d'énergie",
+  "Productivité énergétique, PIB par unité d'ATE",
   "PIB par unité d'ATE",
   "Approvisionnements totaux en énergie",
   "Prélèvements bruts d'eau douce par habitant",
-  "Stress hydrique, total des prélèvements d'eau douce",
+  "Stress hydrique, total des prélèvements d'eau douce en % des ressources internes renouvelables",
   "Pourcentage de la population exposée à plus de 35 microgrammes/m3",
   "Mortalité due à l'exposition aux PM2.5",
-  "Coûts en bien-être dus à l'exposition aux PM2.5",
-  "PIB équivalent",
+  "Coûts en bien-être dus à l'exposition aux PM2.5, PIB équivalent",
   "Pourcentage de la population exposée aux journées chaudes",
-  "de la population exposée aux inondations fluviales",
-  "Pourcentage de la population exp"
+  "Pourcentage de la population exposée aux journées glacées",
+  "Pourcentage de la population exposée aux inondations fluviales"
 )
 
-OCDE_data_filtered <- OCDE_GG %>%
+OCDE_data_filtere <- OCDE_GG %>%
   filter(Variable %in% Variables_to_select)
 
 
@@ -356,7 +338,41 @@ worldbank_filtered <- Worldbank %>%
 ```{r}
 # Description du data cleaning et du data joining
 ```
+``
+```{r}
+# Description des sources 
+ ## OCDE : La base de donnée provient de l'Organisation de coopération et de développement économique,crée en 1961, qui regroupe 38 pays membres. Elle leur permet de pouvoir partager des données, des analyses et des recommandation visant a améliorer les performances dans diverses domaines.Son but étant de favoriser la croissance économique inclusive et le progrès durable. Elle travaille en collaboration avec les pouvoirs publics, les acteurs économiques et sociaux, et les representants de la sociétée civile.Cette plateforme que nous avons choisis pour notre première base de donnée, est choisis par de nombreux dirigeants grâce à sa qualité et sa fiabilité. L'accès à des données sur lesquel nous pouvons nous aider, offrent des perspectives approfondies sur les défis mondiaux et facilite les prises de décisions.Ces données proviennent de ses pays membres qui partagent des normes communes en matières de collecte de donnée, facilitant ainsi la comptabilité de celles-ci.Elle réalise aussi des analyses appronfondies sur de nombreux sujets économiques, sociaux et environnementaux et publie des rapports, des études et des statistiques qui sont regulièrement mis à jourpour refléter l'évolution des tendances des pays membres. 
+
+
+## Worldbank : La Banque Mondiale est une Institution financière internationale ,crée en 1944, qui a financé plus de 12000 projets de développement. Elle offre des services de financements, d'expertise et de recherche afin de soutenir le developpement économique, et la reduction de la pauvreté. Elle se compose de 5 Institutions dont les deux plus importantes sont la Banque internationale pour la reconstruction et le développement (BIRD) et l'Association internationale de développement (IDA). Elle collabore avec les pays membres, les ONG, le secteur privé, et d'autres partenaires. En plus de sa mission de financement, la Banque mondiale collecte et publie des donnés. Sa base apellé World Development Indicators (WDI) contient des informations sur les pays du monde entiers couvrants des sujets tels que la croissance économique, la pauvreté, l'éducation ..etc A l'image de l'OCDE, cette mine d'information est utilisé par de nombreux dirigeants ainsi que des chercheurs afin de d'informer les prises de décisions en matière de développement assuré par des normes rigoureuses de collecte. Ses données sont également régulièrement mises à jour afin de réfleter les évolutions des pays concernés. 
+
+
+
+
 ```
 
+```{r}
+#Question de Recherche 
 
+# ## La conference de Rio+20 qui a eu lieu en 2012, a été un véritable lancement pour le développement durable. En effet c'est lors de cet evenement que les objectifs de  décarbonisation et de croissance verte ont été decidé. Ce sujet nous paraît important au vu de l'impact de l'activité humaine sur l'environnement, et d'autant plus en 2023 afin de faire des constats mais aussi de voir les évolutions des solutions envisagées voir deja mise en place. 
+# 
+# Notre Projet de recherche sera portée sur l'Analyse des tendances de transition écologique: une étude comparative des pays au sein et en dehors de l'OCDE entre 1990 et 2022. 
+# 
+# ###Nous aurons 3 grands axes de recherches: Le découplage de la croissance, les différentes polices mises en place et la Vulnérabilité grandissante de nos sociétés face aux urgences climatiques. 
+# 
+# Le terme découplage est habituellement utilisé pour désigner la possibilité d'une croissance économique, mesuré par une hausse du PIB, qui a lieu de manière simultanée à une baisse des consommations de ressources et des impacts environnementaux. 
+# Dans cette partie, nous allons mesurer le PIB et en voir sa composition en terme d'energie utilisé. Les énergies polluantes étant les moins coûteuses et plus génératrice de revenue, elles sont souvent la composante principale. L'efficacité de l'utilisation des ressources et la productivité du carbone seront également scrutées, en se concentrant sur des indicateurs tels que le PIB par unité d'émission de CO2. 
+# 
+# Dans un second temps, nous étudierons les pressions environnementales, analysant les tendances liées à l'intensité énergétique, à la qualité de l'air, et à l'adoption de source d'énergie renouvelable. Cette partie se penchera aussi sur les polices mises en place (taxes, subventions), et les efforts en R&D afin de favoriser la transition écologique. Elles nous permettrons également d'observer le lien de corrélation entre les mesures politiques et les résultats écologiques. 
+# 
+# 
+# Dans un dernier temps, nous évaluerons la vulnérabilité des pays aux événements liés au réchauffement climatique, tels que les inondations, les incendies et les températures extrêmes. Nous examinerons également le rôle des facteurs géographiques et démographiques dans l'influence de cette vulnérabilité. Les schémas de migrations de populations seront également examinés en tant que potentielles stratégies d'adaptation aux changements environnementaux. 
+# 
+# En conclusion, notre recherche ambitionne de fournir des perspectives sur les dynamiques de la transition écologiques , en comparant différents groupes de pays intérieur ou extérieur à l'OCDE. Nous appuierons notre démarche sur des représentations graphiques à l'aide de subplot, graphe divers, et d'autres utilisations de donnée à l'aide de R. 
+# ```
+
+
+```{r}
+
+```
 
