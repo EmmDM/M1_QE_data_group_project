@@ -55,6 +55,12 @@ Worldbank <- Worldbank %>% rename ("COU" = "Country Code", "Pays" = "Country Nam
 ```
 
 ```{r}
+# Number of rows and number of columns
+info_OCDE_GG <- data.frame(OCDE_GG)
+```
+
+
+```{r}
 # Un tableau par fichier de données qui donne des informations basiques sur ce fichier, en incluant le nombre de lignes et de colonnes (description of Raw data file or clean data file ?)
 ```
 
