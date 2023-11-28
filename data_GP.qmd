@@ -6,9 +6,7 @@ format: html
 
 Here the link to the github project : https://github.com/EmmDM/M1_QE_data_group_project
 
-Here the links to the original sources : 
-For the OECD : 
-https://stats.oecd.org/index.aspx?lang=fr&datasetcode=green_growth
+Here the links to the original sources : For the OECD : https://stats.oecd.org/index.aspx?lang=fr&datasetcode=green_growth
 
 And for the World Bank : https://donnees.banquemondiale.org/theme/changement-climatique
 
@@ -19,7 +17,6 @@ And for the World Bank : https://donnees.banquemondiale.org/theme/changement-cli
 ```{r}
 #Description de la question de recherche
 ```
-
 
 ```{r}
 #Séléction des librairies
@@ -32,7 +29,6 @@ library(readr)
 library(stringr)
 library(readxl)
 ```
-
 
 ```{r}
 here :: i_am("M1_QE_data_group_project.Rproj")
@@ -56,16 +52,20 @@ Worldbank <- Worldbank %>% rename ("COU" = "Country Code", "Pays" = "Country Nam
 
 ```{r}
 # Number of rows and number of columns
-info_OCDE_GG <- data.frame(OCDE_GG)
-```
+info_OCDE_GG <- OCDE_GG %>% summarise(ligne = nrow(.), colonne = ncol(.), Pays = n_distinct(COU, na.rm = TRUE), Variables = n_distinct(Variable, na.rm = TRUE))
+info_Worldbank <- Worldbank %>% summarise("ligne" = nrow(Worldbank),"colonne" = ncol(Worldbank ), Pays = n_distinct(COU, na.rm = TRUE), Variables = n_distinct(Variable, na.rm = TRUE))
 
+knitr :: kable(info_OCDE_GG, caption = "Information tableau de l'OCDE")
+knitr :: kable(info_Worldbank, caption = "Information tableau de la World Bank")
+
+
+```
 
 ```{r}
 # Un tableau par fichier de données qui donne des informations basiques sur ce fichier, en incluant le nombre de lignes et de colonnes (description of Raw data file or clean data file ?)
 ```
 
-
-```{r} 
+```{r}
 # # Tri des variables base de données OCDE 
 # 
 # Variables_to_select <- c(
@@ -405,8 +405,6 @@ non_OCDE_pays <- dataframe_new %>%  filter(!(`Pays` %in% OCDE_to_select))
 
 ```
 
-
 ```{r}
 # Description du data cleaning et du data joining
 ```
-
