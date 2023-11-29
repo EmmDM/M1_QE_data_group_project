@@ -6,23 +6,21 @@ echo : false
 ---
 ### Analyzing Ecological Transition Trends: A Comparative Study of OECD and Non-OECD Countries (1990-2022)
 
-**Here the link to the github project :** https://github.com/EmmDM/M1_QE_data_group_project
-
-**Here the links to the original sources : For the OECD :** https://stats.oecd.org/index.aspx?lang=fr&datasetcode=green_growth
-
-**And for the World Bank :** https://donnees.banquemondiale.org/theme/changement-climatique
+**Link to the github project :** https://github.com/EmmDM/M1_QE_data_group_project
 
 
 
-![Présentation OCDE](OCDE_logo.jpg)(https://www.hatvp.fr/wordpress/wp-content/uploads/2015/12/Logo_OCDE.jpg)
 
+
+
+![Présentation OCDE](OCDE_logo.jpg)**Here the links to the original sources : For the OECD :** https://stats.oecd.org/index.aspx?lang=fr&datasetcode=green_growth
 
 ### **Description des sources** 
 
 -   OCDE : La base de donnée provient de l'Organisation de coopération et de développement économique,crée en 1961, qui regroupe 38 pays membres. Elle leur permet de pouvoir partager des données, des analyses et des recommandation visant a améliorer les performances dans diverses domaines.Son but étant de favoriser la croissance économique inclusive et le progrès durable. Elle travaille en collaboration avec les pouvoirs publics, les acteurs économiques et sociaux, et les representants de la sociétée civile.Cette plateforme que nous avons choisis pour notre première base de donnée, est choisis par de nombreux dirigeants grâce à sa qualité et sa fiabilité. L'accès à des données sur lesquel nous pouvons nous aider, offrent des perspectives approfondies sur les défis mondiaux et facilite les prises de décisions.Ces données proviennent de ses pays membres qui partagent des normes communes en matières de collecte de donnée, facilitant ainsi la comptabilité de celles-ci.Elle réalise aussi des analyses appronfondies sur de nombreux sujets économiques, sociaux et environnementaux et publie des rapports, des études et des statistiques qui sont regulièrement mis à jourpour refléter l'évolution des tendances des pays membres.
 
 
-![Présenation de la World Bank](world_bank_logo.jpg) (https://bv.world/wp-content/uploads/2017/09/world-bank-logo.jpg)
+![Présenation de la World Bank](world_bank_logo.jpg) **Here the link for the World Bank :** https://donnees.banquemondiale.org/theme/changement-climatique
 
 -   Worldbank : La Banque Mondiale est une Institution financière internationale ,crée en 1944, qui a financé plus de 12000 projets de développement. Elle offre des services de financements, d'expertise et de recherche afin de soutenir le developpement économique, et la reduction de la pauvreté. Elle se compose de 5 Institutions dont les deux plus importantes sont la Banque internationale pour la reconstruction et le développement (BIRD) et l'Association internationale de développement (IDA). Elle collabore avec les pays membres, les ONG, le secteur privé, et d'autres partenaires. En plus de sa mission de financement, la Banque mondiale collecte et publie des donnés. Sa base apellé World Development Indicators (WDI) contient des informations sur les pays du monde entiers couvrants des sujets tels que la croissance économique, la pauvreté, l'éducation ..etc A l'image de l'OCDE, cette mine d'information est utilisé par de nombreux dirigeants ainsi que des chercheurs afin de d'informer les prises de décisions en matière de développement assuré par des normes rigoureuses de collecte. Ses données sont également régulièrement mises à jour afin de réfleter les évolutions des pays concernés.
 
@@ -41,16 +39,16 @@ Enfin, nous évaluerons la vulnérabilité des pays aux événements liés au r�
 
 ## **Nettoyage de notre Base de Donnée**
 
-```{r}
-#Sélection des librairies
-library(here)
-library(dplyr)
+```{r, echo=FALSE}
+# Sélection des librairies
+suppressWarnings({suppressMessages(library(here))
+suppressMessages(library(dplyr))
 library(tidyr)
 library(knitr)
 library(ggplot2)
 library(readr)
 library(stringr)
-library(readxl)
+library(readxl)})
 ```
 
 
@@ -188,9 +186,12 @@ Worldbank <- Worldbank %>%
 #Verification du nombre de variable pour chaque base de données
  WB_variable <- Worldbank %>% distinct(`Variable`) %>% summarize(`Variable` = n())
  OCDE_variable <- OCDE_GG %>% distinct(Variable) %>% summarize(`Variable` = n())
- print(WB_variable)
- print(OCDE_variable)
+ 
+info_OCDE_variable <- OCDE_GG %>% summarise(Variables = n_distinct(Variable, na.rm = TRUE))
+info_Worldbank_variable <- Worldbank %>% summarise(Variables = n_distinct(Variable, na.rm = TRUE))
 
+knitr :: kable(info_OCDE_variable, caption = "Nombre de variables de l'OCDE sélectionnées")
+knitr :: kable(info_Worldbank_variable, caption = "Nombre de variable de la World Bank selectionnées")
 ```
 
 
@@ -218,7 +219,7 @@ Worldbank <- Worldbank %>%
 | Zone terrestre protégée, % surface terrestre  | Surface terrestre réservée légalement à la protection de la faune et de la flore  |
 |  PIB réel | Mesure ajustée de la production économique, tenant compte de l'inflation  |
 |PIB réel par habitant|  PIB réel divisé par la population, indiquant le niveau de vie moyen |
-|Migration nette","Différence entre le nombre d'immigrants et d'émigrants  | influençant la croissance démographique  |
+|Migration nette  | Différence entre le nombre d'immigrants et d'émigrants influençant la croissance démographique  |
 | Consommation d'énergie | Quantité totale d'énergie consommée dans une économie.  |
 |  Émissions de CO2 induites par la production | Mesure des émissions de CO2 attribuables aux activités de production  |
 | Productivité énergétique | Efficacité dans l'utilisation de l'énergie pour la production économique.  |
@@ -229,7 +230,7 @@ Worldbank <- Worldbank %>%
 | Pourcentage de la population exposée à plus de 35 microgrammes/m3| Proportion de la population confrontée à des niveaux élevés de PM2.5.|
 |Mortalité due à l'exposition aux PM2.5 | Nombre de décès attribués à l'exposition aux particules fines PM2.5. |
 | Coûts en bien-être dus à l'exposition aux PM2.5 | Évaluation des impacts économiques négatifs liés à la santé dus à l'exposition aux PM2.5.  |
-| PIB équivalent"  | Mesure agrégée du bien-être économique, prenant en compte des facteurs tels que l'environnement et la santé.   |
+| PIB équivalent  | Mesure agrégée du bien-être économique, prenant en compte des facteurs tels que l'environnement et la santé.   |
 | Pourcentage de la population exposée aux journées chaudes | Proportion de la population subissant des températures élevées.|
 | Pourcentage de la population exposée aux journées glacées  | Mesure la part de la population susceptible d'être affectée par des conditions météorologiques extrêmement froides, offrant un indicateur de la vulnérabilité de la population aux épisodes de gel.  |
 | Pourcentage de la population exposée aux inondations fluviales |Part de la population résidant dans des zones exposées aux inondations fluviales. |
@@ -309,8 +310,13 @@ OCDE_count_ry <- OCDE_GG %>% distinct(COU) %>% summarize(`COU` = n())
 WB_count_ry <- Worldbank %>% distinct(`COU`) %>% summarize(`COU` = n())
 # Il y a 206 pays dans chacune des bases
 
+
+
+knitr :: kable(OCDE_count_ry, caption = "Nombre de pays dans la base de données l'OCDE après nettoyage")
+knitr :: kable(WB_count_ry, caption = "Nombre de pays dans la base de données de la World Bank après nettoyage")
 ```
 
+Il y a bien le même nombre de pays.
 ```{r}
 #On compare les noms des pays afin de les renommer si leur nom est différent
 #Je fusionne les deux dataframe contenant les codes pays
@@ -343,10 +349,7 @@ WB_variable <- Worldbank %>% distinct(`Variable`) %>% summarize(`Variable` = n()
 OCDE_variable <- OCDE_GG %>% distinct(Variable) %>% summarize(`Variable` = n())
 dataframe_variable <- dataframe %>% distinct(Variable) %>% summarize(`Variable` = n())
 dataframe_new_variable <- dataframe_new %>% distinct(Variable) %>% summarize(`Variable` = n())
-print(WB_variable)
-print(OCDE_variable)
-print(dataframe_variable)
-print(dataframe_new_variable)
+
 ```
 
 ```{r}
@@ -366,8 +369,8 @@ non_OCDE_pays <- dataframe_new %>%  filter(!(`Pays` %in% OCDE_to_select))
 info_OCDE_pays <- OCDE_pays %>% summarise(ligne = nrow(.), colonne = ncol(.), Pays = n_distinct(COU, na.rm = TRUE), Variables = n_distinct(Variable, na.rm = TRUE))
 info_non_OCDE_pays <- non_OCDE_pays %>% summarise(ligne = nrow(.),colonne = ncol(.), Pays = n_distinct(COU, na.rm = TRUE), Variables = n_distinct(Variable, na.rm = TRUE))
 
-knitr :: kable(info_OCDE_pays, caption = "Information tableau des pays membres l'OCDE")
-knitr :: kable(info_non_OCDE_pays, caption = "Information tableau des pays non membres de l'OCDE")
+knitr :: kable(info_OCDE_pays, caption = "Information tableau final des pays membres l'OCDE")
+knitr :: kable(info_non_OCDE_pays, caption = "Information tableau final des pays non membres de l'OCDE")
 ```
 
 ```{r}
@@ -378,12 +381,12 @@ var_non_OCDE <- non_OCDE_pays %>% select(`Variable`) %>% distinct (`Variable`, .
 var_manquants_OCDE <- anti_join(var_OCDE,var_non_OCDE, by = c("Variable" = "Variable"))
 var_manquants_non_OCDE <- anti_join(var_non_OCDE ,var_OCDE, by = c("Variable" = "Variable" ))
 
-knitr :: kable(var_manquants_OCDE)
-knitr :: kable(var_manquants_non_OCDE)
+knitr :: kable(var_manquants_OCDE, caption = "Variables manquantes dans la base de données des pays non membres de l'OCDE")
 
-# On constate que certaines variables ne sont présentes que pour les pays de l'OCDE (Pourcentage de la population exposée aux incendies incontrôlés,Pourcentage de la population exposée aux journées chaudes, Pourcentage de la population exposée aux journées glacées, Pourcentage de la population exposée aux inondations fluviales, Stress hydrique, total des prélèvements d’eau douce en % des ressources internes renouvelables). Elles pourront pas être utilisées comme comparaison avec les pays non membre de l'organisation
 ```
 
+
+On constate que certaines variables ne sont présentes que pour les pays de l'OCDE (Pourcentage de la population exposée aux incendies incontrôlés,Pourcentage de la population exposée aux journées chaudes, Pourcentage de la population exposée aux journées glacées, Pourcentage de la population exposée aux inondations fluviales, Stress hydrique, total des prélèvements d’eau douce en % des ressources internes renouvelables). Elles pourront pas être utilisées comme comparaison avec les pays non membre de l'organisation
 
 ## **Description du data cleaning et data joining**
 
