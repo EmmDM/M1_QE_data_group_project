@@ -4,7 +4,7 @@ author: "Victoire Truchon-Bartès & Emmanuel de MOREL"
 format: html
 echo : false
 ---
-### Analyse des tendances de la transition écologique: une étude comparative des pays de l'OCDE et des pays non membres (1990-2022)
+### Analyse des tendances de la transition écologique: une étude comparative des pays de l'OCDE et des pays non membres (1990-2020)
 
 
 **Lien vers le projet GitHub :** https://github.com/EmmDM/M1_QE_data_group_project
