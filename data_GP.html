@@ -1,0 +1,978 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Victoire Truchon-Bartès &amp; Emmanuel de MOREL">
+
+<title>Data Group Project</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="data_GP_files/libs/clipboard/clipboard.min.js"></script>
+<script src="data_GP_files/libs/quarto-html/quarto.js"></script>
+<script src="data_GP_files/libs/quarto-html/popper.min.js"></script>
+<script src="data_GP_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="data_GP_files/libs/quarto-html/anchor.min.js"></script>
+<link href="data_GP_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="data_GP_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="data_GP_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="data_GP_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="data_GP_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+
+</head>
+
+<body class="fullcontent">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Data Group Project</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Victoire Truchon-Bartès &amp; Emmanuel de MOREL </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="analyzing-ecological-transition-trends-a-comparative-study-of-oecd-and-non-oecd-countries-1990-2022" class="level3">
+<h3 class="anchored" data-anchor-id="analyzing-ecological-transition-trends-a-comparative-study-of-oecd-and-non-oecd-countries-1990-2022">Analyzing Ecological Transition Trends: A Comparative Study of OECD and Non-OECD Countries (1990-2022)</h3>
+<p><strong>Link to the github project :</strong> https://github.com/EmmDM/M1_QE_data_group_project</p>
+</section>
+<section id="insertion-du-logo-de-la-world-bank-et-de-locde" class="level3">
+<h3 class="anchored" data-anchor-id="insertion-du-logo-de-la-world-bank-et-de-locde"><strong>Insertion du Logo de la World bank et de l’OCDE</strong></h3>
+<div class="cell">
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: le package 'downloader' a été compilé avec la version R 4.3.2</code></pre>
+</div>
+<div class="cell-output-display">
+<p><img src="data_GP_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="data_GP_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD ### <strong>Description des sources</strong></p>
+<ul>
+<li>OCDE : La base de donnée provient de l’Organisation de coopération et de développement économique,crée en 1961, qui regroupe 38 pays membres. Elle leur permet de pouvoir partager des données, des analyses et des recommandation visant a améliorer les performances dans diverses domaines.Son but étant de favoriser la croissance économique inclusive et le progrès durable. Elle travaille en collaboration avec les pouvoirs publics, les acteurs économiques et sociaux, et les representants de la sociétée civile.Cette plateforme que nous avons choisis pour notre première base de donnée, est choisis par de nombreux dirigeants grâce à sa qualité et sa fiabilité. L’accès à des données sur lesquel nous pouvons nous aider, offrent des perspectives approfondies sur les défis mondiaux et facilite les prises de décisions.Ces données proviennent de ses pays membres qui partagent des normes communes en matières de collecte de donnée, facilitant ainsi la comptabilité de celles-ci.Elle réalise aussi des analyses appronfondies sur de nombreux sujets économiques, sociaux et environnementaux et publie des rapports, des études et des statistiques qui sont regulièrement mis à jourpour refléter l’évolution des tendances des pays membres.</li>
+</ul>
+</section>
+<section id="présenation-de-la-world-bank-httpsbv.worldwp-contentuploads201709world-bank-logo.jpg" class="level1">
+<h1><img src="world_bank_logo.jpg" class="img-fluid" alt="Présenation de la World Bank"> (https://bv.world/wp-content/uploads/2017/09/world-bank-logo.jpg)</h1>
+<p><img src="OCDE_logo.jpg" class="img-fluid" alt="Présentation OCDE"><strong>Here the links to the original sources : For the OECD :</strong> https://stats.oecd.org/index.aspx?lang=fr&amp;datasetcode=green_growth</p>
+<section id="description-des-sources" class="level3">
+<h3 class="anchored" data-anchor-id="description-des-sources"><strong>Description des sources</strong></h3>
+<ul>
+<li>OCDE : La base de donnée provient de l’Organisation de coopération et de développement économique,crée en 1961, qui regroupe 38 pays membres. Elle leur permet de pouvoir partager des données, des analyses et des recommandation visant a améliorer les performances dans diverses domaines.Son but étant de favoriser la croissance économique inclusive et le progrès durable. Elle travaille en collaboration avec les pouvoirs publics, les acteurs économiques et sociaux, et les representants de la sociétée civile.Cette plateforme que nous avons choisis pour notre première base de donnée, est choisis par de nombreux dirigeants grâce à sa qualité et sa fiabilité. L’accès à des données sur lesquel nous pouvons nous aider, offrent des perspectives approfondies sur les défis mondiaux et facilite les prises de décisions.Ces données proviennent de ses pays membres qui partagent des normes communes en matières de collecte de donnée, facilitant ainsi la comptabilité de celles-ci.Elle réalise aussi des analyses appronfondies sur de nombreux sujets économiques, sociaux et environnementaux et publie des rapports, des études et des statistiques qui sont regulièrement mis à jourpour refléter l’évolution des tendances des pays membres.</li>
+</ul>
+<p><img src="world_bank_logo.jpg" class="img-fluid" alt="Présenation de la World Bank"> <strong>Here the link for the World Bank :</strong> https://donnees.banquemondiale.org/theme/changement-climatique &gt;&gt;&gt;&gt;&gt;&gt;&gt; 419abd793391dc5858cec6d7c49a30dd9b619a76</p>
+<blockquote class="blockquote">
+<blockquote class="blockquote">
+<blockquote class="blockquote">
+<blockquote class="blockquote">
+<blockquote class="blockquote">
+<blockquote class="blockquote">
+<blockquote class="blockquote">
+<p>fc0c6032f6d83528b74fff91c68c8edb4756201a - Worldbank : La Banque Mondiale est une Institution financière internationale ,crée en 1944, qui a financé plus de 12000 projets de développement. Elle offre des services de financements, d’expertise et de recherche afin de soutenir le developpement économique, et la reduction de la pauvreté. Elle se compose de 5 Institutions dont les deux plus importantes sont la Banque internationale pour la reconstruction et le développement (BIRD) et l’Association internationale de développement (IDA). Elle collabore avec les pays membres, les ONG, le secteur privé, et d’autres partenaires. En plus de sa mission de financement, la Banque mondiale collecte et publie des donnés. Sa base apellé World Development Indicators (WDI) contient des informations sur les pays du monde entiers couvrants des sujets tels que la croissance économique, la pauvreté, l’éducation ..etc A l’image de l’OCDE, cette mine d’information est utilisé par de nombreux dirigeants ainsi que des chercheurs afin de d’informer les prises de décisions en matière de développement assuré par des normes rigoureuses de collecte. Ses données sont également régulièrement mises à jour afin de réfleter les évolutions des pays concernés.</p>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+</section>
+<section id="question-de-recherche" class="level2">
+<h2 class="anchored" data-anchor-id="question-de-recherche"><strong>Question de recherche</strong></h2>
+<p>Dans la quête d’un développement durable et d’un équilibre harmonieux entre croissance économique et préservation de l’environnement, l’analyse des tendances de transition écologique parmi différents groupes de pays devient un domaine d’investigation crucial. Dès lors, le cadre de notre recherche vise à examiner la dynamique environnementale et économique des pays sélectionnés couvrant différentes régions et affiliations en considérant les pays membres et non membres de l’Organisation de Coopération et de Développement Économiques (OCDE). La période d’intérêt que nous considérons couvre les années 1990 à 2020, permettant un examen complet des tendances à long terme et des développements récents.&nbsp; De plus, l’OCDE en tant que consortium de pays économiquement avancés, devrait présenter certains modèles de transition écologique qui pourraient différer de ceux observés dans les pays non membres de l’OCDE. En examinant les tendances au sein et entre ces groupes, nous chercherons à démêler l’interaction complexe des facteurs économiques, environnementaux et politiques qui ont façonné leurs trajectoires respectives. Ainsi, la question de recherche qui guidera notre étude et à laquelle nous tâcherons de répondre est la suivante :</p>
+<p><em>Comment la transition écologique a-t-elle évolué entre 1990 et 2020 pour les groupes de pays de l’OCDE et ceux hors de cette organisation?</em></p>
+<p>Dans un premier temps, nous chercherons à présenter un état des lieux en déterminant les liens fondamentaux entre les principaux agrégats économiques et environnementaux tels que le PIB, et les émissions de CO2 pour notamment étudier dans quelle mesure la croissance économique s’est découplée de l’impact environnemental. Nous nous intéresserons à la notion de découplage, signifiant une croissance économique sans augmentation proportionnelle de la pression environnementale.&nbsp; Nous analyserons aussi les tendances en matière d’intensité carbone et d’efficacité énergétique.</p>
+<p>Dans un second temps, nous étudierons les pressions environnementales, analysant les tendances liées à l’intensité de l’eau, à la qualité de l’air, et à l’adoption de sources d’énergie renouvelable. Cette partie examinera également les politiques telles que les taxes, les subventions, et les efforts en R&amp;D visant à favoriser la transition écologique. Elles nous permettront également d’observer le lien de corrélation entre les mesures politiques et les résultats écologiques.</p>
+<p>Enfin, nous évaluerons la vulnérabilité des pays aux événements liés au réchauffement climatique, tels que les inondations, les incendies et les températures extrêmes. Nous examinerons également le rôle des facteurs géographiques et démographiques dans l’influence de cette vulnérabilité. Les schémas de migrations de populations seront également examinés en tant que potentielles stratégies d’adaptation aux changements environnementaux.</p>
+<section id="description-des-sources-1" class="level3">
+<h3 class="anchored" data-anchor-id="description-des-sources-1"><strong>Description des sources</strong></h3>
+<ul>
+<li><p>OCDE : La base de donnée provient de l’Organisation de coopération et de développement économique,crée en 1961, qui regroupe 38 pays membres. Elle leur permet de pouvoir partager des données, des analyses et des recommandation visant a améliorer les performances dans diverses domaines.Son but étant de favoriser la croissance économique inclusive et le progrès durable. Elle travaille en collaboration avec les pouvoirs publics, les acteurs économiques et sociaux, et les representants de la sociétée civile.Cette plateforme que nous avons choisis pour notre première base de donnée, est choisis par de nombreux dirigeants grâce à sa qualité et sa fiabilité. L’accès à des données sur lesquel nous pouvons nous aider, offrent des perspectives approfondies sur les défis mondiaux et facilite les prises de décisions.Ces données proviennent de ses pays membres qui partagent des normes communes en matières de collecte de donnée, facilitant ainsi la comptabilité de celles-ci.Elle réalise aussi des analyses appronfondies sur de nombreux sujets économiques, sociaux et environnementaux et publie des rapports, des études et des statistiques qui sont regulièrement mis à jourpour refléter l’évolution des tendances des pays membres.</p></li>
+<li><p>Worldbank : La Banque Mondiale est une Institution financière internationale ,crée en 1944, qui a financé plus de 12000 projets de développement. Elle offre des services de financements, d’expertise et de recherche afin de soutenir le developpement économique, et la reduction de la pauvreté. Elle se compose de 5 Institutions dont les deux plus importantes sont la Banque internationale pour la reconstruction et le développement (BIRD) et l’Association internationale de développement (IDA). Elle collabore avec les pays membres, les ONG, le secteur privé, et d’autres partenaires. En plus de sa mission de financement, la Banque mondiale collecte et publie des donnés. Sa base apellé World Development Indicators (WDI) contient des informations sur les pays du monde entiers couvrants des sujets tels que la croissance économique, la pauvreté, l’éducation ..etc A l’image de l’OCDE, cette mine d’information est utilisé par de nombreux dirigeants ainsi que des chercheurs afin de d’informer les prises de décisions en matière de développement assuré par des normes rigoureuses de collecte. Ses données sont également régulièrement mises à jour afin de réfleter les évolutions des pays concernés.</p></li>
+</ul>
+</section>
+</section>
+<section id="question-de-recherche-1" class="level2">
+<h2 class="anchored" data-anchor-id="question-de-recherche-1"><strong>Question de recherche</strong></h2>
+<p>Dans la quête d’un développement durable et d’un équilibre harmonieux entre croissance économique et préservation de l’environnement, l’analyse des tendances de transition écologique parmi différents groupes de pays devient un domaine d’investigation crucial. Dès lors, le cadre de notre recherche vise à examiner la dynamique environnementale et économique des pays sélectionnés couvrant différentes régions et affiliations en considérant les pays membres et non membres de l’Organisation de Coopération et de Développement Économiques (OCDE). La période d’intérêt que nous considérons couvre les années 1990 à 2020, permettant un examen complet des tendances à long terme et des développements récents.&nbsp; De plus, l’OCDE en tant que consortium de pays économiquement avancés, devrait présenter certains modèles de transition écologique qui pourraient différer de ceux observés dans les pays non membres de l’OCDE. En examinant les tendances au sein et entre ces groupes, nous chercherons à démêler l’interaction complexe des facteurs économiques, environnementaux et politiques qui ont façonné leurs trajectoires respectives. Ainsi, la question de recherche qui guidera notre étude et à laquelle nous tâcherons de répondre est la suivante :</p>
+<p><em>Comment la transition écologique a-t-elle évolué entre 1990 et 2020 pour les groupes de pays de l’OCDE et ceux hors de cette organisation?</em></p>
+<p>Dans un premier temps, nous chercherons à présenter un état des lieux en déterminant les liens fondamentaux entre les principaux agrégats économiques et environnementaux tels que le PIB, et les émissions de CO2 pour notamment étudier dans quelle mesure la croissance économique s’est découplée de l’impact environnemental. Nous nous intéresserons à la notion de découplage, signifiant une croissance économique sans augmentation proportionnelle de la pression environnementale.&nbsp; Nous analyserons aussi les tendances en matière d’intensité carbone et d’efficacité énergétique.</p>
+<p>Dans un second temps, nous étudierons les pressions environnementales, analysant les tendances liées à l’intensité de l’eau, à la qualité de l’air, et à l’adoption de sources d’énergie renouvelable. Cette partie examinera également les politiques telles que les taxes, les subventions, et les efforts en R&amp;D visant à favoriser la transition écologique. Elles nous permettront également d’observer le lien de corrélation entre les mesures politiques et les résultats écologiques.</p>
+<p>Enfin, nous évaluerons la vulnérabilité des pays aux événements liés au réchauffement climatique, tels que les inondations, les incendies et les températures extrêmes. Nous examinerons également le rôle des facteurs géographiques et démographiques dans l’influence de cette vulnérabilité. Les schémas de migrations de populations seront également examinés en tant que potentielles stratégies d’adaptation aux changements environnementaux.</p>
+</section>
+<section id="nettoyage-de-notre-base-de-donnée" class="level2">
+<h2 class="anchored" data-anchor-id="nettoyage-de-notre-base-de-donnée"><strong>Nettoyage de notre Base de Donnée</strong></h2>
+<div class="cell">
+<div class="cell-output cell-output-stderr">
+<pre><code>here() starts at C:/Users/Victoire/Documents/M1_QE_data_group_project</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<caption>Information tableau de l’OCDE</caption>
+<thead>
+<tr class="header">
+<th style="text-align: right;">ligne</th>
+<th style="text-align: right;">colonne</th>
+<th style="text-align: right;">Pays</th>
+<th style="text-align: right;">Variables</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">21323</td>
+<td style="text-align: right;">37</td>
+<td style="text-align: right;">236</td>
+<td style="text-align: right;">162</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<caption>Information tableau de la World Bank</caption>
+<thead>
+<tr class="header">
+<th style="text-align: right;">ligne</th>
+<th style="text-align: right;">colonne</th>
+<th style="text-align: right;">Pays</th>
+<th style="text-align: right;">Variables</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">20216</td>
+<td style="text-align: right;">35</td>
+<td style="text-align: right;">266</td>
+<td style="text-align: right;">76</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<caption>Nombre de variables de l’OCDE sélectionnées</caption>
+<thead>
+<tr class="header">
+<th style="text-align: right;">Variables</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">34</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<caption>Nombre de variable de la World Bank selectionnées</caption>
+<thead>
+<tr class="header">
+<th style="text-align: right;">Variables</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">41</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD | Nom des variables | Description des variables | |————————|————————————————| | Productivité CO2 induite par la production | Mesure de l’efficacité dans la réduction des émissions de CO2 pendant les processus de fabrication. | | PIB par unité d’émission de CO2 liée à l’énergie | Évaluation de la performance économique relative à l’émission de CO2 associée à la production d’énergie. | | Intensité CO2 induite par la production, émissions de CO2 liées à l’énergie, par habitant | Indicateur de la quantité de CO2 émise par habitant due à la production et à la consommation d’énergie. | | Émissions de CO2 induites par la production | Mesure totale des gaz à effet de serre générés lors des processus de production. | | Intensité énergétique, ATE par habitant | Évaluation de la consommation énergétique par habitant, ajustée en fonction de l’efficacité énergétique. | | Intensité énergétique, ATE par habitant | Évaluation de la consommation énergétique par habitant, ajustée en fonction de l’efficacité énergétique. | | Approvisionnement total en énergie en énergies renouvelables | Quantité globale d’énergie provenant de sources renouvelables | | Production électrique totale en énergies renouvelables | Évaluation de la production d’électricité issue de sources d’énergie renouvelables. | | Exposition moyenne de la population aux PM2.5 | Niveau moyen d’exposition de la population aux particules fines PM2.5. | | Pourcentage de la population exposée à plus de 10 microgrammes/m3 | Proportion de la population confrontée à des niveaux élevés de PM2.5. | | Développement de technologies liées à l’environnement, % inventions mondiales | Représente la part des inventions dans le monde consacrées au développement de technologies environnementales, offrant un indicateur de l’engagement mondial dans ce domaine | | Développement de technologies liées à l’environnement, inventions par habitant | Mesure le nombre d’inventions liées à l’environnement par habitant, fournissant un indice du niveau d’innovation environnementale par individu dans une population donnée. | | Recettes provenant des taxes liées à l’environnement | Montant des revenus générés par les taxes environnementales. | | Soutien aux consommateurs de combustibles fossiles | Indicateur des subventions allouées aux consommateurs de combustibles fossiles. | | Soutien au pétrole, % soutien total aux combustibles fossiles | Montant des subventions spécifiquement attribuées au secteur pétrolier. | | Soutien à l’électricité, % soutien total aux combustibles fossiles | Niveau de soutien financier accordé au secteur de l’électricité. | | Soutien total aux combustibles fossiles | Somme des subventions allouées aux consommateurs et producteurs de combustibles fossiles | | Zone marine protégée,% zone économique exclusive totale | Étendue océanique légalement préservée pour la conservation de la biodiversité | | Zone terrestre protégée, % surface terrestre | Surface terrestre réservée légalement à la protection de la faune et de la flore | | PIB réel | Mesure ajustée de la production économique, tenant compte de l’inflation | | PIB réel par habitant | PIB réel divisé par la population, indiquant le niveau de vie moyen | | Migration nette”,“Différence entre le nombre d’immigrants et d’émigrants | influençant la croissance démographique | | Consommation d’énergie | Quantité totale d’énergie consommée dans une économie. | | Émissions de CO2 induites par la production | Mesure des émissions de CO2 attribuables aux activités de production | | Productivité énergétique | Efficacité dans l’utilisation de l’énergie pour la production économique. | | PIB par unité d’ATE | Évaluation de la productivité économique par unité d’ATE (énergie ajustée au travail). | | Approvisionnements totaux en énergie | Total de l’énergie disponible pour une économie. | | Prélèvements bruts d’eau douce par habitant | Quantité totale d’eau douce prélevée par habitant. | | Stress hydrique, total des prélèvements d’eau douce | Mesure de la pression exercée sur les ressources hydriques en raison des prélèvements totaux d’eau douce. | | Pourcentage de la population exposée à plus de 35 microgrammes/m3 | Proportion de la population confrontée à des niveaux élevés de PM2.5. | | Mortalité due à l’exposition aux PM2.5 | Nombre de décès attribués à l’exposition aux particules fines PM2.5. | | Coûts en bien-être dus à l’exposition aux PM2.5 | Évaluation des impacts économiques négatifs liés à la santé dus à l’exposition aux PM2.5. | | PIB équivalent” | Mesure agrégée du bien-être économique, prenant en compte des facteurs tels que l’environnement et la santé. | | Pourcentage de la population exposée aux journées chaudes | Proportion de la population subissant des températures élevées. | | Pourcentage de la population exposée aux journées glacées | Mesure la part de la population susceptible d’être affectée par des conditions météorologiques extrêmement froides, offrant un indicateur de la vulnérabilité de la population aux épisodes de gel. | | Pourcentage de la population exposée aux inondations fluviales | Part de la population résidant dans des zones exposées aux inondations fluviales. | | Pourcentage de la population exposée aux inondations fluviales | Part de la population résidant dans des zones exposées aux inondations fluviales. | | Pourcentage de la population exposée aux incendies incontrôlés | Indique la proportion de la population qui pourrait être impactée par des incendies incontrôlés, fournissant une mesure de la vulnérabilité de la population face à ce risque spécifique. | =======</p>
+<table class="table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Nom des variables</th>
+<th>Description des variables</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Productivité CO2 induite par la production</td>
+<td>Mesure de l’efficacité dans la réduction des émissions de CO2 pendant les processus de fabrication.</td>
+</tr>
+<tr class="even">
+<td>PIB par unité d’émission de CO2 liée à l’énergie</td>
+<td>Évaluation de la performance économique relative à l’émission de CO2 associée à la production d’énergie.</td>
+</tr>
+<tr class="odd">
+<td>Intensité CO2 induite par la production, émissions de CO2 liées à l’énergie, par habitant</td>
+<td>Indicateur de la quantité de CO2 émise par habitant due à la production et à la consommation d’énergie.</td>
+</tr>
+<tr class="even">
+<td>Émissions de CO2 induites par la production</td>
+<td>Mesure totale des gaz à effet de serre générés lors des processus de production.</td>
+</tr>
+<tr class="odd">
+<td>Intensité énergétique, ATE par habitant</td>
+<td>Évaluation de la consommation énergétique par habitant, ajustée en fonction de l’efficacité énergétique.</td>
+</tr>
+<tr class="even">
+<td>Intensité énergétique, ATE par habitant</td>
+<td>Évaluation de la consommation énergétique par habitant, ajustée en fonction de l’efficacité énergétique.</td>
+</tr>
+<tr class="odd">
+<td>Approvisionnement total en énergie en énergies renouvelables</td>
+<td>Quantité globale d’énergie provenant de sources renouvelables</td>
+</tr>
+<tr class="even">
+<td>Production électrique totale en énergies renouvelables</td>
+<td>Évaluation de la production d’électricité issue de sources d’énergie renouvelables.</td>
+</tr>
+<tr class="odd">
+<td>Exposition moyenne de la population aux PM2.5</td>
+<td>Niveau moyen d’exposition de la population aux particules fines PM2.5.</td>
+</tr>
+<tr class="even">
+<td>Pourcentage de la population exposée à plus de 10 microgrammes/m3</td>
+<td>Proportion de la population confrontée à des niveaux élevés de PM2.5.</td>
+</tr>
+<tr class="odd">
+<td>Développement de technologies liées à l’environnement, % inventions mondiales</td>
+<td>Représente la part des inventions dans le monde consacrées au développement de technologies environnementales, offrant un indicateur de l’engagement mondial dans ce domaine</td>
+</tr>
+<tr class="even">
+<td>Développement de technologies liées à l’environnement, inventions par habitant</td>
+<td>Mesure le nombre d’inventions liées à l’environnement par habitant, fournissant un indice du niveau d’innovation environnementale par individu dans une population donnée.</td>
+</tr>
+<tr class="odd">
+<td>Recettes provenant des taxes liées à l’environnement</td>
+<td>Montant des revenus générés par les taxes environnementales.</td>
+</tr>
+<tr class="even">
+<td>Soutien aux consommateurs de combustibles fossiles</td>
+<td>Indicateur des subventions allouées aux consommateurs de combustibles fossiles.</td>
+</tr>
+<tr class="odd">
+<td>Soutien au pétrole, % soutien total aux combustibles fossiles</td>
+<td>Montant des subventions spécifiquement attribuées au secteur pétrolier.</td>
+</tr>
+<tr class="even">
+<td>Soutien à l’électricité, % soutien total aux combustibles fossiles</td>
+<td>Niveau de soutien financier accordé au secteur de l’électricité.</td>
+</tr>
+<tr class="odd">
+<td>Soutien total aux combustibles fossiles</td>
+<td>Somme des subventions allouées aux consommateurs et producteurs de combustibles fossiles</td>
+</tr>
+<tr class="even">
+<td>Zone marine protégée,% zone économique exclusive totale</td>
+<td>Étendue océanique légalement préservée pour la conservation de la biodiversité</td>
+</tr>
+<tr class="odd">
+<td>Zone terrestre protégée, % surface terrestre</td>
+<td>Surface terrestre réservée légalement à la protection de la faune et de la flore</td>
+</tr>
+<tr class="even">
+<td>PIB réel</td>
+<td>Mesure ajustée de la production économique, tenant compte de l’inflation</td>
+</tr>
+<tr class="odd">
+<td>PIB réel par habitant</td>
+<td>PIB réel divisé par la population, indiquant le niveau de vie moyen</td>
+</tr>
+<tr class="even">
+<td>Migration nette</td>
+<td>Différence entre le nombre d’immigrants et d’émigrants influençant la croissance démographique</td>
+</tr>
+<tr class="odd">
+<td>Consommation d’énergie</td>
+<td>Quantité totale d’énergie consommée dans une économie.</td>
+</tr>
+<tr class="even">
+<td>Émissions de CO2 induites par la production</td>
+<td>Mesure des émissions de CO2 attribuables aux activités de production</td>
+</tr>
+<tr class="odd">
+<td>Productivité énergétique</td>
+<td>Efficacité dans l’utilisation de l’énergie pour la production économique.</td>
+</tr>
+<tr class="even">
+<td>PIB par unité d’ATE</td>
+<td>Évaluation de la productivité économique par unité d’ATE (énergie ajustée au travail).</td>
+</tr>
+<tr class="odd">
+<td>Approvisionnements totaux en énergie</td>
+<td>Total de l’énergie disponible pour une économie.</td>
+</tr>
+<tr class="even">
+<td>Prélèvements bruts d’eau douce par habitant</td>
+<td>Quantité totale d’eau douce prélevée par habitant.</td>
+</tr>
+<tr class="odd">
+<td>Stress hydrique, total des prélèvements d’eau douce</td>
+<td>Mesure de la pression exercée sur les ressources hydriques en raison des prélèvements totaux d’eau douce.</td>
+</tr>
+<tr class="even">
+<td>Pourcentage de la population exposée à plus de 35 microgrammes/m3</td>
+<td>Proportion de la population confrontée à des niveaux élevés de PM2.5.</td>
+</tr>
+<tr class="odd">
+<td>Mortalité due à l’exposition aux PM2.5</td>
+<td>Nombre de décès attribués à l’exposition aux particules fines PM2.5.</td>
+</tr>
+<tr class="even">
+<td>Coûts en bien-être dus à l’exposition aux PM2.5</td>
+<td>Évaluation des impacts économiques négatifs liés à la santé dus à l’exposition aux PM2.5.</td>
+</tr>
+<tr class="odd">
+<td>PIB équivalent</td>
+<td>Mesure agrégée du bien-être économique, prenant en compte des facteurs tels que l’environnement et la santé.</td>
+</tr>
+<tr class="even">
+<td>Pourcentage de la population exposée aux journées chaudes</td>
+<td>Proportion de la population subissant des températures élevées.</td>
+</tr>
+<tr class="odd">
+<td>Pourcentage de la population exposée aux journées glacées</td>
+<td>Mesure la part de la population susceptible d’être affectée par des conditions météorologiques extrêmement froides, offrant un indicateur de la vulnérabilité de la population aux épisodes de gel.</td>
+</tr>
+<tr class="even">
+<td>Pourcentage de la population exposée aux inondations fluviales</td>
+<td>Part de la population résidant dans des zones exposées aux inondations fluviales.</td>
+</tr>
+<tr class="odd">
+<td>Pourcentage de la population exposée aux inondations fluviales</td>
+<td>Part de la population résidant dans des zones exposées aux inondations fluviales.</td>
+</tr>
+<tr class="even">
+<td>Pourcentage de la population exposée aux incendies incontrôlés</td>
+<td>Indique la proportion de la population qui pourrait être impactée par des incendies incontrôlés, fournissant une mesure de la vulnérabilité de la population face à ce risque spécifique.</td>
+</tr>
+</tbody>
+</table>
+<blockquote class="blockquote">
+<blockquote class="blockquote">
+<blockquote class="blockquote">
+<blockquote class="blockquote">
+<blockquote class="blockquote">
+<blockquote class="blockquote">
+<blockquote class="blockquote">
+<p>419abd793391dc5858cec6d7c49a30dd9b619a76</p>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+<table class="table-striped table-hover table">
+<caption>Description des variables sélectionnées de l’OCDE</caption>
+<colgroup>
+<col style="width: 38%">
+<col style="width: 61%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Noms des variables</th>
+<th>Description des variables</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Population urbaine (% du total)</td>
+<td>Pourcentage de la population résidant en milieu urbain par rapport à la population totale.</td>
+</tr>
+<tr class="even">
+<td>Population urbaine (% du total)</td>
+<td>Pourcentage de la population résidant en milieu urbain par rapport à la population totale.</td>
+</tr>
+<tr class="odd">
+<td>Population urbaine</td>
+<td>Nombre total d’habitants vivant en milieu urbain.</td>
+</tr>
+<tr class="even">
+<td>Croissance de la population urbaine (% annuel)</td>
+<td>Taux de croissance annuel de la population urbaine.</td>
+</tr>
+<tr class="odd">
+<td>Population, total</td>
+<td>Nombre total d’habitants, incluant les zones urbaines et rurales.</td>
+</tr>
+<tr class="even">
+<td>Croissance de la population (% annuel)</td>
+<td>Taux de croissance annuel de la population totale.</td>
+</tr>
+<tr class="odd">
+<td>Agriculture, valeur ajoutée (% du PIB)</td>
+<td>Contribution de la valeur ajoutée de l’agriculture au produit intérieur brut (PIB).</td>
+</tr>
+<tr class="even">
+<td>Zones terrestres et marines protégées (% du territoire total)</td>
+<td>Pourcentage du territoire total réservé aux zones terrestres et marines protégées.</td>
+</tr>
+<tr class="odd">
+<td>Zones marines protégées (% des eaux du territoire)</td>
+<td>Proportion des eaux territoriales réservée aux zones marines protégées.</td>
+</tr>
+<tr class="even">
+<td>Émissions/éliminations nettes de GES attribuables au changement d’affectation des terres et à la foresterie (Mt d’équivalents CO2)</td>
+<td>Quantité nette d’émissions ou de séquestration de gaz à effet de serre résultant des changements dans l’utilisation des terres et de la foresterie.</td>
+</tr>
+<tr class="odd">
+<td>Note sur les progrès de réduction des risques de catastrophes (échelle de 1 à 5, 5 étant la meilleure note)</td>
+<td>Évaluation des progrès dans la réduction des risques de catastrophes naturelles sur une échelle de 1 à 5.</td>
+</tr>
+<tr class="even">
+<td>Émissions totales de GES (variation depuis 1990, %)</td>
+<td>Variation en pourcentage des émissions totales de gaz à effet de serre depuis 1990.</td>
+</tr>
+<tr class="odd">
+<td>Émissions totales de GES (kt d’équivalent CO2)</td>
+<td>Total des émissions de gaz à effet de serre mesurées en milliers de tonnes d’équivalents CO2.</td>
+</tr>
+<tr class="even">
+<td>Zones protégées à l’échelle nationale (% du territoire total)</td>
+<td>Pourcentage du territoire national réservé à des zones protégées.</td>
+</tr>
+<tr class="odd">
+<td>Retraits annuels d’eau douce, total (% des ressources internes)</td>
+<td>Pourcentage des ressources internes utilisé par les retraits annuels d’eau douce.</td>
+</tr>
+<tr class="even">
+<td>Retraits annuels d’eau douce, total (milliards de mètres cubes)</td>
+<td>Volume total des retraits annuels d’eau douce mesuré en milliards de mètres cubes.</td>
+</tr>
+<tr class="odd">
+<td>Autres émissions de gaz à effet de serre, HFC, PFC et SF6 (milliers de tonnes métriques d’équivalent CO2)</td>
+<td>Émissions de gaz à effet de serre autres que le dioxyde de carbone, mesurées en milliers de tonnes métriques d’équivalent CO2.</td>
+</tr>
+<tr class="even">
+<td>Émissions de CO2 (tonnes métriques par habitant)</td>
+<td>Quantité de CO2 émise par habitant, mesurée en tonnes métriques.</td>
+</tr>
+<tr class="odd">
+<td>Sécheresses, inondations, températures extrêmes (en % de la population, moyenne de 1990 à 2009)</td>
+<td>Pourcentage moyen de la population exposée à des événements climatiques extrêmes entre 1990 et 2009.</td>
+</tr>
+<tr class="even">
+<td>Émissions de CO2 (kg par $ US de 2010 de PIB)</td>
+<td>Intensité des émissions de CO2 par unité de PIB, mesurée en kilogrammes par dollar américain de 2010.</td>
+</tr>
+<tr class="odd">
+<td>Intensité en CO2 (kg par kg d’utilisation d’énergie en équivalent pétrole)</td>
+<td>Mesure de l’intensité des émissions de CO2 par unité d’utilisation d’énergie, convertie en équivalent pétrole.</td>
+</tr>
+<tr class="even">
+<td>Utilisation d’énergie (kg d’équivalent pétrole par habitant)</td>
+<td>Quantité d’énergie utilisée par habitant, mesurée en kilogrammes d’équivalent pétrole.</td>
+</tr>
+<tr class="odd">
+<td>Consommation d’électricité (KWh par habitant)</td>
+<td>Quantité d’électricité consommée par habitant, mesurée en kilowattheures.</td>
+</tr>
+<tr class="even">
+<td>Utilisation d’énergie (en kg d’équivalent pétrole) pour 1 000 $ de PIB (PPA constants de 2011)</td>
+<td>Consommation d’énergie par unité de PIB, ajustée en parité de pouvoir d’achat constante de 2011.</td>
+</tr>
+<tr class="odd">
+<td>Consommation d’énergies renouvelables (% de la consommation totale d’énergie)</td>
+<td>Pourcentage de la consommation totale d’énergie provenant de sources renouvelables.</td>
+</tr>
+<tr class="even">
+<td>Production d’électricité à partir de sources d’énergie renouvelables, hors énergie hydroélectrique (% du total)</td>
+<td>Pourcentage de la production totale d’électricité provenant de sources d’énergie renouvelables, excluant l’hydroélectricité.</td>
+</tr>
+<tr class="odd">
+<td>Production d’électricité à partir de sources d’énergie renouvelables, hors énergie hydroélectrique (kWh)</td>
+<td>Quantité d’électricité produite à partir de sources d’énergie renouvelables, excluant l’hydroélectricité, mesurée en kilowattheures.</td>
+</tr>
+<tr class="even">
+<td>Accès à l’électricité (% de la population)</td>
+<td>Pourcentage de la population ayant accès à l’électricité</td>
+</tr>
+<tr class="odd">
+<td>Hauteur moyenne des précipitations (mm par an)</td>
+<td>Moyenne annuelle de la hauteur des précipitations mesurée en millimètres.</td>
+</tr>
+<tr class="even">
+<td>Terres agricoles (km carrés)</td>
+<td>Surface totale utilisée pour l’agriculture, mesurée en kilomètres carrés.</td>
+</tr>
+<tr class="odd">
+<td>Émissions de CO2 (kg par $ PPA de 2011 de PIB)</td>
+<td>Intensité des émissions de CO2 par unité de PIB, ajustée en parité de pouvoir d’achat constante de 2011 et mesurée en kilogrammes par dollar.</td>
+</tr>
+<tr class="even">
+<td>Émissions de CO2 (kt)</td>
+<td>Total des émissions de CO2 mesuré en milliers de tonnes.</td>
+</tr>
+<tr class="odd">
+<td>Production d’électricité renouvelable (% de la production totale d’électricité)</td>
+<td>Pourcentage de la production totale d’électricité provenant de sources d’énergie renouvelables.</td>
+</tr>
+<tr class="even">
+<td>Production d’électricité à partir de sources pétrolières (% du total)</td>
+<td>Pourcentage de la production totale d’électricité provenant de sources pétrolières.</td>
+</tr>
+<tr class="odd">
+<td>Production d’électricité à partir de sources nucléaires (% du total)</td>
+<td>Pourcentage de la production totale d’électricité provenant de sources nucléaires.</td>
+</tr>
+<tr class="even">
+<td>Production d’électricité à partir de sources de gaz naturel (% du total)</td>
+<td>Pourcentage de la production totale d’électricité provenant de sources de gaz naturel.</td>
+</tr>
+<tr class="odd">
+<td>Production d’électricité à partir de sources hydroélectriques (% du total)</td>
+<td>Proportion de la production totale d’électricité générée à partir de sources hydroélectriques.</td>
+</tr>
+<tr class="even">
+<td>Production d’électricité à partir de sources de charbon (% du total)</td>
+<td>Pourcentage de la production totale d’électricité provenant de sources de charbon.</td>
+</tr>
+<tr class="odd">
+<td>Surface forestière (% du territoire)</td>
+<td>Pourcentage du territoire couvert par des surfaces forestières.</td>
+</tr>
+<tr class="even">
+<td>Terres agricoles (% du territoire)</td>
+<td>Proportion du territoire utilisée à des fins agricoles.</td>
+</tr>
+<tr class="odd">
+<td>Population vivant sur des terres dont l’altitude est inférieure à 5 mètres (en % de la population totale</td>
+<td>Mesure la part de la population résidant à une altitude inférieure à 5 mètres, offrant un indicateur de la concentration démographique en zones basses.</td>
+</tr>
+<tr class="even">
+<td>Zones urbaines dont l’altitude est &lt; à 5&nbsp;m (% de la superficie totale)</td>
+<td>Représente le pourcentage de la superficie totale occupée par des zones urbaines à moins de 5 mètres d’altitude, offrant des insights sur la répartition spatiale des zones urbaines dans des zones de basse altitude.</td>
+</tr>
+<tr class="odd">
+<td>Superficie des terres dont l’altitude est inférieure à 5 mètres (en % de la superficie totale des terres)</td>
+<td>Exprime la proportion de la superficie totale des terres situées à une altitude inférieure à 5 mètres, fournissant une perspective concise sur la géographie physique du territoire.</td>
+</tr>
+</tbody>
+</table>
+<p>: Description des variables sélectionnées de la World Bank {.striped .hover}</p>
+<div class="cell">
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<caption>Nombre de pays dans la base de données l’OCDE après nettoyage</caption>
+<thead>
+<tr class="header">
+<th style="text-align: right;">COU</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">206</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<caption>Nombre de pays dans la base de données de la World Bank après nettoyage</caption>
+<thead>
+<tr class="header">
+<th style="text-align: right;">COU</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">206</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>Il y a bien le même nombre de pays.</p>
+</section>
+<section id="description-du-data-cleaning-et-data-joining" class="level2">
+<h2 class="anchored" data-anchor-id="description-du-data-cleaning-et-data-joining"><strong>Description du data cleaning et data joining</strong></h2>
+<p><strong>1ère étape</strong> : Récupération des données à partir des sites de la world bank et de l’OCDE</p>
+<p><strong>2ème étape</strong> : Nous avons supprimé des colonnes sur le document .csv&nbsp; de l’OCDE : “Flags”, “Flag Codes”. Sur le document .csv de la World Bank, nous avons mis en forme le tableau en supprimant des éléments extérieurs : “Data Source”, “Last Updated Date”,&nbsp; “26/10/2023”,“Indicateurs du développement dans le monde”. Puis on a&nbsp; deplacé le tableau excel pour que la première case soit en AA.&nbsp;</p>
+<p><strong>3ème étape</strong> : Nous avons ensuite commencé le traitement des bases de données sur R, en supprimant en premier lieu des colonnes qui ne nous étaient pas utile ( Pour l’OCDE : -`YEA`,-`PowerCode.Code`, -`Reference.Period.Code`,-`Reference.Period`, -`Unit.Code. Pour la Worldbank : -`1960`,-`1961`,-`1962`,-`1963`,-`1964`,-`1965`,-`1966`,-`1967`,-`1968`,-`1969`,-`1970`,-`1971`,-`1972`,-`1973`,-`1974`,-`1975`,-`1976`,-`1977`,-`1978`,-`1979`,-`1980`,-`1981`,-`1982`,-`1983`,-`1984`,-`1985`,-`1986`,-`1987`,-`1988`,-`1989`,-`2021`, -`2022`). On conserve seulement période de 1990 à 2020 afin de faire des comparaisons avec les données de l’OCDE. On supprime les données 2021 et 2022 car il y a un manque de données. Nous avons aussi transformé la colonne `Année` de l’OCDE en colonne pour chaque année, afin d’avoir une meilleure présentation visuelle et aussi similaire à la base de données de la Worldbank. Enfin, on renomme les colonnes qui ont la même fonction mais des noms différents</p>
+<p><strong>4ème étape</strong> : Nous avons trié les variables de l’OCDE et de la World Bank en conservant nos variables d’intérêt. 38 pour la World Bank et 34 pour l’OCDE</p>
+<p><strong>5ème étape</strong> : Nous avons fait la sélection des pays. Premièrement, nous avons cherché si certains pays n’apparaissaient pas dans l’une des bases de données en utilisant le code pays qui est une norme internationale et qui se trouvait dans les deux bases de données. Si un des codes pays n’apparaissait pas dans l’une des bases de données alors on supprimait ce pays. On obtient 206 pays. Deuxièmement, les pays n’avaient pas le même nom selon la base de données. Donc on a comparé les noms des pays afin de les renommer si leur nom est différent. Nous avons utilisé une base de données créée par la fusion des colonnes codes pays et des colonnes pays des deux sources, puis on a identifié si les codes pays apparaissent deux fois dans cette base alors on supprimait une des lignes où le code pays apparaissait deux fois. On a ensuite fusionné les deux bases de données de l’OCDE et de la World Bank et on a fusionné avec la base finale des codes pays pour obtenir les mêmes noms de pays. Finalement, on crée deux bases de données, la première avec les pays membres de l’OCDE et la seconde avec les pays qui ne sont pas membres.</p>
+<div class="cell">
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<caption>Information tableau final des pays membres l’OCDE</caption>
+<thead>
+<tr class="header">
+<th style="text-align: right;">ligne</th>
+<th style="text-align: right;">colonne</th>
+<th style="text-align: right;">Pays</th>
+<th style="text-align: right;">Variables</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">2834</td>
+<td style="text-align: right;">37</td>
+<td style="text-align: right;">38</td>
+<td style="text-align: right;">75</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<caption>Information tableau final des pays non membres de l’OCDE</caption>
+<thead>
+<tr class="header">
+<th style="text-align: right;">ligne</th>
+<th style="text-align: right;">colonne</th>
+<th style="text-align: right;">Pays</th>
+<th style="text-align: right;">Variables</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">9882</td>
+<td style="text-align: right;">37</td>
+<td style="text-align: right;">168</td>
+<td style="text-align: right;">70</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<caption>Variables manquantes dans la base de données des pays non membres de l’OCDE</caption>
+<colgroup>
+<col style="width: 100%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Variable</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Pourcentage de la population exposée aux incendies incontrôlés</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Pourcentage de la population exposée aux journées chaudes</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Pourcentage de la population exposée aux journées glacées</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Pourcentage de la population exposée aux inondations fluviales</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Stress hydrique, total des prélèvements d’eau douce en % des ressources internes renouvelables</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+</section>
+<section id="head" class="level1">
+<h1>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD</h1>
+<p>On constate que certaines variables ne sont présentes que pour les pays de l’OCDE (Pourcentage de la population exposée aux incendies incontrôlés,Pourcentage de la population exposée aux journées chaudes, Pourcentage de la population exposée aux journées glacées, Pourcentage de la population exposée aux inondations fluviales, Stress hydrique, total des prélèvements d’eau douce en % des ressources internes renouvelables). Elles pourront pas être utilisées comme comparaison avec les pays non membre de l’organisation</p>
+<blockquote class="blockquote">
+<blockquote class="blockquote">
+<blockquote class="blockquote">
+<blockquote class="blockquote">
+<blockquote class="blockquote">
+<blockquote class="blockquote">
+<blockquote class="blockquote">
+<p>419abd793391dc5858cec6d7c49a30dd9b619a76 ## <strong>Description du data cleaning et data joining</strong></p>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+<p><strong>1ère étape</strong> : Récupération des données à partir des sites de la world bank et de l’OCDE</p>
+<p><strong>2ème étape</strong> : Nous avons supprimé des colonnes sur le document .csv&nbsp; de l’OCDE : “Flags”, “Flag Codes”. Sur le document .csv de la World Bank, nous avons mis en forme le tableau en supprimant des éléments extérieurs : “Data Source”, “Last Updated Date”,&nbsp; “26/10/2023”,“Indicateurs du développement dans le monde”. Puis on a&nbsp; deplacé le tableau excel pour que la première case soit en AA.&nbsp;</p>
+<p><strong>3ème étape</strong> : Nous avons ensuite commencé le traitement des bases de données sur R, en supprimant en premier lieu des colonnes qui ne nous étaient pas utile ( Pour l’OCDE : -`YEA`,-`PowerCode.Code`, -`Reference.Period.Code`,-`Reference.Period`, -`Unit.Code. Pour la Worldbank : -`1960`,-`1961`,-`1962`,-`1963`,-`1964`,-`1965`,-`1966`,-`1967`,-`1968`,-`1969`,-`1970`,-`1971`,-`1972`,-`1973`,-`1974`,-`1975`,-`1976`,-`1977`,-`1978`,-`1979`,-`1980`,-`1981`,-`1982`,-`1983`,-`1984`,-`1985`,-`1986`,-`1987`,-`1988`,-`1989`,-`2021`, -`2022`). On conserve seulement période de 1990 à 2020 afin de faire des comparaisons avec les données de l’OCDE. On supprime les données 2021 et 2022 car il y a un manque de données. Nous avons aussi transformé la colonne `Année` de l’OCDE en colonne pour chaque année, afin d’avoir une meilleure présentation visuelle et aussi similaire à la base de données de la Worldbank. Enfin, on renomme les colonnes qui ont la même fonction mais des noms différents</p>
+<p><strong>4ème étape</strong> : Nous avons trié les variables de l’OCDE et de la World Bank en conservant nos variables d’intérêt. 38 pour la World Bank et 34 pour l’OCDE</p>
+<p><strong>5ème étape</strong> : Nous avons fait la sélection des pays. Premièrement, nous avons cherché si certains pays n’apparaissaient pas dans l’une des bases de données en utilisant le code pays qui est une norme internationale et qui se trouvait dans les deux bases de données. Si un des codes pays n’apparaissait pas dans l’une des bases de données alors on supprimait ce pays. On obtient 206 pays. Deuxièmement, les pays n’avaient pas le même nom selon la base de données. Donc on a comparé les noms des pays afin de les renommer si leur nom est différent. Nous avons utilisé une base de données créée par la fusion des colonnes codes pays et des colonnes pays des deux sources, puis on a identifié si les codes pays apparaissent deux fois dans cette base alors on supprimait une des lignes où le code pays apparaissait deux fois. On a ensuite fusionné les deux bases de données de l’OCDE et de la World Bank et on a fusionné avec la base finale des codes pays pour obtenir les mêmes noms de pays. Finalement, on crée deux bases de données, la première avec les pays membres de l’OCDE et la seconde avec les pays qui ne sont pas membres.</p>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
