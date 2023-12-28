@@ -5,6 +5,263 @@ format: html
 echo : false
 ---
 
-### Analyzing Ecological Transition Trends: A Comparative Study of OECD and Non-OECD Countries (1990-2022)
 
-**Link to the github project :** https://github.com/EmmDM/M1_QE_data_group_project
+```{r, echo=FALSE}
+# Sélection des librairies
+suppressWarnings({suppressMessages(library(here))
+suppressMessages(library(dplyr))
+library(tidyr)
+library(knitr)
+library(ggplot2)
+library(readr)
+library(stringr)
+library(readxl)})
+```
+
+```{r}
+#On lit les bases de données OCDE_pays et non_OCDE_pays
+donnees_partage <- readRDS("donnees_partage.RDS")
+
+OCDE_pays <- donnees_partage$OCDE_pays
+non_OCDE_pays <- donnees_partage$non_OCDE_pays
+```
+
+
+```{r}
+#I- Découplage
+
+
+
+
+
+
+#II- Policies 
+
+#Dans cette deuxième partie, l'objectif est d'étudier les pressions environnementales sur les ressources exercé par les composantes du PIb, puis les politiques mises en place pour réduire cela. 
+
+###Il nous paraît interessant dans un premier temps de comparer entre les pays OCDE et hors OCDE les differentes intensité sur l'eau, la qualité de l'air, et l'adpatation des ressources renouvelables. 
+
+##A- Pression environementales: 
+###A.1 : Intensité de l'eau 
+
+####Afin d'évaluer l'utilisation durable de l'eau, nous allons examiner l'intensité de l'eau par habitant et par unité de production. Nos variables principales utilisés sont : Prélèvements bruts d'eau douce par habitant, Stress hydrique (total des prélèvements d'eau douce en % des ressources internes renouvelables),Retraits annuels d’eau douce, total (% des ressources internes), Retraits annuels d’eau douce, (total milliards de mètres cubes). 
+###Nous les avons choisies car elles permettent d'avoir un aperçu des impact et des utilisations intensives sur l'eau, une ressource qui va venir à manquer. Il va aussi être interessant de se rendre compte des différents accès à l'eau selon les régions du monde, car 1 personne sur 3 n'y a pas accès créant un nombre élévé de dèces du à ce manque important.
+
+
+
+
+###des graphiques comparatifs entre pays OCDE et hors CDE vont être utilisé afin d'illsutrer les différences d'utilisation de l'eau selon les régions du monde et leurs économies. 
+
+
+
+#Création d'une table afin de summarize les informations statistics de ces 4 variables concernant l'eau. #cependant je n'  rrive pas à completement finaliser et je ne trouve pas des valeurs cohérentes, soit toutes pareilles soit des 0 ...
+
+# Importez la base de données OCDE_pays
+data <- OCDE_pays
+
+# Filtrez les données pour l'année 1990
+data <- data[data$année == 1990, ]
+
+# Créez une fonction pour extraire les valeurs des variables
+extract_variable <- function(variable) {
+    return(data$Variable == variable)
+}
+
+# Utilisez la fonction summarize_if() pour calculer la médiane
+# pour chaque pays
+results <- data %>%
+    group_by(Pays) %>%
+    summarise_if(is.numeric, median)
+
+# Créez un vecteur de noms de colonnes pour les variables numériques
+numeric_columns <- vector(mode = "character", length = 0)
+
+for (column in names(data)) {
+    if (is.numeric(data[[column]])) {
+       numeric_columns <- c(numeric_columns, column)
+    }
+}
+
+# Sélectionnez les colonnes numériques
+results_filtered <- results %>%
+    select(numeric_columns)
+
+# Ajoutez les noms des variables aux colonnes
+results_filtered <- results_filtered %>%
+    rename(
+        Stress_hydrique = stress_hydrique_median,
+        Retraits_annuels_eau_douce_total_pourcentage_ressources_
+internes = retraits_annuels_eau_douce_total_pourcentage_ressourc
+es_internes_median,
+        Retraits_annuels_eau_douce_total_milliards_de_metres_cub
+es = retraits_annuels_eau_douce_total_milliards_de_metres_cubes_
+median,
+        Prelevements_bruts_eau_douce_par_habitant =
+        prélèvements_bruts_eau_douce_par_habitant_median,
+    )
+
+# Afficher le tableau
+print(results_filtered)
+
+
+# Création d'un graphique qui represente les  3 variables sur la période de 1990 à 2020 pour les pays de l'OCDE. 
+
+##Observations: 
+
+
+
+
+
+
+
+###A.2 : Qualité de l'air 
+
+#L'indice de qualité de l'air sera utilisé pour évaluer les niveaux de pollution atmoshpériques. Cette donnée interessante pourra aussi nous donner des indices sur les secteurs intensifs des pays. Un pays au secteur industriel principale aura tendance à peut-être rejeté plus de CO2 dans l'air qu'un autre. 
+
+#Graph sur des variables de la qualité de l'air + summarize qualité air 
+
+
+# Importez la base de données OCDE_pays
+data <- OCDE_pays
+# Reformater les données de large à long avec tidyr
+data_long <- gather(data, key = "année", value = "value", -Variable, -Pays)
+
+# Filtrez les données pour les années 1990 à 2020
+data_filtered <- data_long[data_long$Variable == "Retraits_annuels_eau_douce_total_pourcentage_ressources_internes" & 
+                              as.numeric(data_long$année) >= 1990 & as.numeric(data_long$année) <= 2020, ]
+
+# Créer le graphique avec ggplot2
+ggplot(data_filtered, aes(x = as.numeric(année), y = value, color = Pays)) +
+  geom_line() +
+  xlab("Année") +
+  ylab("Retraits annuels d'eau douce total (pourcentage des ressources internes)") +
+  theme_bw() +
+  scale_color_manual(values = c("red", "blue", "green"))
+
+
+
+#VS graph pays non OCDE pour comparer
+
+
+#observations 
+
+
+###A.3 : Adoption de sources d'énergies renouvelables
+
+#depuis 1990 nous pouvons observer la tendance de l'adopation d'energie renouvelable et les pays qui en sont les moteurs. 
+
+#Pays OCDE les 3 premiers qui sont en tete et pays Non OCDE les 3 premiers 
+
+#Pays non OCDE
+
+#Observations
+
+
+#B- Politiques Environnementales
+# Après avoir pu observer les pressions exercés par les composantes de notre activité économique, nous allons pouvoir nous interesser aux politiques mises en place pour les réguler. 
+
+###B.1
+#tax
+
+#Une taxe environnementale est caractérisée par son action sur les coûts des activités ou les prix des produits qui ont un effet négatif sur l'environnement. C'est une internalisation de l'externalité négative. 
+
+#graph sur les taxes 
+
+
+#R&D : graph montrant l'évolution des efforts en R&D correlé ou non avec après les subventions ou aussi la transition vers les nergies renouvelable ?
+
+
+
+
+
+###B.2 
+#Subventions + prise de décision de protection de l'environnement 
+#le dispositif de subvention est une aide aux entreprise afin de les aider dans leurs transitions écologique pour aller vers des énergies plus durables. 
+# nous allons pouvoir observer l'évolution des subventions via plusieurs variables: 
+
+#Soutien total aux combustibles fossiles, % recettes totales des taxes
+#Soutien aux consommateurs de combustibles fossiles, % recettes totales des taxes
+#Soutien à l'électricité, % soutien total aux combustibles fossiles
+#Zones protégées à l'échelle nationale (% du territoire total)
+#Zones terrestres et marines protégées (% du territoire total)
+#Zones marines protégées (% des eaux du territoire)
+
+#faire un graph ou une table
+
+# puis observations/ conclusion sur ces politiques 
+
+```
+```{r}
+#III- Vulnérabilités et strategies adaptives
+
+#A- Variable démographique 
+
+#La migrations des populations vers les espaces urbains s'est réalisé de manière continu depuis l'industrialisation au 19 ième siècle. Aujurd'hui les espaces ruraux sont vides mais à cause d'une pression environementales qui devient trop elevés, et dérangeante ce mouvement peut avoir changer. Nous allons analyser ces migrations dans un graph afin de nous rendre compte depuis 1990 des ces évolutions. La Worldbank à plus de variable sur les indices urbains, tandis que l'OCDE est plus tourné vers les migrations, ce qui va nous permettre d'avoir un grand calibre de donnée.  
+
+
+
+#B- vulnérabilité humaine face aux changement climatiques
+#L'industrialisation intensives qui a lieu depuis le 19 ieme siècle et la consommation de masse des 30 glorieuses n'a pas laissé notre planète indemne. En effet, les catastrophes naturelles se multiplient et nous sommes totalement vulnérable face à cet nature déchainé. 
+
+
+
+
+
+
+
+
+
+```
+
+
+```{r}
+# Installer les packages si ce n'est pas déjà fait
+# install.packages(c("ggplot2", "dplyr"))
+
+# Charger les bibliothèques
+library(ggplot2)
+library(dplyr)
+
+# Supposons que votre jeu de données s'appelle non_OCDE_pays
+# Assurez-vous d'avoir correctement chargé vos données
+
+# Filtrer les données pour la période de 1990 à 2020
+non_OCDE_pays_filtered <- non_OCDE_pays[non_OCDE_pays$année >= 1990 & non_OCDE_pays$année <= 2020, ]
+
+# Graphique : Évolution des émissions de CO2 (kg par $ PPA de 2011 de PIB) pour les trois premiers pays
+top3_emissions <- non_OCDE_pays_filtered %>%
+  group_by(Pays) %>%
+  arrange(desc(`Autres émissions de gaz à effet de serre, HFC, PFC et SF6 (milliers de tonnes métriques d’équivalent CO2)
+`)) %>%
+  slice_head(n = 3)
+
+ggplot(top3_emissions, aes(x = année, y = `Émissions de CO2 (kg par $ PPA de 2011 de PIB)`, color = Pays)) +
+  geom_line() +
+  xlab("Année") +
+  ylab("Émissions de CO2 (kg par $ PPA de 2011 de PIB)") +
+  theme_bw() +
+  ggtitle("Évolution des émissions de CO2 pour les trois premiers pays")
+
+# Graphique : Distribution des valeurs d'exposition moyenne de la population aux PM2.5
+ggplot(non_OCDE_pays_filtered, aes(x = `Exposition moyenne de la population aux PM2.5`)) +
+  geom_histogram(binwidth = 5, fill = "skyblue", color = "black", alpha = 0.7) +
+  xlab("Exposition moyenne de la population aux PM2.5") +
+  ylab("Fréquence") +
+  theme_bw() +
+  ggtitle("Distribution de l'exposition moyenne aux PM2.5")
+
+# Table : Statistiques descriptives pour les variables d'intérêt
+summary_table <- non_OCDE_pays_filtered %>%
+  select(`Émissions de CO2 (kg par $ PPA de 2011 de PIB)`,
+         `Émissions de CO2 (kg par $ US de 2010 de PIB)`,
+         `Autres émissions de gaz à effet de serre, HFC, PFC et SF6 (milliers de tonnes métriques d’équivalent CO2)`,
+         `Émissions totales de GES (variation depuis 1990, %)`,
+         `Exposition moyenne de la population aux PM2.5`)
+
+print("Table des statistiques descriptives :")
+print(summary_table)
+
+
+```
+
+
