@@ -1,0 +1,10 @@
+---
+title: "Final Part"
+author: "Victoire Truchon-Bartès & Emmanuel de MOREL"
+format: html
+echo : false
+---
+
+### Analyzing Ecological Transition Trends: A Comparative Study of OECD and Non-OECD Countries (1990-2022)
+
+**Link to the github project :** https://github.com/EmmDM/M1_QE_data_group_project
