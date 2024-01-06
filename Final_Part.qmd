@@ -27,7 +27,9 @@ OCDE_pays <- donnees_partage$OCDE_pays
 non_OCDE_pays <- donnees_partage$non_OCDE_pays
 ```
 
-*I- Découplage* Dans un premier temps, nous chercherons à présenter un
+*I- Découplage* 
+
+Dans un premier temps, nous chercherons à présenter un
 état des lieux en déterminant les liens fondamentaux entre les
 principaux agrégats économiques et environnementaux tels que le PIB, et
 les émissions de CO2 pour notamment étudier dans quelle mesure la
@@ -36,6 +38,8 @@ nous intéresserons à la notion de découplage, signifiant une croissance
 économique sans augmentation proportionnelle de la pression
 environnementale. Nous analyserons aussi les tendances en matière
 d'intensité carbone et d'efficacité énergétique.
+
+I.
 
 Le découplage se produit lorsque le taux de croissance d'une pression
 environnementale est inférieur à celui de sa force motrice économique
@@ -66,7 +70,7 @@ Force motrice
 
 ```{r}
 #Pour le CO2
-#Tous les pays de l'OCDE et est les trois régions principales (Europe, Amérique du Nord et Pacifique)
+#Tous les pays de l'OCDE et les trois régions principales (Europe, Amérique du Nord et Pacifique)
 
 #Variables : PIB par habitant / Emission de CO2
 decoupling_CO2_OCDE <-  OCDE_pays %>% filter(Variable %in% c("PIB réel par habitant","Émissions totales de GES (kt d’équivalent CO2)")) %>% select(-`COU`, -`VAR` ,- `Unit`, -`PowerCode`) %>% pivot_longer(cols = c(`1990`,`1991`,`1992`,`1993`,`1994`,`1995`,`1996`,`1997`,`1998`,`1999`,`2000`, `2001`, `2002`, `2003`, `2004`, `2005`, `2006`, `2007`, `2008`, `2009`,`2010`, `2011`, `2012`, `2013`, `2014`, `2015`, `2016`, `2017`, `2018`, `2019`, `2020`),  names_to = "Année", values_to = "Value") %>% mutate(Value = as.numeric(Value))
@@ -79,9 +83,30 @@ CO2_total_OCDE <- decoupling_CO2_OCDE_index %>% filter(Pays %in% unique(decoupli
 CO2_total_OCDE <- CO2_total_OCDE %>% mutate(Ratio_base100 = Ratio / Ratio[which(CO2_total_OCDE$Année == 1990)]*100)
 
 ggplot(CO2_total_OCDE, aes(x = Année, y = Ratio_base100))  + geom_point() + labs(title = "Emissions par unité de PIB et par personne en base 100 (1990) pour le total de l'OCDE", x = "Année", y = "Ratio (Base 100 en 1990)") + theme(axis.text.x=element_text(angle=50, size=8, vjust=0.5)) 
-#ggplot(decoupling_CO2_OCDE_index, aes(x = Année, y = Ratio)) + geom_jitter() + labs(title = "Ratio de découplage entre les émissions de CO2 et le PIB Réel par habitant", x = "Année", y = "Ratio de découplage") +  facet_wrap(~ Pays, scales = "free_y", ncol = 5, strip.position = "bottom") + theme(legend.position = "top", legend.title = element_text(size =10), legend.text = element_text(size = 8), axis.text.x = element_text(angle = 45, hjust = 1), axis.text.y = element_text(size= 8), plot.title = element_text(size = 14, face = "bold"), plot.subtitle = element_text(size = 12),plot.caption = element_text(size = 10), panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_rect(fill = "white"), panel.border = element_blank())
+
+#Tous les pays non membres de l'OCDE 
+
+#Variables : PIB par habitant / Emission de CO2
+decoupling_CO2_non_OCDE <-  non_OCDE_pays %>% filter(Variable %in% c("PIB réel par habitant","Émissions totales de GES (kt d’équivalent CO2)")) %>% select(-`COU`, -`VAR` ,- `Unit`, -`PowerCode`) %>% pivot_longer(cols = c(`1990`,`1991`,`1992`,`1993`,`1994`,`1995`,`1996`,`1997`,`1998`,`1999`,`2000`, `2001`, `2002`, `2003`, `2004`, `2005`, `2006`, `2007`, `2008`, `2009`,`2010`, `2011`, `2012`, `2013`, `2014`, `2015`, `2016`, `2017`, `2018`, `2019`, `2020`),  names_to = "Année", values_to = "Value") %>% mutate(Value = as.numeric(Value))
+
+#On crée un index
+decoupling_CO2_non_OCDE_index <- decoupling_CO2_non_OCDE %>% pivot_wider(names_from = Variable, values_from = Value) %>% mutate(Ratio = `Émissions totales de GES (kt d’équivalent CO2)`/`PIB réel par habitant`)
+
+#Création d'un index total non OCDE
+CO2_total_non_OCDE <- decoupling_CO2_non_OCDE_index %>% filter(Pays %in% unique(decoupling_CO2_non_OCDE_index$Pays)) %>% group_by(Année) %>% summarise(Ratio = sum(`Émissions totales de GES (kt d’équivalent CO2)`, na.rm = TRUE)/sum(`PIB réel par habitant`, na.rm = TRUE)) 
+
+CO2_total_non_OCDE <- CO2_total_non_OCDE %>% mutate(Ratio_base100 = Ratio / Ratio[which(CO2_total_non_OCDE$Année == 1990)]*100)
+
+ggplot(CO2_total_non_OCDE, aes(x = Année, y = Ratio_base100))  + geom_point() + labs(title = "Emissions par unité de PIB et par personne en base 100 (1990) pour le total des non membres de l'OCDE", x = "Année", y = "Ratio (Base 100 en 1990)") + theme(axis.text.x=element_text(angle=50, size=8, vjust=0.5)) 
+
 
 ```
+
+```{r}
+#On ajoute la somme totale du C02 émis par an et la somme total du PIB réel par an
+#CO2_total_OCDE <- decoupling_CO2_OCDE %>% group_by(Année,Variable) %>% summarise(Total = sum(`Value`, na.rm = TRUE))
+```
+
 
 *II- Politiques*
 
