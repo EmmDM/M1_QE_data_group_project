@@ -21,7 +21,6 @@ library(readxl)})
 ```{r}
 #On lit les bases de données OCDE_pays et non_OCDE_pays
 donnees_partage <- readRDS("donnees_partage.RDS")
-
 OCDE_pays <- donnees_partage$OCDE_pays
 non_OCDE_pays <- donnees_partage$non_OCDE_pays
 ```
