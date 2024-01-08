@@ -538,53 +538,58 @@ On constate que certaines variables ne sont présentes que pour les pays de l'OC
 
 #Création d'une table afin de summarize les informations statistics de ces 4 variables concernant l'eau. #cependant je n'  rrive pas à completement finaliser et je ne trouve pas des valeurs cohérentes, soit toutes pareilles soit des 0 ...
 
-# Importez la base de données OCDE_pays
-data <- OCDE_pays
 
-# Filtrez les données pour l'année 1990
-data <- data[data$année == 1990, ]
+"Prélèvements bruts d'eau douce par habitant",
+  "Stress hydrique, total des prélèvements d'eau douce en % des ressources internes renouvelables"
+"Retraits annuels d’eau douce, total (% des ressources internes)",
+  "Retraits annuels d’eau douce, total (milliards de mètres cubes)"
+```
 
-# Créez une fonction pour extraire les valeurs des variables
-extract_variable <- function(variable) {
-    return(data$Variable == variable)
+
+```{r}
+année <- summary(OCDE_pays [c("1990","1991","1992","1993","1994","1995","1996","1997","1998","1999","2000","2001","2002","2003","2004","2005","2006","2007","2008","2009","2010","2011","2012","2013","2014","2015","2016","2017","2018","2019","2020")])
+
+
+ggplot(OCDE_pays, aes(x = valeur, y = année)) +
+  geom_curve(aes(x = valeur, y = année), col = 'Pays')
+
+
+ggplot(OCDE_pays, aes(x = valeur, y = année))+
+  geom_curve(colors = 'Pays')
+
+```
+```{r}
+# Assuming "année" and "valeur" are your vectors
+length_annee <- length(année)
+length_valeur <- length(valeur)
+
+if (length_annee == length_valeur) {
+  print("Les vecteurs ont la même taille.")
+} else {
+  print("Les vecteurs n'ont pas la même taille.")
 }
 
-# Utilisez la fonction summarize_if() pour calculer la médiane
-# pour chaque pays
-results <- data %>%
-    group_by(Pays) %>%
-    summarise_if(is.numeric, median)
 
-# Créez un vecteur de noms de colonnes pour les variables numériques
-numeric_columns <- vector(mode = "character", length = 0)
+# Assuming "année" and "valeur" are your vectors
+max_length <- max(length(année), length(valeur))
+année <- c(année, rep(NA, max_length - length(année)))
+valeur <- c(valeur, rep(NA, max_length - length(valeur)))
 
-for (column in names(data)) {
-    if (is.numeric(data[[column]])) {
-       numeric_columns <- c(numeric_columns, column)
-    }
-}
+```
 
-# Sélectionnez les colonnes numériques
-results_filtered <- results %>%
-    select(numeric_columns)
 
-# Ajoutez les noms des variables aux colonnes
-results_filtered <- results_filtered %>%
-    rename(
-        Stress_hydrique = stress_hydrique_median,
-        Retraits_annuels_eau_douce_total_pourcentage_ressources_
-internes = retraits_annuels_eau_douce_total_pourcentage_ressourc
-es_internes_median,
-        Retraits_annuels_eau_douce_total_milliards_de_metres_cub
-es = retraits_annuels_eau_douce_total_milliards_de_metres_cubes_
-median,
-        Prelevements_bruts_eau_douce_par_habitant =
-        prélèvements_bruts_eau_douce_par_habitant_median,
-    )
+```{r}
+cols<- c("Prélèvements bruts d'eau douce par habitant",
+  "Stress hydrique, total des prélèvements d'eau douce en % des ressources internes renouvelables",
+"Retraits annuels d’eau douce, total (% des ressources internes)",
+  "Retraits annuels d’eau douce, total (milliards de mètres cubes)")
+valeur<-summary(OCDE_pays[c('Variable')])
+```
 
-# Afficher le tableau
-print(results_filtered)
 
+
+```{r}
+#
 
 # Création d'un graphique qui represente les  3 variables sur la période de 1990 à 2020 pour les pays de l'OCDE. 
 
@@ -683,7 +688,7 @@ ggplot(data_filtered, aes(x = as.numeric(année), y = value, color = Pays)) +
 
 
 #B- vulnérabilité humaine face aux changement climatiques
-#L'industrialisation intensives qui a lieu depuis le 19 ieme siècle et la consommation de masse des 30 glorieuses n'a pas laissé notre planète indemne. En effet, les catastrophes naturelles se multiplient et nous sommes totalement vulnérable face à cet nature déchainé. 
+#L'industrialisation intensives qui a lieu depuis le 19 ieme siècle et la consommation de masse des 30 glorieuses n'a pas laissé notre planète indemne. En effet, les catastrophes naturelles se multiplient et nous sommes totalement vulnérable face à cet nature déchainée. 
 
 
 
@@ -691,57 +696,6 @@ ggplot(data_filtered, aes(x = as.numeric(année), y = value, color = Pays)) +
 
 
 
-
-
-```
-
-
-```{r}
-# Installer les packages si ce n'est pas déjà fait
-# install.packages(c("ggplot2", "dplyr"))
-
-# Charger les bibliothèques
-library(ggplot2)
-library(dplyr)
-
-# Supposons que votre jeu de données s'appelle non_OCDE_pays
-# Assurez-vous d'avoir correctement chargé vos données
-
-# Filtrer les données pour la période de 1990 à 2020
-non_OCDE_pays_filtered <- non_OCDE_pays[non_OCDE_pays$année >= 1990 & non_OCDE_pays$année <= 2020, ]
-
-# Graphique : Évolution des émissions de CO2 (kg par $ PPA de 2011 de PIB) pour les trois premiers pays
-top3_emissions <- non_OCDE_pays_filtered %>%
-  group_by(Pays) %>%
-  arrange(desc(`Autres émissions de gaz à effet de serre, HFC, PFC et SF6 (milliers de tonnes métriques d’équivalent CO2)
-`)) %>%
-  slice_head(n = 3)
-
-ggplot(top3_emissions, aes(x = année, y = `Émissions de CO2 (kg par $ PPA de 2011 de PIB)`, color = Pays)) +
-  geom_line() +
-  xlab("Année") +
-  ylab("Émissions de CO2 (kg par $ PPA de 2011 de PIB)") +
-  theme_bw() +
-  ggtitle("Évolution des émissions de CO2 pour les trois premiers pays")
-
-# Graphique : Distribution des valeurs d'exposition moyenne de la population aux PM2.5
-ggplot(non_OCDE_pays_filtered, aes(x = `Exposition moyenne de la population aux PM2.5`)) +
-  geom_histogram(binwidth = 5, fill = "skyblue", color = "black", alpha = 0.7) +
-  xlab("Exposition moyenne de la population aux PM2.5") +
-  ylab("Fréquence") +
-  theme_bw() +
-  ggtitle("Distribution de l'exposition moyenne aux PM2.5")
-
-# Table : Statistiques descriptives pour les variables d'intérêt
-summary_table <- non_OCDE_pays_filtered %>%
-  select(`Émissions de CO2 (kg par $ PPA de 2011 de PIB)`,
-         `Émissions de CO2 (kg par $ US de 2010 de PIB)`,
-         `Autres émissions de gaz à effet de serre, HFC, PFC et SF6 (milliers de tonnes métriques d’équivalent CO2)`,
-         `Émissions totales de GES (variation depuis 1990, %)`,
-         `Exposition moyenne de la population aux PM2.5`)
-
-print("Table des statistiques descriptives :")
-print(summary_table)
 
 
 ```
