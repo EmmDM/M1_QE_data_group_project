@@ -519,7 +519,7 @@ On constate que certaines variables ne sont présentes que pour les pays de l'OC
 
 #II- Policies 
 
-#Dans cette deuxième partie, l'objectif est d'étudier les pressions environnementales sur les ressources exercé par les composantes du PIb, puis les politiques mises en place pour réduire cela. 
+#Dans cette deuxième partie, l'objectif est d'étudier les pressions environnementales sur les ressources exercées par les composantes du PIb, puis les politiques mises en place pour réduire cela. 
 
 ###Il nous paraît interessant dans un premier temps de comparer entre les pays OCDE et hors OCDE les differentes intensité sur l'eau, la qualité de l'air, et l'adpatation des ressources renouvelables. 
 
