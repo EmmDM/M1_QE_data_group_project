@@ -143,11 +143,11 @@ car 1 personne sur 3 n'y a pas accès créant un nombre élévé de dèces du
 ```
 
 ```{r}
-#Création d'une base de données pour les indicateurs d'eau pour les pays membres de l'OCDE
-eau_OCDE <- OCDE_pays %>% filter(Variable %in% c("Prélèvements bruts d'eau douce par habitant","Stress hydrique, total des prélèvements d'eau douce en % des ressources internes renouvelables","Retraits annuels d’eau douce, total (% des ressources internes)","Retraits annuels d’eau douce, total (milliards de mètres cubes)")) %>% select(-`COU`, -`VAR` ,- `Unit`, -`PowerCode`) %>% pivot_longer(cols = c(`1990`,`1991`,`1992`,`1993`,`1994`,`1995`,`1996`,`1997`,`1998`,`1999`,`2000`, `2001`, `2002`, `2003`, `2004`, `2005`, `2006`, `2007`, `2008`, `2009`,`2010`, `2011`, `2012`, `2013`, `2014`, `2015`, `2016`, `2017`, `2018`, `2019`, `2020`),  names_to = "Année", values_to = "Value") %>% mutate(Value = as.numeric(Value))
 
 
 #  On calcule la moyenne et la médiane des variables pour chaques pays membres de l'OCDE
+eau_OCDE <- OCDE_pays %>% filter(Variable, Année, Pays)
+
 eau_stat_OCDE <- eau_OCDE %>% group_by(Pays,Variable) %>% summarize(Valeur_moyenne = mean(`Value`, na.rm = TRUE), valeur_median = median(`Value`, na.rm = TRUE), .groups = 'drop')
  
 
@@ -158,6 +158,21 @@ eau_non_OCDE <- non_OCDE_pays %>% filter(Variable %in% c("Prélèvements bruts d
 
 ```{r}
 #  On calcule la moyenne et la médiane des variables pour chaques pays non membres de l'OCDE
+
+eau_stat_OCDE <- eau_OCDE %>% group_by(Pays,Variable) %>% summarize(
+  Valeur_moyenne = mean(`Value`, na.rm = TRUE), 
+  valeur_median = median(`Value`, na.rm = TRUE), 
+  valeur_min = min(`Value`, na.rm = TRUE), 
+  valeur_max = max(`Value`, na.rm = TRUE), 
+  .groups = 'drop')
+
+eau_stat_OCDE_min <- eau_OCDE %>% summarise (
+  min_eau = min("Prélèvements bruts d'eau douce par habitant")
+)
+                                             
+knitr :: kable(eau_stat_OCDE_min)
+
+
 eau_stat_non_OCDE <- eau_non_OCDE %>% group_by(Pays,Variable) %>% summarize(Valeur_moyenne = mean(`Value`, na.rm = TRUE), valeur_median = median(`Value`, na.rm = TRUE), valeur_min = min(`Value`, na.rm = TRUE), valeur_max = max(`Value`, na.rm = TRUE), .groups = 'drop')
 
 knitr :: kable(eau_stat_OCDE, caption = "Tableau de valeurs moyennes et médianes sur les variables hydriques d'intérêt par pays")
@@ -167,6 +182,8 @@ knitr :: kable(eau_stat_non_OCDE, caption = "Tableau de valeurs moyennes et méd
 
 ```
 
+Voici un tableau récapitulatif pour ces 4 variables qui permettent d'avoir une vue d'ensemble à l'aide d'outils statistics. Les disparités sont énorment entre tous ces pays, en effet prenons par exemple le Brésil pour le retrait annuel d'eau douce par habitant en pourcentage des resssources internes qui à un maximum de 1,32 contrairement au Japon qui est à plus de 182.La situation Géographique est aussi à prendre en compte, cependant ce n'est pas notre cible ici. Nous voulons simplement expliquer la tendance qui est pour les pays de l'OCDE  restée stable depuis les années 1980 en matière des prelevement totaux d'eau de surface mais en parallele les quantitées pour l'irriguation ont augmentés. Ont peux expliquer cela par l'implantation de nouvelles technologies et la transition d'une activitée à une autre. Nous illustrons cela par 4 graph pour les pays de l'oCDE. 
+
 ```{r}
 #On analyse les tendances des pays membres de l'OCDE
 
@@ -175,44 +192,93 @@ eau_tendance_OCDE <- eau_OCDE %>% group_by(Année,Variable) %>% summarise(moyenn
 
 ggplot(eau_tendance_OCDE, aes(x=`Année`, y = moyenne_annuelle)) + geom_jitter() + scale_size_continuous("moyenne_annuelle") +  facet_wrap(~ Variable, scales = "free_y", ncol = 1) + theme(axis.text.x=element_text(angle=50, size=8, vjust=0.5)) 
 
-#Il faut faire des correlations entre différentes variables
 ```
+
+Nous pouvons observer par ces 4 tableaux, que pour chacune des variables, la moyenne annuelle était plus elevés en 1990 qu'en 2020. Pour la variable : retraits annuel d'eau douce relié au pourcentage des ressources internes , sa croissance est plutot homogene avec celle qui mesure en milliard de mètre cubes, cela est cohérent. Cependant, la demande d'eau ne cesse d'augmenter avec le secteur agricole le principal consommateur avec 70% de la demande d'eau douce (OCDE), puis la production d'éléctricité.
+D'après le scénario de reference des Perspectives à horizon 2050, 40% de la population mondiale vivront dans des bassins soumis à un stress hydrique elevé qui correspond à plus de 40% de demande d'eau dites bleues ( eau douces des aquiferes, cours d'eau et lacs). 
+Ces indicateurs ne refletent pas la réalité complexe, la diminution de la moyenne annuelle transcrit le fait que les pays de l'OCDE developpés ont finis leurs croissance exponentielles. Cependant les BRIICS et les autres pays emergents devrait voir leurs consommation augementer fortement pour le secteur manufacturier, la production d'éléctricité et les besoins domestiques. 
+
 
 *A.2 : Qualité de l'air* L'indice de qualité de l'air sera utilisé pour
 évaluer les niveaux de pollution atmoshpériques. Cette donnée
 interessante pourra aussi nous donner des indices sur les secteurs
 intensifs des pays. Un pays au secteur industriel principale aura
-tendance à peut-être rejeté plus de CO2 dans l'air qu'un autre.
+tendance à peut-être rejeté plus de CO2 dans l'air qu'un autre.Aujourd'hui, les particules types pm10, pm2.5 sont concentrés dans les millieux surtout urbains et supérieurs aux règles fixés. Cette surexposition entraîne la hausse du nombre de dècés par leurs contenance de produits toxiques qui penetrent dans les poumons. En effet le nombre de décès est passé de près d'un million en 2000 à plus de 3.5 millions d'ici 2050, avec une majorité dans les BRIICS. 
+
+1) émission GES et autres particules 
+
+2) expositions a la pollution et decès
+
 
 ```{r}
 
+#1) emission GES et autre
+library(dplyr)
+library(corrplot)
 
-#Graph sur des variables de la qualité de l'air + summarize qualité air 
+qualité_air <- OCDE_pays %>%
+  filter(Variable %in% c(  "Autres émissions de gaz à effet de serre, HFC, PFC et SF6 (milliers de tonnes métriques d’équivalent CO2)",
+                          "Émissions/éliminations nettes de GES attribuables au changement d'affectation des terres et à la foresterie (Mt d’équivalents CO2)",
+                          "Émissions totales de GES (kt d’équivalents CO2)", "Mortalité due à l'exposition aux PM2.5","Pourcentage de la population exposée à plus de 10 microgrammes/m3", "Pourcentage de la population exposée à plus de 35 microgrammes/m3",
+                          
+                          
 
 
-qualité_air <-  OCDE_pays %>% filter(Variable %in% c("Intensité CO2 induite par la production", "émissions de CO2 liées à l'énergie, par habitant",
-"Autres émissions de gaz à effet de serre, HFC, PFC et SF6 (milliers de tonnes métriques d’équivalent CO2)", "Émissions/éliminations nettes de GES attribuables au changement d'affectation des terres et à la foresterie (Mt d’équivalents CO2)","Émissions totales de GES (kt d’équivalent CO2)") %>%
 
-select(-`COU`, -`VAR` ,- `Unit`, -`PowerCode`) %>% pivot_longer(cols = c(`1990`,`1991`,`1992`,`1993`,`1994`,`1995`,`1996`,`1997`,`1998`,`1999`,`2000`, `2001`, `2002`, `2003`, `2004`, `2005`, `2006`, `2007`, `2008`, `2009`,`2010`, `2011`, `2012`, `2013`, `2014`, `2015`, `2016`, `2017`, `2018`, `2019`, `2020`),  names_to = "Année", values_to = "Value") %>% mutate(Value = as.numeric(Value))
-
-ggplot(qualité_air, aes(x = Année, y = ))  + geom_point() + labs(title = "Emissions par unité de PIB et par personne en base 100 (1990) pour le total de l'OCDE", x = "Année", y = "Ratio (Base 100 en 1990)") + theme(axis.text.x=element_text(angle=50, size=8, vjust=0.5)) 
-
-#observations
 ```
+
+
 ```{r}
 library(ggplot2)
+library(ggplot2)
 
-# Chargement des données
-OCDE_pays 
+# Select the relevant variables
+selected_variables <- c("Autres émissions de gaz à effet de serre, HFC, PFC et SF6 (milliers de tonnes métriques d’équivalent CO2)",
+                         "Émissions totales de GES (kt d’équivalents CO2)",
+                         "Mortalité due à l'exposition aux PM2.5",
+                         "Pourcentage de la population exposée à plus de 10 microgrammes/m3",
+                         "Pourcentage de la population exposée à plus de 35 microgrammes/m3")
 
-# Pivot des données
-OCDE_pays <- (cols = c(`1990`,`1991`,`1992`,`1993`,`1994`,`1995`,`1996`,`1997`,`1998`,`1999`,`2000`, `2001`, `2002`, `2003`, `2004`, `2005`, `2006`, `2007`, `2008`, `2009`,`2010`, `2011`, `2012`, `2013`, `2014`, `2015`, `2016`, `2017`, `2018`, `2019`, `2020`),names_to = "Année", values_to = "Value") %>% mutate(Value = as.numeric(Value))
+# Filter data for selected variables
+selected_data <- OCDE_pays %>%
+  filter(Variable %in% selected_variables) %>%
+  select(Année, Pays, Variable, Value)
 
-# Création des subplots
-ggplot(data = OCDE_pays, aes(x = Année, y = "Intensité CO2 induite par la production")) +
-  geom_line() +
-  facet_wrap(~Variable, scales = "free_y")
+# Convert "Année" to a factor for proper ordering
+selected_data$Année <- factor(selected_data$Année, levels = unique(selected_data$Année))
 
+# Create separate plots for each variable
+for (Variable in selected_variables) {
+  # Filter data for the current variable
+  variable_data <- selected_data[selected_data$Variable == Variable, ]
+
+  # Plot for the current variable
+  ggplot(variable_data, aes(x = Année, y = Value, fill = Pays)) +
+    geom_bar(stat = "identity", position = "dodge") +
+    labs(title = Variable,
+         x = "Year",
+         y = "Value") +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+    facet_wrap(~pays, scales = "free_y", ncol = 3)  # Adjust ncol as needed
+  
+  # Add the plot to the list
+  plots_list[[length(plots_list) + 1]] <- plot
+
+
+# Print the plots using grid.arrange
+grid.arrange(grobs = plots_list, ncol = 2)
+}
+
+
+```
+
+
+```{r}
+"Intensité CO2 induite par la production", "émissions de CO2 liées à l'énergie, par habitant",
+"Autres émissions de gaz à effet de serre, HFC, PFC et SF6 (milliers de tonnes métriques d’équivalent CO2)", "Émissions/éliminations nettes de GES attribuables au changement d'affectation des terres et à la foresterie (Mt d’équivalents CO2)","Émissions totales de GES (kt d’équivalent CO2)") %>%,
+Pays 
+  
+  
 ```
 
 
@@ -223,10 +289,70 @@ les pays qui en sont les moteurs.
 ```{r}
 #Pays OCDE les 3 premiers qui sont en tete et pays Non OCDE les 3 premiers 
 
+
 #Pays non OCDE
 
 #Observations
 ```
+
+
+```{r}
+air_stat_OCDE <- OCDE_pays %>% group_by(Pays,Variable) %>% summarize(Valeur_moyenne = mean(`Value`, na.rm = TRUE), valeur_median = median(`Value`, na.rm = TRUE), valeur_min = min(`Value`, na.rm = TRUE), valeur_max = max(`Value`, na.rm = TRUE), .groups = 'drop')
+air_stat_non_OCDE <- OCDE_pays %>% group_by(Pays,Variable) %>% summarize(Valeur_moyenne = mean(`Value`, na.rm = TRUE), valeur_median = median(`Value`, na.rm = TRUE), valeur_min = min(`Value`, na.rm = TRUE), valeur_max = max(`Value`, na.rm = TRUE), .groups = 'drop')
+
+knitr :: kable(air_stat_OCDE, caption = "Tableau de valeurs moyennes et médianes sur les variables hydriques d'intérêt par pays")
+
+knitr :: kable(air_stat_non_OCDE, caption = "Tableau de valeurs moyennes et médianes sur les variables hydriques d'intérêt par pays")
+
+
+extreme_air <- OCDE_pays(Variable =character(),
+```
+
+
+```{r}
+
+library(dplyr)
+library(knitr)
+
+# Sélection des variables d'intérêt
+selected_variables <- c("Intensité CO2 induite par la production", 
+                        "émissions de CO2 liées à l'énergie, par habitant",
+                        "Autres émissions de gaz à effet de serre, HFC, PFC et SF6 (milliers de tonnes métriques d’équivalent CO2)", 
+                        "Émissions/éliminations nettes de GES attribuables au changement d'affectation des terres et à la foresterie (Mt d’équivalents CO2)",
+                        "Émissions totales de GES (kt d’équivalent CO2)")
+
+# Filtrer les données pour les variables sélectionnées
+selected_data <- OCDE_pays %>%
+  filter(Variable %in% selected_variables)
+
+# Calcul des valeurs minimales et maximales pour chaque variable, par pays (OCDE)
+air_stat_OCDE <- selected_data %>%
+  filter(`OCDE` == "Membre") %>%
+  group_by(Variable) %>%
+  summarize(
+    valeur_min_OCDE = min(`Value`, na.rm = TRUE),
+    valeur_max_OCDE = max(`Value`, na.rm = TRUE),
+    .groups = 'drop'
+  )
+
+# Affichage du tableau pour les pays de l'OCDE
+knitr::kable(air_stat_OCDE, caption = "Tableau des valeurs minimales et maximales sur les variables hydriques d'intérêt pour les pays de l'OCDE")
+
+# Calcul des valeurs minimales et maximales pour chaque variable, par pays (non OCDE)
+air_stat_non_OCDE <- selected_data %>%
+  filter(`OCDE` == "Non-Membre") %>%
+  group_by(Variable) %>%
+  summarize(
+    valeur_min_non_OCDE = min(`Value`, na.rm = TRUE),
+    valeur_max_non_OCDE = max(`Value`, na.rm = TRUE),
+    .groups = 'drop'
+  )
+
+# Affichage du tableau pour les pays non membres de l'OCDE
+knitr::kable(air_stat_non_OCDE, caption = "Tableau des valeurs minimales et maximales sur les variables hydriques d'intérêt pour les pays non membres de l'OCDE")
+
+```
+
 
 *B- Politiques Environnementales* Après avoir pu observer les pressions
 exercés par les composantes de notre activité économique, nous allons
@@ -341,214 +467,5 @@ sommes totalement vulnérable face à cet nature déchainé.
 ```
 
 
-
-
-# Importez la base de données OCDE_pays
-data <- OCDE_pays
-
-# Filtrez les données pour l'année 1990
-data <- data[data$année == 1990, ]
-
-# Créez une fonction pour extraire les valeurs des variables
-extract_variable <- function(variable) {
-    return(data$Variable == variable)
-}
-
-# Utilisez la fonction summarize_if() pour calculer la médiane
-# pour chaque pays
-results <- data %>%
-    group_by(Pays) %>%
-    summarise_if(is.numeric, median)
-
-# Créez un vecteur de noms de colonnes pour les variables numériques
-numeric_columns <- vector(mode = "character", length = 0)
-
-for (column in names(data)) {
-    if (is.numeric(data[[column]])) {
-       numeric_columns <- c(numeric_columns, column)
-    }
-}
-
-# Sélectionnez les colonnes numériques
-results_filtered <- results %>%
-    select(numeric_columns)
-
-# Ajoutez les noms des variables aux colonnes
-results_filtered <- results_filtered %>%
-    rename(
-        Stress_hydrique = stress_hydrique_median,
-        Retraits_annuels_eau_douce_total_pourcentage_ressources_
-internes = retraits_annuels_eau_douce_total_pourcentage_ressourc
-es_internes_median,
-        Retraits_annuels_eau_douce_total_milliards_de_metres_cub
-es = retraits_annuels_eau_douce_total_milliards_de_metres_cubes_
-median,
-        Prelevements_bruts_eau_douce_par_habitant =
-        prélèvements_bruts_eau_douce_par_habitant_median,
-    )
-
-# Afficher le tableau
-print(results_filtered)
-
-
-# Création d'un graphique qui represente les  3 variables sur la période de 1990 à 2020 pour les pays de l'OCDE. 
-
-##Observations: 
-
-
-
-
-
-
-
-###A.2 : Qualité de l'air 
-
-#L'indice de qualité de l'air sera utilisé pour évaluer les niveaux de pollution atmoshpériques. Cette donnée interessante pourra aussi nous donner des indices sur les secteurs intensifs des pays. Un pays au secteur industriel principale aura tendance à peut-être rejeté plus de CO2 dans l'air qu'un autre. 
-
-#Graph sur des variables de la qualité de l'air + summarize qualité air 
-
-
-# Importez la base de données OCDE_pays
-data <- OCDE_pays
-# Reformater les données de large à long avec tidyr
-data_long <- gather(data, key = "année", value = "value", -Variable, -Pays)
-
-# Filtrez les données pour les années 1990 à 2020
-data_filtered <- data_long[data_long$Variable == "Retraits_annuels_eau_douce_total_pourcentage_ressources_internes" & 
-                              as.numeric(data_long$année) >= 1990 & as.numeric(data_long$année) <= 2020, ]
-
-# Créer le graphique avec ggplot2
-ggplot(data_filtered, aes(x = as.numeric(année), y = value, color = Pays)) +
-  geom_line() +
-  xlab("Année") +
-  ylab("Retraits annuels d'eau douce total (pourcentage des ressources internes)") +
-  theme_bw() +
-  scale_color_manual(values = c("red", "blue", "green"))
-
-
-
-#VS graph pays non OCDE pour comparer
-
-
-#observations 
-
-
-###A.3 : Adoption de sources d'énergies renouvelables
-
-#depuis 1990 nous pouvons observer la tendance de l'adopation d'energie renouvelable et les pays qui en sont les moteurs. 
-
-#Pays OCDE les 3 premiers qui sont en tete et pays Non OCDE les 3 premiers 
-
-#Pays non OCDE
-
-#Observations
-
-
-#B- Politiques Environnementales
-# Après avoir pu observer les pressions exercés par les composantes de notre activité économique, nous allons pouvoir nous interesser aux politiques mises en place pour les réguler. 
-
-###B.1
-#tax
-
-#Une taxe environnementale est caractérisée par son action sur les coûts des activités ou les prix des produits qui ont un effet négatif sur l'environnement. C'est une internalisation de l'externalité négative. 
-
-#graph sur les taxes 
-
-
-#R&D : graph montrant l'évolution des efforts en R&D correlé ou non avec après les subventions ou aussi la transition vers les nergies renouvelable ?
-
-
-
-
-
-###B.2 
-#Subventions + prise de décision de protection de l'environnement 
-#le dispositif de subvention est une aide aux entreprise afin de les aider dans leurs transitions écologique pour aller vers des énergies plus durables. 
-# nous allons pouvoir observer l'évolution des subventions via plusieurs variables: 
-
-#Soutien total aux combustibles fossiles, % recettes totales des taxes
-#Soutien aux consommateurs de combustibles fossiles, % recettes totales des taxes
-#Soutien à l'électricité, % soutien total aux combustibles fossiles
-#Zones protégées à l'échelle nationale (% du territoire total)
-#Zones terrestres et marines protégées (% du territoire total)
-#Zones marines protégées (% des eaux du territoire)
-
-#faire un graph ou une table
-
-# puis observations/ conclusion sur ces politiques 
-
-```
-```{r}
-#III- Vulnérabilités et strategies adaptives
-
-#A- Variable démographique 
-
-#La migrations des populations vers les espaces urbains s'est réalisé de manière continu depuis l'industrialisation au 19 ième siècle. Aujurd'hui les espaces ruraux sont vides mais à cause d'une pression environementales qui devient trop elevés, et dérangeante ce mouvement peut avoir changer. Nous allons analyser ces migrations dans un graph afin de nous rendre compte depuis 1990 des ces évolutions. La Worldbank à plus de variable sur les indices urbains, tandis que l'OCDE est plus tourné vers les migrations, ce qui va nous permettre d'avoir un grand calibre de donnée.  
-
-
-
-#B- vulnérabilité humaine face aux changement climatiques
-#L'industrialisation intensives qui a lieu depuis le 19 ieme siècle et la consommation de masse des 30 glorieuses n'a pas laissé notre planète indemne. En effet, les catastrophes naturelles se multiplient et nous sommes totalement vulnérable face à cet nature déchainé. 
-
-
-
-
-
-
-
-
-
-```
-
-
-```{r}
-# Installer les packages si ce n'est pas déjà fait
-# install.packages(c("ggplot2", "dplyr"))
-
-# Charger les bibliothèques
-library(ggplot2)
-library(dplyr)
-
-# Supposons que votre jeu de données s'appelle non_OCDE_pays
-# Assurez-vous d'avoir correctement chargé vos données
-
-# Filtrer les données pour la période de 1990 à 2020
-non_OCDE_pays_filtered <- non_OCDE_pays[non_OCDE_pays$année >= 1990 & non_OCDE_pays$année <= 2020, ]
-
-# Graphique : Évolution des émissions de CO2 (kg par $ PPA de 2011 de PIB) pour les trois premiers pays
-top3_emissions <- non_OCDE_pays_filtered %>%
-  group_by(Pays) %>%
-  arrange(desc(`Autres émissions de gaz à effet de serre, HFC, PFC et SF6 (milliers de tonnes métriques d’équivalent CO2)
-`)) %>%
-  slice_head(n = 3)
-
-ggplot(top3_emissions, aes(x = année, y = `Émissions de CO2 (kg par $ PPA de 2011 de PIB)`, color = Pays)) +
-  geom_line() +
-  xlab("Année") +
-  ylab("Émissions de CO2 (kg par $ PPA de 2011 de PIB)") +
-  theme_bw() +
-  ggtitle("Évolution des émissions de CO2 pour les trois premiers pays")
-
-# Graphique : Distribution des valeurs d'exposition moyenne de la population aux PM2.5
-ggplot(non_OCDE_pays_filtered, aes(x = `Exposition moyenne de la population aux PM2.5`)) +
-  geom_histogram(binwidth = 5, fill = "skyblue", color = "black", alpha = 0.7) +
-  xlab("Exposition moyenne de la population aux PM2.5") +
-  ylab("Fréquence") +
-  theme_bw() +
-  ggtitle("Distribution de l'exposition moyenne aux PM2.5")
-
-# Table : Statistiques descriptives pour les variables d'intérêt
-summary_table <- non_OCDE_pays_filtered %>%
-  select(`Émissions de CO2 (kg par $ PPA de 2011 de PIB)`,
-         `Émissions de CO2 (kg par $ US de 2010 de PIB)`,
-         `Autres émissions de gaz à effet de serre, HFC, PFC et SF6 (milliers de tonnes métriques d’équivalent CO2)`,
-         `Émissions totales de GES (variation depuis 1990, %)`,
-         `Exposition moyenne de la population aux PM2.5`)
-
-print("Table des statistiques descriptives :")
-print(summary_table)
-
-
-```
 
 
