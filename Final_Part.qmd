@@ -27,19 +27,19 @@ OCDE_pays <- donnees_partage$OCDE_pays
 non_OCDE_pays <- donnees_partage$non_OCDE_pays
 ```
 
-*I- Découplage* 
+*I- Constat*
 
-Dans un premier temps, nous chercherons à présenter un
-état des lieux en déterminant les liens fondamentaux entre les
-principaux agrégats économiques et environnementaux tels que le PIB, et
-les émissions de CO2 pour notamment étudier dans quelle mesure la
-croissance économique s'est découplée de l'impact environnemental. Nous
-nous intéresserons à la notion de découplage, signifiant une croissance
-économique sans augmentation proportionnelle de la pression
-environnementale. Nous analyserons aussi les tendances en matière
-d'intensité carbone et d'efficacité énergétique.
+Dans un premier temps, nous chercherons à présenter un état des lieux en
+déterminant les liens fondamentaux entre les principaux agrégats
+économiques et environnementaux tels que le PIB, et les émissions de CO2
+pour notamment étudier dans quelle mesure la croissance économique s'est
+découplée de l'impact environnemental. Nous nous intéresserons à la
+notion de découplage, signifiant une croissance économique sans
+augmentation proportionnelle de la pression environnementale. Nous
+analyserons aussi les tendances en matière d'intensité carbone et
+d'efficacité énergétique.
 
-I.
+I.1 Découplage
 
 Le découplage se produit lorsque le taux de croissance d'une pression
 environnementale est inférieur à celui de sa force motrice économique
@@ -69,7 +69,8 @@ définie comme : Ration = \[(EP/DF)\_endofperiod\] /
 Force motrice
 
 #### Ne pas sommer les PIB par habitant pour obtenir le PIB par habitant total !
-#### Convertir PIB réel faire *10^6 
+
+#### Convertir PIB réel faire \*10\^6
 
 ```{r}
 #Pour les GES
@@ -97,8 +98,6 @@ CO2_total_non_OCDE <- CO2_total_non_OCDE %>% mutate(Ratio_base100 = Ratio / Rati
 
 ```
 
-
-
 ```{r}
 #On va faire des graphs en considérant la croissance du PIB et la croissance des émissions
 #On s'intéresse aux pays membres de l'OCDE
@@ -117,7 +116,6 @@ decoupling_CO2_non_OCDE_growth <- CO2_total_non_OCDE_index %>% mutate(taux_PIB =
 decoupling_CO2_non_OCDE_growth_convert <- decoupling_CO2_non_OCDE_growth %>% pivot_longer(cols = c(taux_PIB,taux_CO2), names_to = "Variable", values_to = "Taux")
 ```
 
-
 ```{r}
 
 # Représentation des graphiques considérant la croissance du PIB et la croissance des émissions
@@ -133,7 +131,6 @@ summary(reg_CO2_PIB_non_OCDE)
 ggplot(reg_CO2_PIB_non_OCDE, aes(x = taux_PIB,y = taux_CO2)) + geom_point(color='gray', size=1, na.rm = TRUE) + geom_smooth(method='lm',formula = 'y ~ x', se=FALSE, na.rm = TRUE) +  labs(title = "Taux de croissance du PIB par habitant et taux de croissance des émissions de CO2 des pays non membres de l'OCDE", x = "Taux de croissance du PIB/hab (%)", y = "Taux de croissance des émissions de GES (%)") + theme_minimal() 
 
 ```
-
 
 ```{r}
 #Representation graphique de l'indice de découplage entre les émissions de GES et le PIB/hab pour l'ensemble des pays membres de l'OCDE
@@ -151,7 +148,7 @@ ggplot(CO2_fusion, aes(x = Année, y = Ratio_base100, color = Group)) + geom_poi
 ```
 
 ```{r}
-#Ici le but est de réaliser un digramme en nuage de point avec en abscisse le taux de croissance du PIB en pourcentage en 2020 depuis 1990 et en ordonnées le taux de croisssance des émissions de GES en pourcentage en 2020 depuis 1990. Cela nous permettra de distinguer les pays qui ont on effectué un découplage et de de quel type de découplage il s'agit
+#Ici le but est de réaliser un diagramme en nuage de point avec en abscisse le taux de croissance du PIB en pourcentage en 2020 depuis 1990 et en ordonnées le taux de croisssance des émissions de GES en pourcentage en 2020 depuis 1990. Cela nous permettra de distinguer les pays qui ont on effectué un découplage et de de quel type de découplage il s'agit
 
 
 #OCDE
@@ -181,9 +178,15 @@ graph_decoupling_non_OCDE + geom_abline(intercept = 0, slope = 1, color = "black
 
 ```
 
-Les pays dont le point se trouve à gauche de l'axe des ordonnées ou au dessus de la droite d'équation y = x sont des pays où le découplage n'a pas eu lieu. 
-Les pays dont le point se trouve en dessous de la droite d'équation y = x mais au dessus de l'axe des abscisse, sont des pays ayant effectués un découplage relatif, c'est à dire dont les émissions de GES ont cru plus lentement que le PIB
-Les pays dont le point est à droite de l'axe des ordonnées et en dessous de l'axe des abscisse sont des pays ayant effectuées un découplage absolue, c'est à dire les pays dont les émissions de GES ont diminué tandis que le PIB  a cru
+Les pays dont le point se trouve à gauche de l'axe des ordonnées ou au
+dessus de la droite d'équation y = x sont des pays où le découplage n'a
+pas eu lieu. Les pays dont le point se trouve en dessous de la droite
+d'équation y = x mais au dessus de l'axe des abscisse, sont des pays
+ayant effectués un découplage relatif, c'est à dire dont les émissions
+de GES ont cru plus lentement que le PIB Les pays dont le point est à
+droite de l'axe des ordonnées et en dessous de l'axe des abscisse sont
+des pays ayant effectuées un découplage absolue, c'est à dire les pays
+dont les émissions de GES ont diminué tandis que le PIB a cru
 
 ```{r}
 decoupling_table_OCDE <- decoupling_final_convert %>% mutate(decoupling_type = case_when(taux_GES_90_20 > taux_PIB_90_20 ~ "No decoupling", taux_GES_90_20 <= taux_PIB_90_20 & taux_GES_90_20 >= 0 ~"Relative decoupling", taux_GES_90_20 < 0 & taux_PIB_90_20 >= 0 ~ "Absolute decoupling", TRUE ~ "Other"))
@@ -199,6 +202,40 @@ knitr :: kable(decoupling_summary_OCDE, caption = "Part des pays membres de l'OC
 
 knitr :: kable(decoupling_summary_non_OCDE, caption = "Part des pays non membres de l'OCDE d'après le découplage effectué")
 ```
+
+I.2 Nous analyserons aussi les tendances en matière d'intensité carbone et d'efficacité énergétique.
+
+A. Courbe environnementale de Kuznets
+"Selon l'économiste Éloi Laurent, spécialiste de la croissance, la source de l’idée de découplage repose sur la courbe environnementale de Kuznets, théorie construite dans les années 1990 selon laquelle les dommages environnementaux augmentent dans les premières phases du développement d'une société, puis reculent alors que la croissance économique se poursuit" (Wikipedia, découplage (écologie))
+
+La courbe de Kuznets, dont la forme est U inversé, représente initiallement l'inégalité économique dans un pays en fonction de son niveau de développement. C'est selon Grossman et Krueger (1994), que cette forme de courbe peut être observée dans le domaine de l'environnement.Le modèle de courbe environnementale de Kuznets (EKC) postule une relation déterministe entre développement économique et qualité de l’environnement. Dans la première étape de l'industrialisation, la pollution augmente rapidement car les individus sont principalement interessées par leur travail et leur revenus que par la qualité de l'air et de l'eau. A ce stade, la société est trop pauvre pour réduire ses émissions, de fait la réglementations environnementales est trop failbe. Le retournement s'effectue à mesure que les revenus augmentent. Dès lors, les principaux secteurs industriels deviennent plus propres, les individus valorisent l'environnement et les institutions de régulation deviennent plus efficaces. Le long de la courbe, la pollution se stabilise dans la tranche des revenus moyens, puis retombe au niveau pré-industriel dans les sociétés développées.
+
+```{r}
+#CKE 1990
+#En abscisse le PIB par tête et en ordonnées le GES par tête
+#PIB_hab, GES_hab
+#Fusion OCDE, non_OCDE, group
+#ggplot
+CKE_1990 <- bind_rows(mutate(decoupling_final, Group = "OCDE"),mutate(decoupling_final_non_OCDE, Group = "Non-OCDE"))
+CKE_1990 <- CKE_1990 %>% group_by(Année) %>% mutate(GES_hab = `GES_tot` / `Hab_tot`)
+CKE_1990 <- CKE_1990 %>% filter(Pays%in%unique(CKE_1990$Pays)) %>% group_by(Pays, Group) %>% summarise(PIB_hab = PIB_hab[Année == 1990], GES_hab = GES_hab[Année == 1990], .groups = 'drop')
+
+ggplot(CKE_1990, aes(x = PIB_hab, y = GES_hab, color = Group)) + geom_point(na.rm = TRUE) + geom_smooth(method = 'lm', formula = y ~ poly(x, 2), se = FALSE, color = 'darkorange') + labs(title = "Courbe de Kuznets environnementale en 1990", x = "PIB par habitant", y = "Emmission de GES")
+
+
+#CKE 2020
+CKE_2020 <- bind_rows(mutate(decoupling_final, Group = "OCDE"),mutate(decoupling_final_non_OCDE, Group = "Non-OCDE"))
+CKE_2020 <- CKE_2020 %>% group_by(Année) %>% mutate(GES_hab = `GES_tot` / `Hab_tot`)
+CKE_2020 <- CKE_2020 %>% filter(Pays%in%unique(CKE_2020$Pays)) %>% group_by(Pays, Group) %>% summarise(PIB_hab = PIB_hab[Année == 2020], GES_hab = GES_hab[Année == 2020], .groups = 'drop')
+
+ggplot(CKE_2020, aes(x = PIB_hab, y = GES_hab, color = Group)) + geom_point(na.rm = TRUE) + geom_smooth(method = 'lm', formula = y ~ poly(x, 2), se = FALSE, color = 'darkorange') + labs(title = "Courbe de Kuznets environnementale en 2020", x = "PIB par habitant", y = "Emmission de GES")
+
+
+
+```
+En utilisant les données des pays pour les emissions de GES et les PIB par habitant, nous constatons qu'il n'y a pas de courbe en U inversée, ni en 1990, ni en 2020. En effet, à mesure que le PIB est élevé, les émissions de GES devraient théoriquement diminuées dans les pays développées, or ce n'est pas ce qui est observées empiriquement, bien qu'en 2020 il semble y avoir un seuil aux émissions de GES qui n'étaient pas constaté en 1990. Toutefois, l'année 2020 est aussi une année particulière en raison de la pandémie de COVID-19 qui a drastiquement diminué les émissions de CO2, comme le montre l'un des graphiques précédent.
+
+
 
 
 *II- Politiques*
@@ -269,13 +306,13 @@ ggplot(eau_tendance_OCDE, aes(x=`Année`, y = moyenne_annuelle)) + geom_jitter()
 #Il faut faire des correlations entre différentes variables
 ```
 
-*A.2 : Qualité de l'air* 
+*A.2 : Qualité de l'air*
 
-L'indice de qualité de l'air sera utilisé pour
-évaluer les niveaux de pollution atmoshpériques. Cette donnée
-interessante pourra aussi nous donner des indices sur les secteurs
-intensifs des pays. Un pays au secteur industriel principale aura
-tendance à peut-être rejeté plus de CO2 dans l'air qu'un autre.
+L'indice de qualité de l'air sera utilisé pour évaluer les niveaux de
+pollution atmoshpériques. Cette donnée interessante pourra aussi nous
+donner des indices sur les secteurs intensifs des pays. Un pays au
+secteur industriel principale aura tendance à peut-être rejeté plus de
+CO2 dans l'air qu'un autre.
 
 ```{r}
 
@@ -374,9 +411,9 @@ l'industrialisation au 19 ième siècle. Aujourd'hui les espaces ruraux
 sont vides mais à cause d'une pression environementales qui devient trop
 elevées, et dérangeante ce mouvement peut avoir changé. Nous allons
 analyser ces migrations dans un graph afin de nous rendre compte depuis
-1990 des ces évolutions. La Worldbank à plus de variables sur les indices
-urbains, tandis que l'OCDE est plus tournée vers les migrations, ce qui
-va nous permettre d'avoir un grand calibre de données.
+1990 des ces évolutions. La Worldbank à plus de variables sur les
+indices urbains, tandis que l'OCDE est plus tournée vers les migrations,
+ce qui va nous permettre d'avoir un grand calibre de données.
 
 ```{r}
 ```
