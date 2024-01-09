@@ -74,44 +74,30 @@ Force motrice
 ```{r}
 #Pour les GES
 #Tous les pays de l'OCDE et les trois régions principales (Europe, Amérique du Nord et Pacifique)
-
 #Variables : PIB par habitant / Emission de GES
 decoupling_CO2_OCDE <-  OCDE_pays %>% filter(Variable %in% c("PIB réel","Émissions totales de GES (kt d’équivalent CO2)","Population, total")) %>% select(-`COU`, -`VAR` ,- `Unit`, -`PowerCode`) %>% pivot_longer(cols = c(`1990`,`1991`,`1992`,`1993`,`1994`,`1995`,`1996`,`1997`,`1998`,`1999`,`2000`, `2001`, `2002`, `2003`, `2004`, `2005`, `2006`, `2007`, `2008`, `2009`,`2010`, `2011`, `2012`, `2013`, `2014`, `2015`, `2016`, `2017`, `2018`, `2019`, `2020`),  names_to = "Année", values_to = "Value") %>% mutate(Value = as.numeric(Value)) %>% pivot_wider(names_from = Variable, values_from = Value) 
 
 #Création d'un index 
 CO2_total_OCDE_index <- decoupling_CO2_OCDE %>% filter(Pays%in%unique(decoupling_CO2_OCDE$Pays)) %>% group_by(Année) %>% summarise(PIB_tot = sum(`PIB réel`, na.rm = TRUE)*1000000, Hab_tot = sum(`Population, total`,na.rm = TRUE), GES_tot = sum(`Émissions totales de GES (kt d’équivalent CO2)`, na.rm = TRUE)) %>% mutate(PIB_hab = `PIB_tot`/`Hab_tot`)
 
-CO2_total_OCDE <- CO2_total_OCDE_index %>% group_by(Année) %>% summarise(Ratio = `GES_tot`/`PIB_hab`) 
-
+CO2_total_OCDE <- CO2_total_OCDE_index %>% group_by(Année) %>% summarise(Ratio = `GES_tot`/`PIB_hab`)
 CO2_total_OCDE <- CO2_total_OCDE %>% mutate(Ratio_base100 = Ratio / Ratio[which(CO2_total_OCDE$Année == 1990)]*100)
 
 
-ggplot(CO2_total_OCDE, aes(x = Année, y = Ratio_base100))  + geom_point() + labs(title = "Emissions par unité de PIB et par personne en base 100 (1990) pour le total de l'OCDE", x = "Année", y = "Ratio (Base 100 en 1990)") + theme(axis.text.x=element_text(angle=50, size=8, vjust=0.5)) 
-
-#Tous les pays non membres de l'OCDE 
-
-#Variables : PIB par habitant / Emission de CO2
+#Tous les pays NON membres de l'OCDE 
+#Variables : PIB par habitant / Emission de GES
 decoupling_CO2_non_OCDE <-  non_OCDE_pays %>% filter(Variable %in% c("PIB réel","Émissions totales de GES (kt d’équivalent CO2)", "Population, total")) %>% select(-`COU`, -`VAR` ,- `Unit`, -`PowerCode`) %>% pivot_longer(cols = c(`1990`,`1991`,`1992`,`1993`,`1994`,`1995`,`1996`,`1997`,`1998`,`1999`,`2000`, `2001`, `2002`, `2003`, `2004`, `2005`, `2006`, `2007`, `2008`, `2009`,`2010`, `2011`, `2012`, `2013`, `2014`, `2015`, `2016`, `2017`, `2018`, `2019`, `2020`),  names_to = "Année", values_to = "Value") %>% mutate(Value = as.numeric(Value)) %>% pivot_wider(names_from = Variable, values_from = Value) 
 
-#On crée un index
-
+#On crée un indice
 CO2_total_non_OCDE_index <- decoupling_CO2_non_OCDE %>% filter(Pays%in%unique(decoupling_CO2_non_OCDE$Pays)) %>% group_by(Année) %>% summarise(PIB_tot = sum(`PIB réel`, na.rm = TRUE)*1000000, Hab_tot = sum(`Population, total`,na.rm = TRUE), GES_tot = sum(`Émissions totales de GES (kt d’équivalent CO2)`, na.rm = TRUE)) %>% mutate(PIB_hab = `PIB_tot`/`Hab_tot`)
 
 CO2_total_non_OCDE <- CO2_total_non_OCDE_index %>% group_by(Année) %>% summarise(Ratio = `GES_tot`/`PIB_hab`) 
 
 CO2_total_non_OCDE <- CO2_total_non_OCDE %>% mutate(Ratio_base100 = Ratio / Ratio[which(CO2_total_non_OCDE$Année == 1990)]*100)
 
-
-
-ggplot(CO2_total_non_OCDE, aes(x = Année, y = Ratio_base100))  + geom_point() + labs(title = "Emissions par unité de PIB et par personne en base 100 (1990) pour le total des pays non membres de l'OCDE", x = "Année", y = "Ratio (Base 100 en 1990)") + theme(axis.text.x=element_text(angle=50, size=8, vjust=0.5)) 
-
-
-#Fusion des deux graphiques
-CO2_fusion <- bind_rows(mutate(CO2_total_OCDE, Group = "OCDE"), mutate(CO2_total_non_OCDE, Group = "Non-OCDE"))
-
-ggplot(CO2_fusion, aes(x = Année, y = Ratio_base100, color = Group)) + geom_point() +  labs(title = "Emissions par unité de PIB et par personne en base 100 (1990)", x = "Année", y = "Ratio (Base 100 en 1990)") + theme(axis.text.x=element_text(angle=50, size=8, vjust=0.5)) 
-
 ```
+
+
 
 ```{r}
 #On va faire des graphs en considérant la croissance du PIB et la croissance des émissions
@@ -128,9 +114,14 @@ ggplot(decoupling_CO2_OCDE_growth_convert, aes(x = Année, y = Taux, color = Var
 #Non OCDE
 decoupling_CO2_non_OCDE_growth <- CO2_total_non_OCDE_index %>% mutate(taux_PIB = ((`PIB_hab` - lag( `PIB_hab`)) *100/lag( `PIB_hab`)), taux_CO2 = ((`GES_tot` - lag( `GES_tot`))*100 /lag( `GES_tot`)))
 
+decoupling_CO2_non_OCDE_growth_convert <- decoupling_CO2_non_OCDE_growth %>% pivot_longer(cols = c(taux_PIB,taux_CO2), names_to = "Variable", values_to = "Taux")
+```
 
-decoupling_CO2_non_OCDE_growth_convert <- decoupling_CO2_non_OCDE_growth %>% pivot_longer(cols = c(taux_PIB,taux_CO2), names_to = "Variable", values_to = "Taux") 
 
+```{r}
+
+# Représentation des graphiques considérant la croissance du PIB et la croissance des émissions
+#On s'intéresse aux pays membres de l'OCDE
 ggplot(decoupling_CO2_non_OCDE_growth_convert, aes(x = Année, y = Taux, color = Variable, linetype = Variable, group = Variable)) + geom_point(na.rm = TRUE)  + geom_line(na.rm = TRUE) + labs(title = "Taux de croissance du PIB par habitant et taux de croissance des émissions de CO2 des pays non membres de l'OCDE", x = "Année", y = "Taux de croissance (%)", color = "Variable") +  theme(axis.text.x=element_text(angle=50, size=8, vjust=0.5))  
 
 reg_CO2_PIB_OCDE=lm('taux_CO2 ~ taux_PIB', data = decoupling_CO2_OCDE_growth)
@@ -141,6 +132,72 @@ reg_CO2_PIB_non_OCDE=lm('taux_CO2 ~ taux_PIB', data = decoupling_CO2_non_OCDE_gr
 summary(reg_CO2_PIB_non_OCDE)
 ggplot(reg_CO2_PIB_non_OCDE, aes(x = taux_PIB,y = taux_CO2)) + geom_point(color='gray', size=1, na.rm = TRUE) + geom_smooth(method='lm',formula = 'y ~ x', se=FALSE, na.rm = TRUE) +  labs(title = "Taux de croissance du PIB par habitant et taux de croissance des émissions de CO2 des pays non membres de l'OCDE", x = "Taux de croissance du PIB/hab (%)", y = "Taux de croissance des émissions de GES (%)") + theme_minimal() 
 
+```
+
+
+```{r}
+#Representation graphique de l'indice de découplage entre les émissions de GES et le PIB/hab pour l'ensemble des pays membres de l'OCDE
+ggplot(CO2_total_OCDE, aes(x = Année, y = Ratio_base100))  + geom_point() + labs(title = "Emissions par unité de PIB et par personne en base 100 (1990) pour le total de l'OCDE", x = "Année", y = "Ratio (Base 100 en 1990)") + theme(axis.text.x=element_text(angle=50, size=8, vjust=0.5)) 
+
+#Representation graphique de l'indice de découplage entre les émissions de GES et le PIB/hab pour l'ensemble des pays NON membres de l'OCDE
+ggplot(CO2_total_non_OCDE, aes(x = Année, y = Ratio_base100))  + geom_point() + labs(title = "Emissions par unité de PIB et par personne en base 100 (1990) pour le total des pays non membres de l'OCDE", x = "Année", y = "Ratio (Base 100 en 1990)") + theme(axis.text.x=element_text(angle=50, size=8, vjust=0.5)) 
+
+
+#Fusion des deux graphiques
+CO2_fusion <- bind_rows(mutate(CO2_total_OCDE, Group = "OCDE"), mutate(CO2_total_non_OCDE, Group = "Non-OCDE"))
+
+ggplot(CO2_fusion, aes(x = Année, y = Ratio_base100, color = Group)) + geom_point() +  labs(title = "Emissions par unité de PIB et par personne en base 100 (1990)", x = "Année", y = "Ratio (Base 100 en 1990)") + theme(axis.text.x=element_text(angle=50, size=8, vjust=0.5)) 
+
+```
+
+```{r}
+#Ici le but est de réaliser un digramme en nuage de point avec en abscisse le taux de croissance du PIB en pourcentage en 2020 depuis 1990 et en ordonnées le taux de croisssance des émissions de GES en pourcentage en 2020 depuis 1990. Cela nous permettra de distinguer les pays qui ont on effectué un découplage et de de quel type de découplage il s'agit
+
+
+#OCDE
+decoupling_final <- decoupling_CO2_OCDE %>% group_by(Année, Pays) %>% summarise(PIB_tot = sum(`PIB réel`, na.rm = TRUE)*1000000, Hab_tot = sum(`Population, total`,na.rm = TRUE), GES_tot = sum(`Émissions totales de GES (kt d’équivalent CO2)`, na.rm = TRUE), .groups = 'drop') %>% mutate(PIB_hab = `PIB_tot`/`Hab_tot`)
+
+decoupling_final_convert <- decoupling_final %>% filter(Pays%in%unique(decoupling_final$Pays)) %>% group_by(Pays) %>% summarise(taux_GES_90_20 = (GES_tot[Année == 2020] - GES_tot[Année == 1990])*100/ GES_tot[Année == 1990], taux_PIB_90_20 = (PIB_hab[Année == 2020] - PIB_hab[Année == 1990])*100/ PIB_hab[Année == 1990],  .groups = 'drop')
+
+decoupling_final_convert  <- decoupling_final_convert  %>% filter(!is.infinite(taux_PIB_90_20) & !is.infinite(taux_GES_90_20))
+  
+graph_decoupling <- ggplot(decoupling_final_convert, aes(x = taux_PIB_90_20,y = taux_GES_90_20)) + geom_point( size=1, na.rm = TRUE)  +  labs(title = "Découplage au sein de l'OCDE", x = "Taux de croissance du PIB/hab en 2020 par rapport à 1990 (%)", y = "Taux de croissance des émissions de GES en 2020 par rapport à 1990 (%)") + theme_minimal() 
+
+graph_decoupling + geom_abline(intercept = 0, slope = 1, color = "black") + geom_abline(intercept = 0, slope = 0, color = "black") + geom_abline(intercept = 0, slope = 0, color = "black") + geom_vline(xintercept = 0, color = "black")
+
+#Non - OCDE
+decoupling_final_non_OCDE <- decoupling_CO2_non_OCDE %>% group_by(Année, Pays) %>% summarise(PIB_tot = sum(`PIB réel`, na.rm = TRUE)*1000000, Hab_tot = sum(`Population, total`,na.rm = TRUE), GES_tot = sum(`Émissions totales de GES (kt d’équivalent CO2)`, na.rm = TRUE),  .groups = 'drop') %>% mutate(PIB_hab = `PIB_tot`/`Hab_tot`)
+
+decoupling_final_convert_non_OCDE <- decoupling_final_non_OCDE %>% filter(Pays%in%unique(decoupling_final_non_OCDE$Pays)) %>% group_by(Pays) %>% summarise(taux_GES_90_20 = (GES_tot[Année == 2020] - GES_tot[Année == 1990])*100/ GES_tot[Année == 1990], taux_PIB_90_20 = (PIB_hab[Année == 2020] - PIB_hab[Année == 1990])*100/ PIB_hab[Année == 1990],.groups = 'drop')
+
+decoupling_final_convert_non_OCDE  <- decoupling_final_convert_non_OCDE  %>% filter(!is.infinite(taux_PIB_90_20) & !is.infinite(taux_GES_90_20))
+
+x_limits <- c(-70,1000)
+y_limits <- c(-75,1000)
+graph_decoupling_non_OCDE <- ggplot(decoupling_final_convert_non_OCDE, aes(x = taux_PIB_90_20,y = taux_GES_90_20)) + geom_point( size=1, na.rm = TRUE)  +  labs(title = "Découplage des pays non membres de l'OCDE", x = "Taux de croissance du PIB/hab en 2020 par rapport à 1990 (%)", y = "Taux de croissance des émissions de GES en 2020 par rapport à 1990 (%)") + theme_minimal() + coord_cartesian(xlim = x_limits, ylim = y_limits) 
+
+graph_decoupling_non_OCDE + geom_abline(intercept = 0, slope = 1, color = "black") + geom_abline(intercept = 0, slope = 0, color = "black") + geom_abline(intercept = 0, slope = 0, color = "black") + geom_vline(xintercept = 0, color = "black")
+
+
+```
+
+Les pays dont le point se trouve à gauche de l'axe des ordonnées ou au dessus de la droite d'équation y = x sont des pays où le découplage n'a pas eu lieu. 
+Les pays dont le point se trouve en dessous de la droite d'équation y = x mais au dessus de l'axe des abscisse, sont des pays ayant effectués un découplage relatif, c'est à dire dont les émissions de GES ont cru plus lentement que le PIB
+Les pays dont le point est à droite de l'axe des ordonnées et en dessous de l'axe des abscisse sont des pays ayant effectuées un découplage absolue, c'est à dire les pays dont les émissions de GES ont diminué tandis que le PIB  a cru
+
+```{r}
+decoupling_table_OCDE <- decoupling_final_convert %>% mutate(decoupling_type = case_when(taux_GES_90_20 > taux_PIB_90_20 ~ "No decoupling", taux_GES_90_20 <= taux_PIB_90_20 & taux_GES_90_20 >= 0 ~"Relative decoupling", taux_GES_90_20 < 0 & taux_PIB_90_20 >= 0 ~ "Absolute decoupling", TRUE ~ "Other"))
+
+decoupling_summary_OCDE <- decoupling_table_OCDE %>% group_by(decoupling_type) %>% summarise(percentage = n()/nrow(decoupling_table_OCDE)*100)
+
+decoupling_table_non_OCDE <- decoupling_final_convert_non_OCDE %>% mutate(decoupling_type = case_when(taux_GES_90_20 > taux_PIB_90_20 ~ "No decoupling", taux_GES_90_20 <= taux_PIB_90_20 & taux_GES_90_20 >= 0 ~"Relative decoupling", taux_GES_90_20 < 0 & taux_PIB_90_20 >= 0 ~ "Absolute decoupling", TRUE ~ "Other"))
+
+decoupling_summary_non_OCDE <- decoupling_table_non_OCDE %>% group_by(decoupling_type) %>% summarise(percentage = n()/nrow(decoupling_table_non_OCDE)*100)
+
+
+knitr :: kable(decoupling_summary_OCDE, caption = "Part des pays membres de l'OCDE d'après le découplage effectué")
+
+knitr :: kable(decoupling_summary_non_OCDE, caption = "Part des pays non membres de l'OCDE d'après le découplage effectué")
 ```
 
 
@@ -247,6 +304,18 @@ tendance à peut-être rejeté plus de CO2 dans l'air qu'un autre.
 
 
 #observations
+
+CO2_emission_OCDE <-  OCDE_pays %>% filter(Variable %in% c("Émissions de CO2 (kt)","Population, total","Autres émissions de gaz à effet de serre, HFC, PFC et SF6 (milliers de tonnes métriques d’équivalent CO2)")) %>% select(-`COU`, -`VAR` ,- `Unit`, -`PowerCode`) %>% pivot_longer(cols = c(`1990`,`1991`,`1992`,`1993`,`1994`,`1995`,`1996`,`1997`,`1998`,`1999`,`2000`, `2001`, `2002`, `2003`, `2004`, `2005`, `2006`, `2007`, `2008`, `2009`,`2010`, `2011`, `2012`, `2013`, `2014`, `2015`, `2016`, `2017`, `2018`, `2019`, `2020`),  names_to = "Année", values_to = "Value") %>% mutate(Value = as.numeric(Value)) %>% pivot_wider(names_from = Variable, values_from = Value) 
+
+#Création d'un index 
+
+CO2_emission_OCDE_index <- CO2_emission_OCDE %>% filter(Pays%in%unique(decoupling_CO2_OCDE$Pays)) %>% group_by(Année) %>% summarise(Hab_tot = sum(`Population, total`,na.rm = TRUE), CO2_emi_tot = sum(`Émissions de CO2 (kt)`, na.rm = TRUE), Autre_CO2 = sum(`Autres émissions de gaz à effet de serre, HFC, PFC et SF6 (milliers de tonnes métriques d’équivalent CO2)`, na.rm = TRUE)) %>% mutate(CO2_hab = `CO2_emi_tot`/`Hab_tot`)
+
+
+
+ggplot(CO2_emission_OCDE_index, aes(x  = Année, y = Autre_CO2)) + geom_point(na.rm = TRUE) + labs(title = "Évolution des variables sélectionnées par année",x = "Année",  y = "Valeur") + theme_minimal() + theme(axis.text.x = element_text(angle = 45, hjust = 1)) 
+
+
 ```
 
 *A.3 : Adoption de sources d'énergies renouvelables* Depuis 1990 nous
