@@ -369,46 +369,86 @@ Rand D
 
 
 ```{r}
-#pour les pays de l'OCDE
-# Il faut utiliser pivot_longer pour transformer les colonnes années en une colonne Année
+library(ggplot2)
+library(tidyr)
+
+#pour OCDE
+OCDE_pays_Taxes <- OCDE_pays %>%
+  filter(Variable == "Recettes provenant des taxes liées à l'énergie, % recettes des taxes environnementales") %>%
+  pivot_longer(cols = c(`1990`, `1991`, `1992`, `1993`, `1994`, `1995`, `1996`, `1997`, `1998`, `1999`, `2000`, `2001`, `2002`, `2003`, `2004`, `2005`, `2006`, `2007`, `2008`, `2009`, `2010`, `2011`, `2012`, `2013`, `2014`, `2015`, `2016`, `2017`, `2018`, `2019`, `2020`),
+               names_to = "Année",
+               values_to = "Value") %>%
+  mutate(Value = as.numeric(Value), Groupe = "OCDE")
+
+#Non OCDE
+non_OCDE_pays_Taxes <- non_OCDE_pays%>%
+  filter(Variable == "Recettes provenant des taxes liées à l'énergie, % recettes des taxes environnementales") %>%
+  pivot_longer(cols = c(`1990`, `1991`, `1992`, `1993`, `1994`, `1995`, `1996`, `1997`, `1998`, `1999`, `2000`, `2001`, `2002`, `2003`, `2004`, `2005`, `2006`, `2007`, `2008`, `2009`, `2010`, `2011`, `2012`, `2013`, `2014`, `2015`, `2016`, `2017`, `2018`, `2019`, `2020`),
+               names_to = "Année",
+               values_to = "Value") %>%
+  mutate(Value = as.numeric(Value), Groupe = "non_OCDE")
+
+#Merged data 
+
+merged_data <- bind_rows(OCDE_pays_Taxes, non_OCDE_pays_Taxes)
+
+ggplot(merged_data, aes(x = as.numeric(Année), y = Value, color = Groupe)) +
+  geom_smooth(method = "loess", se = FALSE)+
+  labs(title = "Recettes provenant des taxes liées à l'énergie, % recettes des taxes environnementales",
+       x = "Année",
+       y = "Recettes en %") +
+  theme_minimal()
+```
+
+
+#Voici un graph presentant les Recettes provenant des taxes liées à l'énergie pour les pays OCDE et ceux hors OCDE.Nous pouvons observer que le taux des recettes des taxes pour le groupe OCDE est largement supérieur a hors OCDE avec un taux plutot constant autour des 70%. Contrairement les pays hors OCDE ont connu une croissance asymptomatique depuis les années 1990 avec un pic entre 2010 et 2015 à plus de 50%. Les recettes beaucoup plus éléves pour les pays de l'OCDE permettent des mesures plus importantes.
+Les taxes representent une mesure efficace à moindre coût, les pays dans l'OCDE souvent plus developpés que la moyenne hors OCDE ont commencés à se doter de cadres d'actions nationaux afin de préserver l'environnement.Ces mesures sont necessaire afin de pénaliser les technologies nocives et encourager le developpement de celles plus durable. L'innovation technologique via l'investissement en R&D est un élement essentiel de la transition vers une économie plus sobre.Cependant, de nombreux problèmes bloquent l'innovation, notamment la compétitivité accrue entre les entreprises. 
+
+
+
+
+
+```{r}
+library(ggplot2)
+library(tidyr)
+
+# Filtrer les données pour la variable d'intérêt
+selected_data <- OCDE_pays %>%
+  filter(Variable == "Recettes provenant des taxes liées à l'énergie, % recettes des taxes environnementales") %>%
+  select(Pays, `1990`:`2020`) %>%
+  pivot_longer(cols = `1990`:`2020`, names_to = "Année", values_to = "Value") %>%
+  mutate(Value = as.numeric(Value))
+
+# Créer le graphique en barres avec des couleurs selon l'intensité
+ggplot(selected_data, aes(x = as.numeric(Année), y = Value, fill = Value)) +
+  geom_bar(stat = "identity") +
+  labs(title = "Recettes provenant des taxes liées à l'énergie, % recettes des taxes environnementales",
+       x = "Année",
+       y = "Recettes en %") +
+  theme_minimal()
+
+```
+
+
+```{r}
+# Supposons que vos données sont dans un dataframe appelé "data"
+
+
 OCDE_pays_long <- OCDE_pays %>%
   pivot_longer(cols = c(`1990`, `1991`, `1992`, `1993`, `1994`, `1995`, `1996`, `1997`, `1998`, `1999`, `2000`, `2001`, `2002`, `2003`, `2004`, `2005`, `2006`, `2007`, `2008`, `2009`, `2010`, `2011`, `2012`, `2013`, `2014`, `2015`, `2016`, `2017`, `2018`, `2019`, `2020`),
                names_to = "Année",
                values_to = "Value") %>%
   mutate(Value = as.numeric(Value))
 
+# Supposons que vos données sont dans un dataframe appelé "OCDE_pays"
+modele <- lm(Value ~ Pays, data = OCDE_pays[OCDE_pays$Variable %in% c("Développement de technologies liées à l'environnement, % inventions dans le monde", "Recettes provenant des taxes liées à l'énergie, % recettes des taxes environnementales"),])
 
-ggplot(OCDE_pays_long, aes(x = Année, y = Value)) +
-  geom_line(na.rm = TRUE) +
-  labs(title = "Recettes provenant des taxes liées à l'énergie, % recettes des taxes environnementales",
-       x = "Année",
-       y = "Valeur") +
-  theme_minimal() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1)) #Ajustement du texte pour qu'il soit plus lisibles
-
-
-#pour les pays hors OCDE
-
-non_OCDE_pays_long <- non_OCDE_pays %>%
-  pivot_longer(cols = c(`1990`, `1991`, `1992`, `1993`, `1994`, `1995`, `1996`, `1997`, `1998`, `1999`, `2000`, `2001`, `2002`, `2003`, `2004`, `2005`, `2006`, `2007`, `2008`, `2009`, `2010`, `2011`, `2012`, `2013`, `2014`, `2015`, `2016`, `2017`, `2018`, `2019`, `2020`),
-               names_to = "Année",
-               values_to = "Value") %>%
-  mutate(Value = as.numeric(Value))
-
-
-ggplot(non_OCDE_pays_long, aes(x = Année, y = Value)) +
-  geom_line(na.rm = TRUE) +
-  labs(title = "Recettes provenant des taxes liées à l'énergie, % recettes des taxes environnementales",
-       x = "Année",
-       y = "Valeur") +
-  theme_minimal() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1)) #Ajustement du texte pour qu'il soit plus lisibles
-
+# Afficher le résumé du modèle
+summary(modele)
 
 
 ```
-#Voici deux grapsh presentant les Recettes provenant des taxes liées à l'énergie pour les pays OCDE et ceux hors OCDE. Leurs croissance exponentielle à commencée dans les années 2004-2005 pour les pays OCDE et hors OCDE. 
-Les taxes representent une mesure efficace à moindre coût, les pays dans l'OCDE souvent plus developpés que la moyenne hors OCDE ont commencés à se doter de cadres d'actions nationaux afin de préserver notre environnement.
+
 
 ```{r}
 library(ggplot2)
@@ -483,6 +523,7 @@ ggplot() +
 ```
 
 *B.2* Subventions + prise de décision de protection de l'environnement
+
 
 ```{r}
 
