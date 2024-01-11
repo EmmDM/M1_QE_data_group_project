@@ -235,7 +235,47 @@ ggplot(CKE_2020, aes(x = PIB_hab, y = GES_hab, color = Group)) + geom_point(na.r
 ```
 En utilisant les données des pays pour les emissions de GES et les PIB par habitant, nous constatons qu'il n'y a pas de courbe en U inversée, ni en 1990, ni en 2020. En effet, à mesure que le PIB est élevé, les émissions de GES devraient théoriquement diminuées dans les pays développées, or ce n'est pas ce qui est observées empiriquement, bien qu'en 2020 il semble y avoir un seuil aux émissions de GES qui n'étaient pas constaté en 1990. Toutefois, l'année 2020 est aussi une année particulière en raison de la pandémie de COVID-19 qui a drastiquement diminué les émissions de CO2, comme le montre l'un des graphiques précédent.
 
+I.3 Identité de Kaya
 
+"L'identité de Kaya, relie les émissions anthropique de dioxyde de carbone à des paramètre d'ordre démographique, économique et énergétique. [...] Selon Kaya, le niveau total d'émission peut s'exprimer comme le produit de quatres facteurs : la population, le PIB par habitant, l'intensité énergétique et le contenu en CO2 de l'énergie consommée.
+Cette identité se décompose par :
+CO2 = POP * (PIB/POP) * (E/PIB) * (CO2/E)
+Avec : 
+CO2 : Emission de CO2
+POP : la population
+PIB : Produit interieur brut
+E : consommation d'énergie
+PIB/POP : Produit interieur brut par habitant
+E/PIB : Intensité énergétique du PIB
+CO2/E : Intensité carbone de l'énergie
+
+```{r}
+#Identité de Kaya pour l'ensemble des pays membres de l'OCDE
+Kaya_OCDE <-  OCDE_pays %>% filter(Variable %in% c("Émissions de CO2 (kt)","Population, total","PIB réel","Approvisionnements totaux en énergie")) %>% select(-`COU`, -`VAR` ,- `Unit`, -`PowerCode`) %>% pivot_longer(cols = c(`1990`,`1991`,`1992`,`1993`,`1994`,`1995`,`1996`,`1997`,`1998`,`1999`,`2000`, `2001`, `2002`, `2003`, `2004`, `2005`, `2006`, `2007`, `2008`, `2009`,`2010`, `2011`, `2012`, `2013`, `2014`, `2015`, `2016`, `2017`, `2018`, `2019`, `2020`),  names_to = "Année", values_to = "Value") %>% mutate(Value = as.numeric(Value)) %>% pivot_wider(names_from = Variable, values_from = Value) 
+
+Kaya_OCDE <- Kaya_OCDE %>%  group_by(Année) %>% summarise(PIB_tot = sum(`PIB réel`, na.rm = TRUE)*1000000, Hab_tot = sum(`Population, total`,na.rm = TRUE), CO2_tot = sum(`Émissions de CO2 (kt)`, na.rm = TRUE), E_tot = sum(`Approvisionnements totaux en énergie`, na.rm = TRUE)) %>% mutate(PIB_hab = `PIB_tot`/`Hab_tot`, IEP_tot = `E_tot`/`PIB_tot`, ICE_tot = `CO2_tot`/`E_tot`)
+
+Kaya_OCDE_growth <- Kaya_OCDE %>% mutate(taux_PIB_hab = ((`PIB_hab` - lag( `PIB_hab`))*100/lag( `PIB_hab`)),taux_CO2 = ((`CO2_tot` - lag( `CO2_tot`))*100 /lag( `CO2_tot`)), taux_POP = ((`Hab_tot` - lag(`Hab_tot`))*100 / `Hab_tot`), taux_IEP = ((`IEP_tot` - lag( `IEP_tot`))*100 /lag( `IEP_tot`)), taux_ICE = ((`ICE_tot` - lag( `ICE_tot`))*100 /lag( `ICE_tot`)))
+
+ggplot(Kaya_OCDE_growth, aes(x = Année)) + geom_bar(aes(y = taux_PIB_hab, fill = "Taux PIB par habitant"), stat ="identity", position = "dodge", na.rm = TRUE) + geom_bar(aes(y = taux_POP, fill = "Taux population"), stat ="identity", position = "dodge", na.rm = TRUE) + geom_bar(aes(y = taux_IEP, fill = "Taux de l'intensité énergétique du PIB"), stat ="identity", position = "dodge", na.rm = TRUE) + geom_bar(aes(y = taux_ICE, fill = "Taux de l'intensité carbone de l'énergie"), stat ="identity", position = "dodge", na.rm = TRUE) + geom_point(aes(y = taux_CO2), color = 'black', size = 2, na.rm = TRUE) + theme(axis.text.x=element_text(angle=50, size=8, vjust=0.5)) +  labs(title = "Identité de Kaya des pays membres de l'OCDE", x = "Année", y = "Taux") + geom_abline(intercept = 0, slope = 0, color = "black") 
+
+
+
+#Identité de Kaya pour l'ensemble des pays non membres de l'OCDE
+Kaya_non_OCDE <-  non_OCDE_pays %>% filter(Variable %in% c("Émissions de CO2 (kt)","Population, total","PIB réel","Approvisionnements totaux en énergie")) %>% select(-`COU`, -`VAR` ,- `Unit`, -`PowerCode`) %>% pivot_longer(cols = c(`1990`,`1991`,`1992`,`1993`,`1994`,`1995`,`1996`,`1997`,`1998`,`1999`,`2000`, `2001`, `2002`, `2003`, `2004`, `2005`, `2006`, `2007`, `2008`, `2009`,`2010`, `2011`, `2012`, `2013`, `2014`, `2015`, `2016`, `2017`, `2018`, `2019`, `2020`),  names_to = "Année", values_to = "Value") %>% mutate(Value = as.numeric(Value)) %>% pivot_wider(names_from = Variable, values_from = Value) 
+
+Kaya_non_OCDE <- Kaya_non_OCDE %>%  group_by(Année) %>% summarise(PIB_tot = sum(`PIB réel`, na.rm = TRUE)*1000000, Hab_tot = sum(`Population, total`,na.rm = TRUE), CO2_tot = sum(`Émissions de CO2 (kt)`, na.rm = TRUE), E_tot = sum(`Approvisionnements totaux en énergie`, na.rm = TRUE)) %>% mutate(PIB_hab = `PIB_tot`/`Hab_tot`, IEP_tot = `E_tot`/`PIB_tot`, ICE_tot = `CO2_tot`/`E_tot`)
+
+Kaya_non_OCDE_growth <- Kaya_non_OCDE %>% mutate(taux_PIB_hab = ((`PIB_hab` - lag( `PIB_hab`))*100/lag( `PIB_hab`)),taux_CO2 = ((`CO2_tot` - lag( `CO2_tot`))*100 /lag( `CO2_tot`)), taux_POP = ((`Hab_tot` - lag(`Hab_tot`))*100 / `Hab_tot`), taux_IEP = ((`IEP_tot` - lag( `IEP_tot`))*100 /lag( `IEP_tot`)), taux_ICE = ((`ICE_tot` - lag( `ICE_tot`))*100 /lag( `ICE_tot`)))
+
+ggplot(Kaya_non_OCDE_growth, aes(x = Année)) + geom_bar(aes(y = taux_PIB_hab, fill = "Taux PIB par habitant"), stat ="identity", position = "dodge", na.rm = TRUE) + geom_bar(aes(y = taux_POP, fill = "Taux population"), stat ="identity", position = "dodge", na.rm = TRUE) + geom_bar(aes(y = taux_IEP, fill = "Taux de l'intensité énergétique du PIB"), stat ="identity", position = "dodge", na.rm = TRUE) + geom_bar(aes(y = taux_ICE, fill = "Taux de l'intensité carbone de l'énergie"), stat ="identity", position = "dodge", na.rm = TRUE) + geom_point(aes(y = taux_CO2), color = 'black', size = 2, na.rm = TRUE) + theme(axis.text.x=element_text(angle=50, size=8, vjust=0.5)) +  labs(title = "Identité de Kaya des pays non membres de l'OCDE", x = "Année", y = "Taux") + geom_abline(intercept = 0, slope = 0, color = "black") 
+
+
+```
+```{r}
+#Kaya Table
+Kaya_table_OCDE <- Kaya_OCDE_growth %>% select(Année,taux_PIB_hab,taux_CO2,taux_POP,taux_ICE,taux_IEP)
+```
 
 
 *II- Politiques*
@@ -248,7 +288,8 @@ Il nous paraît interessant dans un premier temps de comparer entre les
 pays OCDE et hors OCDE les differentes intensité sur l'eau, la qualité
 de l'air, et l'adpatation des ressources renouvelables.
 
-**A- Pression environementales** *A.1 : Intensité de l'eau*
+**A- Pression environementales** 
+*A.1 : Intensité de l'eau*
 
 Afin d'évaluer l'utilisation durable de l'eau, nous allons examiner
 l'intensité de l'eau par habitant et par unité de production. Nos
@@ -422,7 +463,7 @@ ce qui va nous permettre d'avoir un grand calibre de données.
 L'industrialisation intensives qui a lieu depuis le 19 ieme siècle et la
 consommation de masse des 30 glorieuses n'a pas laissé notre planète
 indemne. En effet, les catastrophes naturelles se multiplient et nous
-sommes totalement vulnérable face à cet nature déchainé.
+sommes totalement vulnérable face à cet nature déchainée.
 
 ```{r}
 
