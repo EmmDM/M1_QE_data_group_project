@@ -257,7 +257,7 @@ Kaya_OCDE <- Kaya_OCDE %>%  group_by(Année) %>% summarise(PIB_tot = sum(`PIB r�
 
 Kaya_OCDE_growth <- Kaya_OCDE %>% mutate(taux_PIB_hab = ((`PIB_hab` - lag( `PIB_hab`))*100/lag( `PIB_hab`)),taux_CO2 = ((`CO2_tot` - lag( `CO2_tot`))*100 /lag( `CO2_tot`)), taux_POP = ((`Hab_tot` - lag(`Hab_tot`))*100 / `Hab_tot`), taux_IEP = ((`IEP_tot` - lag( `IEP_tot`))*100 /lag( `IEP_tot`)), taux_ICE = ((`ICE_tot` - lag( `ICE_tot`))*100 /lag( `ICE_tot`)))
 
-ggplot(Kaya_OCDE_growth, aes(x = Année)) + geom_bar(aes(y = taux_PIB_hab, fill = "Taux PIB par habitant"), stat ="identity", position = "dodge", na.rm = TRUE) + geom_bar(aes(y = taux_POP, fill = "Taux population"), stat ="identity", position = "dodge", na.rm = TRUE) + geom_bar(aes(y = taux_IEP, fill = "Taux de l'intensité énergétique du PIB"), stat ="identity", position = "dodge", na.rm = TRUE) + geom_bar(aes(y = taux_ICE, fill = "Taux de l'intensité carbone de l'énergie"), stat ="identity", position = "dodge", na.rm = TRUE) + geom_point(aes(y = taux_CO2), color = 'black', size = 2, na.rm = TRUE) + theme(axis.text.x=element_text(angle=50, size=8, vjust=0.5)) +  labs(title = "Identité de Kaya des pays membres de l'OCDE", x = "Année", y = "Taux") + geom_abline(intercept = 0, slope = 0, color = "black") 
+ggplot(Kaya_OCDE_growth, aes(x = Année)) + geom_bar(aes(y = taux_PIB_hab, fill = "Taux PIB par habitant"), stat ="identity", position = "dodge", na.rm = TRUE) + geom_bar(aes(y = taux_POP, fill = "Taux population"), stat ="identity", position = "dodge", na.rm = TRUE) + geom_bar(aes(y = taux_IEP, fill = "Taux de l'intensité énergétique du PIB"), stat ="identity", position = "dodge", na.rm = TRUE) + geom_bar(aes(y = taux_ICE, fill = "Taux de l'intensité carbone de l'énergie"), stat ="identity", position = "dodge", na.rm = TRUE) + geom_point(aes(y = taux_CO2), color = 'black', size = 2, na.rm = TRUE) + theme(axis.text.x=element_text(angle=50, size=8, vjust=0.5)) +  labs(title = "Identité de Kaya des pays membres de l'OCDE", x = "Année", y = "Taux (%)") + geom_abline(intercept = 0, slope = 0, color = "black") 
 
 
 
@@ -268,13 +268,15 @@ Kaya_non_OCDE <- Kaya_non_OCDE %>%  group_by(Année) %>% summarise(PIB_tot = sum
 
 Kaya_non_OCDE_growth <- Kaya_non_OCDE %>% mutate(taux_PIB_hab = ((`PIB_hab` - lag( `PIB_hab`))*100/lag( `PIB_hab`)),taux_CO2 = ((`CO2_tot` - lag( `CO2_tot`))*100 /lag( `CO2_tot`)), taux_POP = ((`Hab_tot` - lag(`Hab_tot`))*100 / `Hab_tot`), taux_IEP = ((`IEP_tot` - lag( `IEP_tot`))*100 /lag( `IEP_tot`)), taux_ICE = ((`ICE_tot` - lag( `ICE_tot`))*100 /lag( `ICE_tot`)))
 
-ggplot(Kaya_non_OCDE_growth, aes(x = Année)) + geom_bar(aes(y = taux_PIB_hab, fill = "Taux PIB par habitant"), stat ="identity", position = "dodge", na.rm = TRUE) + geom_bar(aes(y = taux_POP, fill = "Taux population"), stat ="identity", position = "dodge", na.rm = TRUE) + geom_bar(aes(y = taux_IEP, fill = "Taux de l'intensité énergétique du PIB"), stat ="identity", position = "dodge", na.rm = TRUE) + geom_bar(aes(y = taux_ICE, fill = "Taux de l'intensité carbone de l'énergie"), stat ="identity", position = "dodge", na.rm = TRUE) + geom_point(aes(y = taux_CO2), color = 'black', size = 2, na.rm = TRUE) + theme(axis.text.x=element_text(angle=50, size=8, vjust=0.5)) +  labs(title = "Identité de Kaya des pays non membres de l'OCDE", x = "Année", y = "Taux") + geom_abline(intercept = 0, slope = 0, color = "black") 
+ggplot(Kaya_non_OCDE_growth, aes(x = Année)) + geom_bar(aes(y = taux_PIB_hab, fill = "Taux PIB par habitant"), stat ="identity", position = "dodge", na.rm = TRUE) + geom_bar(aes(y = taux_POP, fill = "Taux population"), stat ="identity", position = "dodge", na.rm = TRUE) + geom_bar(aes(y = taux_IEP, fill = "Taux de l'intensité énergétique du PIB"), stat ="identity", position = "dodge", na.rm = TRUE) + geom_bar(aes(y = taux_ICE, fill = "Taux de l'intensité carbone de l'énergie"), stat ="identity", position = "dodge", na.rm = TRUE) + geom_point(aes(y = taux_CO2), color = 'black', size = 2, na.rm = TRUE) + theme(axis.text.x=element_text(angle=50, size=8, vjust=0.5)) +  labs(title = "Identité de Kaya des pays non membres de l'OCDE", x = "Année", y = "Taux (%)") + geom_abline(intercept = 0, slope = 0, color = "black") 
 
 
 ```
 ```{r}
 #Kaya Table
 Kaya_table_OCDE <- Kaya_OCDE_growth %>% select(Année,taux_PIB_hab,taux_CO2,taux_POP,taux_ICE,taux_IEP)
+
+Kaya_OCDE_growth <- Kaya_OCDE %>% mutate(taux_PIB_hab = ((`PIB_hab` - lag( `PIB_hab`))*100/lag( `PIB_hab`)),taux_CO2 = ((`CO2_tot` - lag( `CO2_tot`))*100 /lag( `CO2_tot`)), taux_POP = ((`Hab_tot` - lag(`Hab_tot`))*100 / `Hab_tot`), taux_IEP = ((`IEP_tot` - lag( `IEP_tot`))*100 /lag( `IEP_tot`)), taux_ICE = ((`ICE_tot` - lag( `ICE_tot`))*100 /lag( `ICE_tot`)))
 ```
 
 
@@ -465,57 +467,36 @@ consommation de masse des 30 glorieuses n'a pas laissé notre planète
 indemne. En effet, les catastrophes naturelles se multiplient et nous
 sommes totalement vulnérable face à cet nature déchainée.
 
+
+
+
 ```{r}
+vulnerabilite_OCDE <- OCDE_pays %>% filter(Variable %in% c("Pourcentage de la population exposée aux journées glacées","Pourcentage de la population exposée aux journées chaudes","Pourcentage de la population exposée aux incendies incontrôlés","Note sur les progrès de réduction des risques de catastrophes (échelle de 1 à 5, 5 étant la meilleure note)","Stress hydrique, total des prélèvements d'eau douce en % des ressources internes renouvelables","Population, total")) %>% select(-`COU`, -`VAR` ,- `Unit`, -`PowerCode`) %>% pivot_longer(cols = c(`1990`,`1991`,`1992`,`1993`,`1994`,`1995`,`1996`,`1997`,`1998`,`1999`,`2000`, `2001`, `2002`, `2003`, `2004`, `2005`, `2006`, `2007`, `2008`, `2009`,`2010`, `2011`, `2012`, `2013`, `2014`, `2015`, `2016`, `2017`, `2018`, `2019`, `2020`),  names_to = "Année", values_to = "Value") %>% mutate(Value = as.numeric(Value)) %>% pivot_wider(names_from = Variable, values_from = Value) 
+
+vulnarabilite_OCDE_growth <- vulnerabilite_OCDE %>% filter(Pays%in%unique(decoupling_CO2_OCDE$Pays)) %>% group_by(Année, Pays) %>% summarise(population_exposée_aux_journées_glacées = (`Pourcentage de la population exposée aux journées glacées`*`Population, total`),population_exposée_aux_journées_chaudes = (`Pourcentage de la population exposée aux journées chaudes`*`Population, total`), population_exposée_aux_incendies_incontrôlés = (`Pourcentage de la population exposée aux incendies incontrôlés`*`Population, total`), Population = `Population, total`, .groups = 'drop')
+
+vulnarabilite_OCDE_growth <- vulnarabilite_OCDE_growth  %>% group_by(Année) %>% summarise(somme_population_exposée_aux_journées_glacées = sum(`population_exposée_aux_journées_glacées`, na.rm = TRUE),somme_population_exposée_aux_journées_chaudes = sum(`population_exposée_aux_journées_chaudes`, na.rm = TRUE), somme_population_exposée_aux_incendies_incontrôlés = sum(`population_exposée_aux_incendies_incontrôlés`,na.rm = TRUE), somme_Population = sum(`Population`,na.rm = TRUE))
+
+vulnarabilite_OCDE_growth <- vulnarabilite_OCDE_growth %>% mutate(part_population_exposée_aux_journées_glacées = (`somme_population_exposée_aux_journées_glacées`/`somme_Population`), part_population_exposée_aux_journées_chaudes = (`somme_population_exposée_aux_journées_chaudes`/`somme_Population`),part_population_exposée_aux_incendies_incontrôlés = (`somme_population_exposée_aux_incendies_incontrôlés`/`somme_Population`))
+
+vulnarabilite_OCDE_growth<- vulnarabilite_OCDE_growth %>% pivot_longer(cols = c(part_population_exposée_aux_incendies_incontrôlés,part_population_exposée_aux_journées_chaudes,part_population_exposée_aux_journées_glacées), names_to = "Variable", values_to = "Taux") 
+
+ggplot(vulnarabilite_OCDE_growth, aes(x = Année, y = Taux, color = Variable, linetype = Variable, group = Variable)) + geom_point(na.rm = TRUE)  + geom_line(na.rm = TRUE) + labs(title = "Part de la population de l'OCDE exposée aux incendies incontrôlées, aux journées chaudes et aux journées glacées", x = "Année", y = "Taux (%)", color = "Variable") +  theme(axis.text.x=element_text(angle=50, size=8, vjust=0.5)) +   geom_smooth(method = 'loess',formula = 'y ~ x' , alpha = 0.3, linewidth = 0.5, se = FALSE, color = 'black')
+
 
 
 ```
-
+Par ailleurs, en 2011 certains pays du monde ont été évalué note sur les progrès de réduction des risques de catastrophes (échelle de 1 à 5, 5 étant la meilleure note)
 ```{r}
-# Installer les packages si ce n'est pas déjà fait
-# install.packages(c("ggplot2", "dplyr"))
-# 
-# # Charger les bibliothèques
-# library(ggplot2)
-# library(dplyr)
-# 
-# # Supposons que votre jeu de données s'appelle non_OCDE_pays
-# # Assurez-vous d'avoir correctement chargé vos données
-# 
-# # Filtrer les données pour la période de 1990 à 2020
-# non_OCDE_pays_filtered <- non_OCDE_pays[non_OCDE_pays$année >= 1990 & non_OCDE_pays$année <= 2020, ]
-# 
-# # Graphique : Évolution des émissions de CO2 (kg par $ PPA de 2011 de PIB) pour les trois premiers pays
-# top3_emissions <- non_OCDE_pays_filtered %>%
-#   group_by(Pays) %>%
-#   arrange(desc(`Autres émissions de gaz à effet de serre, HFC, PFC et SF6 (milliers de tonnes métriques d’équivalent CO2)
-# `)) %>%
-#   slice_head(n = 3)
-# 
-# ggplot(top3_emissions, aes(x = année, y = `Émissions de CO2 (kg par $ PPA de 2011 de PIB)`, color = Pays)) +
-#   geom_line() +
-#   xlab("Année") +
-#   ylab("Émissions de CO2 (kg par $ PPA de 2011 de PIB)") +
-#   theme_bw() +
-#   ggtitle("Évolution des émissions de CO2 pour les trois premiers pays")
-# 
-# # Graphique : Distribution des valeurs d'exposition moyenne de la population aux PM2.5
-# ggplot(non_OCDE_pays_filtered, aes(x = `Exposition moyenne de la population aux PM2.5`)) +
-#   geom_histogram(binwidth = 5, fill = "skyblue", color = "black", alpha = 0.7) +
-#   xlab("Exposition moyenne de la population aux PM2.5") +
-#   ylab("Fréquence") +
-#   theme_bw() +
-#   ggtitle("Distribution de l'exposition moyenne aux PM2.5")
-# 
-# # Table : Statistiques descriptives pour les variables d'intérêt
-# summary_table <- non_OCDE_pays_filtered %>%
-#   select(`Émissions de CO2 (kg par $ PPA de 2011 de PIB)`,
-#          `Émissions de CO2 (kg par $ US de 2010 de PIB)`,
-#          `Autres émissions de gaz à effet de serre, HFC, PFC et SF6 (milliers de tonnes métriques d’équivalent CO2)`,
-#          `Émissions totales de GES (variation depuis 1990, %)`,
-#          `Exposition moyenne de la population aux PM2.5`)
-# 
-# print("Table des statistiques descriptives :")
-# print(summary_table)
+
+note_progres_non_OCDE <- non_OCDE_pays %>% filter(Variable %in% c("Note sur les progrès de réduction des risques de catastrophes (échelle de 1 à 5, 5 étant la meilleure note)")) %>% select(-`COU`, -`VAR` ,- `Unit`, -`PowerCode`) %>% pivot_longer(cols = c(`1990`,`1991`,`1992`,`1993`,`1994`,`1995`,`1996`,`1997`,`1998`,`1999`,`2000`, `2001`, `2002`, `2003`, `2004`, `2005`, `2006`, `2007`, `2008`, `2009`,`2010`, `2011`, `2012`, `2013`, `2014`, `2015`, `2016`, `2017`, `2018`, `2019`, `2020`),  names_to = "Année", values_to = "Value") %>% mutate(Value = as.numeric(Value)) %>% pivot_wider(names_from = Variable, values_from = Value) 
 
 
+vulnerabilite_OCDE_clean_progres <- drop_na(vulnerabilite_OCDE,`Note sur les progrès de réduction des risques de catastrophes (échelle de 1 à 5, 5 étant la meilleure note)`) %>% select(`Pays`,`Note sur les progrès de réduction des risques de catastrophes (échelle de 1 à 5, 5 étant la meilleure note)`) %>% mutate(Group = "OCDE")
+
+note_progres_non_OCDE <- drop_na(note_progres_non_OCDE,`Note sur les progrès de réduction des risques de catastrophes (échelle de 1 à 5, 5 étant la meilleure note)`) %>% select(`Pays`,`Note sur les progrès de réduction des risques de catastrophes (échelle de 1 à 5, 5 étant la meilleure note)`)  %>% mutate(Group = "Non-OCDE")
+
+note_progres_fusion <- bind_rows(vulnerabilite_OCDE_clean_progres, note_progres_non_OCDE)
+
+ggplot(note_progres_fusion, aes(x = reorder(Pays,`Note sur les progrès de réduction des risques de catastrophes (échelle de 1 à 5, 5 étant la meilleure note)`),y = `Note sur les progrès de réduction des risques de catastrophes (échelle de 1 à 5, 5 étant la meilleure note)`,  fill = Group)) + geom_bar(stat ="identity", position = "dodge", na.rm = TRUE) +  theme(axis.text.x=element_text(angle=45, size=8, hjust = 1, vjust=1), axis.text.y = element_text(margin = margin(r = 10)),plot.title = element_text(hjust = 0.1)) + labs(title = "Note sur les progrès de réduction des risques de catastrophes\n (échelle de 1 à 5, 5 étant la meilleure note)", x = "Pays", y = "note sur les progrès de\n réduction des risques de catastrophes") +  scale_fill_manual(values = c("OCDE" = "blue", "Non-OCDE" = "red")) 
 ```
