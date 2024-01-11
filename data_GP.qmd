@@ -141,7 +141,8 @@ indicators_to_select <- c(
   "Terres agricoles (% du territoire)",
   "Population vivant sur des terres dont l’altitude est inférieure à 5 mètres (en % de la population totale)",
   "Zones urbaines dont l’altitude est < à 5 m (% de la superficie totale)",
-  "Superficie des terres dont l’altitude est inférieure à 5 mètres (en % de la superficie totale des terres)"
+  "Superficie des terres dont l’altitude est inférieure à 5 mètres (en % de la superficie totale des terres)",
+  "Rendement des céréales (kg par hectare)"
 )
 
 # Filter the worldbank dataset
