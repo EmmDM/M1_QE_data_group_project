@@ -17,8 +17,6 @@ library(knitr)
 library(ggplot2)
 library(readr)
 library(stringr)
-library(maps)
-library(countrycode)
 library(readxl)})
 ```
 
@@ -28,51 +26,6 @@ donnees_partage <- readRDS("donnees_partage.RDS")
 OCDE_pays <- donnees_partage$OCDE_pays
 non_OCDE_pays <- donnees_partage$non_OCDE_pays
 ```
-
-*I- Constat*
-
-Dans un premier temps, nous chercherons à présenter un état des lieux en
-déterminant les liens fondamentaux entre les principaux agrégats
-économiques et environnementaux tels que le PIB, et les émissions de CO2
-pour notamment étudier dans quelle mesure la croissance économique s'est
-découplée de l'impact environnemental. Nous nous intéresserons à la
-notion de découplage, signifiant une croissance économique sans
-augmentation proportionnelle de la pression environnementale. Nous
-analyserons aussi les tendances en matière d'intensité carbone et
-d'efficacité énergétique.
-
-I.1 Découplage
-
-Le découplage se produit lorsque le taux de croissance d'une pression
-environnementale est inférieur à celui de sa force motrice économique
-(par exemple le PIB) sur une période donnée. Le découplage peut être
-absolu ou relatif. On parle de découplage absolu lorsque la variable
-pertinente pour l'environnement est stable ou décroissante alors que la
-force motrice économique augmente. Le découplage est dit relatif lorsque
-le taux de croissance de la variable pertinente pour l'environnement est
-positif, mais inférieur au taux de croissance de la variable économique.
-
-Il existe un nombre varié d'indicateur de découplage, dans cette
-présentation nous focaliserons sur les emissions totales de gas à effet
-de serre par unité de PIB et par personne, ainsi que que les émissions
-totales de CO2 par unité de PIB et par personne
-
-La manière la plus direct d'afficher le découplage entre une pression
-environnementale et une force économique consiste à tracer deux séries
-temporelles indexées (par exemple 1980 = 100) sur le même graphique. A
-partir d'un tel graphique, il est immédiatement clair si une force
-économique croit ou décroit, si le découplage -absolu ou relatif-
-s'opère et quand il commence et s'il continue.
-
-Pour comparer le découplage parmi les pays, le ratio de la valeur du
-découplage à la fin et au début d'une période de temps donnée est
-définie comme : Ration = \[(EP/DF)\_endofperiod\] /
-\[(EP/DF)\_startofperiod\] avec EP = Pression environnementale et DF =
-Force motrice
-
-#### Ne pas sommer les PIB par habitant pour obtenir le PIB par habitant total !
-
-#### Convertir PIB réel faire \*10\^6
 
 ```{r}
 #Pour les GES
@@ -100,6 +53,8 @@ CO2_total_non_OCDE <- CO2_total_non_OCDE %>% mutate(Ratio_base100 = Ratio / Rati
 
 ```
 
+# I. Constat sur la transition écologique
+
 ```{r}
 #On va faire des graphs en considérant la croissance du PIB et la croissance des émissions
 #On s'intéresse aux pays membres de l'OCDE
@@ -110,20 +65,19 @@ decoupling_CO2_OCDE_growth <- CO2_total_OCDE_index %>% mutate(taux_PIB = ((`PIB_
 
 decoupling_CO2_OCDE_growth_convert <- decoupling_CO2_OCDE_growth %>% pivot_longer(cols = c(taux_PIB,taux_CO2), names_to = "Variable", values_to = "Taux") 
 
-ggplot(decoupling_CO2_OCDE_growth_convert, aes(x = Année, y = Taux, color = Variable, linetype = Variable, group = Variable)) + geom_point(na.rm = TRUE)  + geom_line(na.rm = TRUE) + labs(title = "Taux de croissance du PIB par habitant et taux de croissance des émissions de CO2 des pays membres de l'OCDE", x = "Année", y = "Taux de croissance (%)", color = "Variable") +  theme(axis.text.x=element_text(angle=50, size=8, vjust=0.5))
+ggplot(decoupling_CO2_OCDE_growth_convert, aes(x = Année, y = Taux, color = Variable, linetype = Variable, group = Variable)) + geom_point(na.rm = TRUE)  + geom_line(na.rm = TRUE) + labs(title = "Taux de croissance du PIB par habitant  \n et taux de croissance des émissions de CO2 des pays membres de l'OCDE", x = "Année", y = "Taux de croissance (%)", color = "Variable") +  theme(axis.text.x=element_text(angle=50, size=8, vjust=0.5))
 
 #Non OCDE
 decoupling_CO2_non_OCDE_growth <- CO2_total_non_OCDE_index %>% mutate(taux_PIB = ((`PIB_hab` - lag( `PIB_hab`)) *100/lag( `PIB_hab`)), taux_CO2 = ((`GES_tot` - lag( `GES_tot`))*100 /lag( `GES_tot`)))
 
 decoupling_CO2_non_OCDE_growth_convert <- decoupling_CO2_non_OCDE_growth %>% pivot_longer(cols = c(taux_PIB,taux_CO2), names_to = "Variable", values_to = "Taux")
+
+# Représentation des graphiques considérant la croissance du PIB et la croissance des émissions
+#On s'intéresse aux pays non membres de l'OCDE
+ggplot(decoupling_CO2_non_OCDE_growth_convert, aes(x = Année, y = Taux, color = Variable, linetype = Variable, group = Variable)) + geom_point(na.rm = TRUE)  + geom_line(na.rm = TRUE) + labs(title = "Taux de croissance du PIB par habitant \n et taux de croissance des émissions de CO2 des pays non membres de l'OCDE", x = "Année", y = "Taux de croissance (%)", color = "Variable") +  theme(axis.text.x=element_text(angle=50, size=8, vjust=0.5))  
 ```
 
 ```{r}
-
-# Représentation des graphiques considérant la croissance du PIB et la croissance des émissions
-#On s'intéresse aux pays membres de l'OCDE
-ggplot(decoupling_CO2_non_OCDE_growth_convert, aes(x = Année, y = Taux, color = Variable, linetype = Variable, group = Variable)) + geom_point(na.rm = TRUE)  + geom_line(na.rm = TRUE) + labs(title = "Taux de croissance du PIB par habitant et taux de croissance des émissions de CO2 des pays non membres de l'OCDE", x = "Année", y = "Taux de croissance (%)", color = "Variable") +  theme(axis.text.x=element_text(angle=50, size=8, vjust=0.5))  
-
 reg_CO2_PIB_OCDE=lm('taux_CO2 ~ taux_PIB', data = decoupling_CO2_OCDE_growth)
 summary(reg_CO2_PIB_OCDE)
 ggplot(reg_CO2_PIB_OCDE, aes(x = taux_PIB,y = taux_CO2)) + geom_point(color='gray', size=1, na.rm = TRUE) + geom_smooth(method='lm', formula = 'y ~ x', se=FALSE, color='red', na.rm = TRUE) + theme_minimal() + labs(title = "Taux de croissance du PIB par habitant et taux de croissance des émissions de CO2 des pays membres de l'OCDE", x = "Taux de croissance du PIB/hab (%)", y = "Taux de croissance des émissions de GES (%)")
@@ -133,6 +87,33 @@ summary(reg_CO2_PIB_non_OCDE)
 ggplot(reg_CO2_PIB_non_OCDE, aes(x = taux_PIB,y = taux_CO2)) + geom_point(color='gray', size=1, na.rm = TRUE) + geom_smooth(method='lm',formula = 'y ~ x', se=FALSE, na.rm = TRUE) +  labs(title = "Taux de croissance du PIB par habitant et taux de croissance des émissions de CO2 des pays non membres de l'OCDE", x = "Taux de croissance du PIB/hab (%)", y = "Taux de croissance des émissions de GES (%)") + theme_minimal() 
 
 ```
+
+## *A) Découplage*
+
+Le découplage se produit lorsque le taux de croissance d'une pression
+environnementale est inférieur à celui de sa force motrice économique
+(par exemple le PIB) sur une période donnée. Le découplage peut être
+absolu ou relatif. On parle de découplage absolu lorsque la variable
+pertinente pour l'environnement est stable ou décroissante alors que la
+force motrice économique augmente. Le découplage est dit relatif lorsque
+le taux de croissance de la variable pertinente pour l'environnement est
+positif, mais inférieur au taux de croissance de la variable économique.
+Il existe un nombre varié d'indicateur de découplage, dans cette
+présentation nous focaliserons sur les emissions totales de gaz à effet
+de serre (GES) par unité de PIB et par personne. La manière la plus
+directe d'afficher le découplage entre une pression environnementale et
+une force économique consiste à tracer deux séries temporelles indexées
+(par exemple 1980 = 100) sur le même graphique. A partir d'un tel
+graphique, il est immédiatement clair si une force économique croit ou
+décroit, si le découplage -absolu ou relatif- s'opère et quand il
+commence et s'il continue.
+
+Pour comparer le découplage parmi les pays, le ratio de la valeur du
+découplage à la fin et au début d'une période de temps donnée est
+définie comme :
+$$ Ratio = {(PE/FM)_{findepériode} / (PE/FM)_{débutdepériode}} $$
+
+avec : PE = Pression environnementale et FM = Force motrice
 
 ```{r}
 #Representation graphique de l'indice de découplage entre les émissions de GES et le PIB/hab pour l'ensemble des pays membres de l'OCDE
@@ -205,12 +186,34 @@ knitr :: kable(decoupling_summary_OCDE, caption = "Part des pays membres de l'OC
 knitr :: kable(decoupling_summary_non_OCDE, caption = "Part des pays non membres de l'OCDE d'après le découplage effectué")
 ```
 
-I.2 Nous analyserons aussi les tendances en matière d'intensité carbone et d'efficacité énergétique.
+I.2 Nous analyserons aussi les tendances en matière d'intensité carbone
+et d'efficacité énergétique.
 
-A. Courbe environnementale de Kuznets
-"Selon l'économiste Éloi Laurent, spécialiste de la croissance, la source de l’idée de découplage repose sur la courbe environnementale de Kuznets, théorie construite dans les années 1990 selon laquelle les dommages environnementaux augmentent dans les premières phases du développement d'une société, puis reculent alors que la croissance économique se poursuit" (Wikipedia, découplage (écologie))
+A. Courbe environnementale de Kuznets "Selon l'économiste Éloi Laurent,
+spécialiste de la croissance, la source de l'idée de découplage repose
+sur la courbe environnementale de Kuznets, théorie construite dans les
+années 1990 selon laquelle les dommages environnementaux augmentent dans
+les premières phases du développement d'une société, puis reculent alors
+que la croissance économique se poursuit" (Wikipedia, découplage
+(écologie))
 
-La courbe de Kuznets, dont la forme est U inversé, représente initiallement l'inégalité économique dans un pays en fonction de son niveau de développement. C'est selon Grossman et Krueger (1994), que cette forme de courbe peut être observée dans le domaine de l'environnement.Le modèle de courbe environnementale de Kuznets (EKC) postule une relation déterministe entre développement économique et qualité de l’environnement. Dans la première étape de l'industrialisation, la pollution augmente rapidement car les individus sont principalement interessées par leur travail et leur revenus que par la qualité de l'air et de l'eau. A ce stade, la société est trop pauvre pour réduire ses émissions, de fait la réglementations environnementales est trop failbe. Le retournement s'effectue à mesure que les revenus augmentent. Dès lors, les principaux secteurs industriels deviennent plus propres, les individus valorisent l'environnement et les institutions de régulation deviennent plus efficaces. Le long de la courbe, la pollution se stabilise dans la tranche des revenus moyens, puis retombe au niveau pré-industriel dans les sociétés développées.
+La courbe de Kuznets, dont la forme est U inversé, représente
+initiallement l'inégalité économique dans un pays en fonction de son
+niveau de développement. C'est selon Grossman et Krueger (1994), que
+cette forme de courbe peut être observée dans le domaine de
+l'environnement.Le modèle de courbe environnementale de Kuznets (EKC)
+postule une relation déterministe entre développement économique et
+qualité de l'environnement. Dans la première étape de
+l'industrialisation, la pollution augmente rapidement car les individus
+sont principalement interessées par leur travail et leur revenus que par
+la qualité de l'air et de l'eau. A ce stade, la société est trop pauvre
+pour réduire ses émissions, de fait la réglementations environnementales
+est trop failbe. Le retournement s'effectue à mesure que les revenus
+augmentent. Dès lors, les principaux secteurs industriels deviennent
+plus propres, les individus valorisent l'environnement et les
+institutions de régulation deviennent plus efficaces. Le long de la
+courbe, la pollution se stabilise dans la tranche des revenus moyens,
+puis retombe au niveau pré-industriel dans les sociétés développées.
 
 ```{r}
 #CKE 1990
@@ -235,21 +238,30 @@ ggplot(CKE_2020, aes(x = PIB_hab, y = GES_hab, color = Group)) + geom_point(na.r
 
 
 ```
-En utilisant les données des pays pour les emissions de GES et les PIB par habitant, nous constatons qu'il n'y a pas de courbe en U inversée, ni en 1990, ni en 2020. En effet, à mesure que le PIB est élevé, les émissions de GES devraient théoriquement diminuées dans les pays développées, or ce n'est pas ce qui est observées empiriquement, bien qu'en 2020 il semble y avoir un seuil aux émissions de GES qui n'étaient pas constaté en 1990. Toutefois, l'année 2020 est aussi une année particulière en raison de la pandémie de COVID-19 qui a drastiquement diminué les émissions de CO2, comme le montre l'un des graphiques précédent.
+
+En utilisant les données des pays pour les emissions de GES et les PIB
+par habitant, nous constatons qu'il n'y a pas de courbe en U inversée,
+ni en 1990, ni en 2020. En effet, à mesure que le PIB est élevé, les
+émissions de GES devraient théoriquement diminuées dans les pays
+développées, or ce n'est pas ce qui est observées empiriquement, bien
+qu'en 2020 il semble y avoir un seuil aux émissions de GES qui n'étaient
+pas constaté en 1990. Toutefois, l'année 2020 est aussi une année
+particulière en raison de la pandémie de COVID-19 qui a drastiquement
+diminué les émissions de CO2, comme le montre l'un des graphiques
+précédent.
 
 I.3 Identité de Kaya
 
-"L'identité de Kaya, relie les émissions anthropique de dioxyde de carbone à des paramètre d'ordre démographique, économique et énergétique. [...] Selon Kaya, le niveau total d'émission peut s'exprimer comme le produit de quatres facteurs : la population, le PIB par habitant, l'intensité énergétique et le contenu en CO2 de l'énergie consommée.
-Cette identité se décompose par :
-CO2 = POP * (PIB/POP) * (E/PIB) * (CO2/E)
-Avec : 
-CO2 : Emission de CO2
-POP : la population
-PIB : Produit interieur brut
-E : consommation d'énergie
-PIB/POP : Produit interieur brut par habitant
-E/PIB : Intensité énergétique du PIB
-CO2/E : Intensité carbone de l'énergie
+"L'identité de Kaya, relie les émissions anthropique de dioxyde de
+carbone à des paramètre d'ordre démographique, économique et
+énergétique. \[...\] Selon Kaya, le niveau total d'émission peut
+s'exprimer comme le produit de quatres facteurs : la population, le PIB
+par habitant, l'intensité énergétique et le contenu en CO2 de l'énergie
+consommée. Cette identité se décompose par : CO2 = POP \* (PIB/POP) \*
+(E/PIB) \* (CO2/E) Avec : CO2 : Emission de CO2 POP : la population PIB
+: Produit interieur brut E : consommation d'énergie PIB/POP : Produit
+interieur brut par habitant E/PIB : Intensité énergétique du PIB CO2/E :
+Intensité carbone de l'énergie
 
 ```{r}
 #Identité de Kaya pour l'ensemble des pays membres de l'OCDE
@@ -274,6 +286,7 @@ ggplot(Kaya_non_OCDE_growth, aes(x = Année)) + geom_bar(aes(y = taux_PIB_hab, f
 
 
 ```
+
 ```{r}
 #Kaya Table
 Kaya_table_OCDE <- Kaya_OCDE_growth %>% select(Année,taux_PIB_hab,taux_CO2,taux_POP,taux_ICE,taux_IEP)
@@ -281,195 +294,11 @@ Kaya_table_OCDE <- Kaya_OCDE_growth %>% select(Année,taux_PIB_hab,taux_CO2,taux
 Kaya_OCDE_growth <- Kaya_OCDE %>% mutate(taux_PIB_hab = ((`PIB_hab` - lag( `PIB_hab`))*100/lag( `PIB_hab`)),taux_CO2 = ((`CO2_tot` - lag( `CO2_tot`))*100 /lag( `CO2_tot`)), taux_POP = ((`Hab_tot` - lag(`Hab_tot`))*100 / `Hab_tot`), taux_IEP = ((`IEP_tot` - lag( `IEP_tot`))*100 /lag( `IEP_tot`)), taux_ICE = ((`ICE_tot` - lag( `ICE_tot`))*100 /lag( `ICE_tot`)))
 ```
 
-
-*II- Politiques*
-
-Dans cette deuxième partie, l'objectif est d'étudier les pressions
-environnementales sur les ressources exercées par les composantes du
-PIb, puis d'analyser les politiques mises en place pour réduire cela.
-
-Il nous paraît interessant dans un premier temps de comparer entre les
-pays OCDE et hors OCDE les differentes intensité sur l'eau, la qualité
-de l'air, et l'adpatation des ressources renouvelables.
-
-**A- Pression environementales** 
-*A.1 : Intensité de l'eau*
-
-Afin d'évaluer l'utilisation durable de l'eau, nous allons examiner
-l'intensité de l'eau par habitant et par unité de production. Nos
-variables principales utilisés sont : Prélèvements bruts d'eau douce par
-habitant, Stress hydrique (total des prélèvements d'eau douce en % des
-ressources internes renouvelables),Retraits annuels d'eau douce, total
-(% des ressources internes), Retraits annuels d'eau douce, (total
-milliards de mètres cubes). Nous les avons choisies car elles permettent
-d'avoir un aperçu des impacts et des utilisations intensives sur l'eau,
-une ressource qui va venir à manquer. Il va aussi être interessant de se
-rendre compte des différents accès à l'eau selon les régions du monde,
-car 1 personne sur 3 n'y a pas accès créant un nombre élévé de dèces du
-à ce manque important.
-
-```{r}
-#des graphiques comparatifs entre pays OCDE et hors OCDE vont être utilisé afin d'illsutrer les différences d'utilisation de l'eau selon les régions du monde et leurs économies. 
-
-#Création d'une table afin de summarize les informations statistiques de ces 4 variables concernant l'eau. 
-#cependant je n'arrive pas à completement finaliser et je ne trouve pas des valeurs cohérentes, soit toutes pareilles soit des 0 ...
-
-
-
-```
-
-```{r}
-#Création d'une base de données pour les indicateurs d'eau pour les pays membres de l'OCDE
-eau_OCDE <- OCDE_pays %>% filter(Variable %in% c("Prélèvements bruts d'eau douce par habitant","Stress hydrique, total des prélèvements d'eau douce en % des ressources internes renouvelables","Retraits annuels d’eau douce, total (% des ressources internes)","Retraits annuels d’eau douce, total (milliards de mètres cubes)")) %>% select(-`COU`, -`VAR` ,- `Unit`, -`PowerCode`) %>% pivot_longer(cols = c(`1990`,`1991`,`1992`,`1993`,`1994`,`1995`,`1996`,`1997`,`1998`,`1999`,`2000`, `2001`, `2002`, `2003`, `2004`, `2005`, `2006`, `2007`, `2008`, `2009`,`2010`, `2011`, `2012`, `2013`, `2014`, `2015`, `2016`, `2017`, `2018`, `2019`, `2020`),  names_to = "Année", values_to = "Value") %>% mutate(Value = as.numeric(Value))
-
-
-#  On calcule la moyenne et la médiane des variables pour chaques pays membres de l'OCDE
-eau_stat_OCDE <- eau_OCDE %>% group_by(Pays,Variable) %>% summarize(Valeur_moyenne = mean(`Value`, na.rm = TRUE), valeur_median = median(`Value`, na.rm = TRUE), .groups = 'drop')
- 
-
-#Création d'une base de données pour les indicateurs d'eau pour les pays non membres de l'OCDE
-eau_non_OCDE <- non_OCDE_pays %>% filter(Variable %in% c("Prélèvements bruts d'eau douce par habitant","Stress hydrique, total des prélèvements d'eau douce en % des ressources internes renouvelables","Retraits annuels d’eau douce, total (% des ressources internes)","Retraits annuels d’eau douce, total (milliards de mètres cubes)")) %>% select(-`COU`, -`VAR` ,- `Unit`, -`PowerCode`) %>% pivot_longer(cols = c(`1990`,`1991`,`1992`,`1993`,`1994`,`1995`,`1996`,`1997`,`1998`,`1999`,`2000`, `2001`, `2002`, `2003`, `2004`, `2005`, `2006`, `2007`, `2008`, `2009`,`2010`, `2011`, `2012`, `2013`, `2014`, `2015`, `2016`, `2017`, `2018`, `2019`, `2020`),  names_to = "Année", values_to = "Value") %>% mutate(Value = as.numeric(Value))
-
-#  On calcule la moyenne et la médiane des variables pour chaques pays non membres de l'OCDE
-eau_stat_non_OCDE <- eau_non_OCDE %>% group_by(Pays,Variable) %>% summarize(Valeur_moyenne = mean(`Value`, na.rm = TRUE), valeur_median = median(`Value`, na.rm = TRUE), .groups = 'drop')
-
-knitr :: kable(eau_stat_OCDE, caption = "Tableau de valeurs moyennes et médianes sur les variables hydriques d'intérêt par pays")
-
-knitr :: kable(eau_stat_non_OCDE, caption = "Tableau de valeurs moyennes et médianes sur les variables hydriques d'intérêt par pays")
-
-
-```
-
-```{r}
-#On analyse les tendances des pays membres de l'OCDE
-
-#On effectue la moyenne par an de tous les pays membres de l'OCDE
-eau_tendance_OCDE <- eau_OCDE %>% group_by(Année,Variable) %>% summarise(moyenne_annuelle = mean(`Value`, na.rm =TRUE), .groups = 'drop')
-
-ggplot(eau_tendance_OCDE, aes(x=`Année`, y = moyenne_annuelle)) + geom_jitter() + scale_size_continuous("moyenne_annuelle") +  facet_wrap(~ Variable, scales = "free_y", ncol = 1) + theme(axis.text.x=element_text(angle=50, size=8, vjust=0.5))
-
-#Il faut faire des correlations entre différentes variables
-```
-
-*A.2 : Qualité de l'air*
-
-L'indice de qualité de l'air sera utilisé pour évaluer les niveaux de
-pollution atmoshpériques. Cette donnée interessante pourra aussi nous
-donner des indices sur les secteurs intensifs des pays. Un pays au
-secteur industriel principale aura tendance à peut-être rejeté plus de
-CO2 dans l'air qu'un autre.
-
-```{r}
-
-
-#Graph sur des variables de la qualité de l'air + summarize qualité air 
-
-
-
-
-# 
-# # Filtrez les données pour les années 1990 à 2020
-# data_filtered <- data_long[data_long$Variable == "Retraits_annuels_eau_douce_total_pourcentage_ressources_internes" & 
-#                               as.numeric(data_long$année) >= 1990 & as.numeric(data_long$année) <= 2020, ]
-# 
-# # Créer le graphique avec ggplot2
-# ggplot(data_filtered, aes(x = as.numeric(année), y = value, color = Pays)) +
-#   geom_line() +
-#   xlab("Année") +
-#   ylab("Retraits annuels d'eau douce total (pourcentage des ressources internes)") +
-#   theme_bw() +
-#   scale_color_manual(values = c("red", "blue", "green"))
-# 
-# 
-# 
-# #VS graph pays non OCDE pour comparer
-
-
-#observations
-
-CO2_emission_OCDE <-  OCDE_pays %>% filter(Variable %in% c("Émissions de CO2 (kt)","Population, total","Autres émissions de gaz à effet de serre, HFC, PFC et SF6 (milliers de tonnes métriques d’équivalent CO2)")) %>% select(-`COU`, -`VAR` ,- `Unit`, -`PowerCode`) %>% pivot_longer(cols = c(`1990`,`1991`,`1992`,`1993`,`1994`,`1995`,`1996`,`1997`,`1998`,`1999`,`2000`, `2001`, `2002`, `2003`, `2004`, `2005`, `2006`, `2007`, `2008`, `2009`,`2010`, `2011`, `2012`, `2013`, `2014`, `2015`, `2016`, `2017`, `2018`, `2019`, `2020`),  names_to = "Année", values_to = "Value") %>% mutate(Value = as.numeric(Value)) %>% pivot_wider(names_from = Variable, values_from = Value) 
-
-#Création d'un index 
-
-CO2_emission_OCDE_index <- CO2_emission_OCDE %>% filter(Pays%in%unique(decoupling_CO2_OCDE$Pays)) %>% group_by(Année) %>% summarise(Hab_tot = sum(`Population, total`,na.rm = TRUE), CO2_emi_tot = sum(`Émissions de CO2 (kt)`, na.rm = TRUE), Autre_CO2 = sum(`Autres émissions de gaz à effet de serre, HFC, PFC et SF6 (milliers de tonnes métriques d’équivalent CO2)`, na.rm = TRUE)) %>% mutate(CO2_hab = `CO2_emi_tot`/`Hab_tot`)
-
-
-
-ggplot(CO2_emission_OCDE_index, aes(x  = Année, y = Autre_CO2)) + geom_point(na.rm = TRUE) + labs(title = "Évolution des variables sélectionnées par année",x = "Année",  y = "Valeur") + theme_minimal() + theme(axis.text.x = element_text(angle = 45, hjust = 1)) 
-
-
-```
-
-*A.3 : Adoption de sources d'énergies renouvelables* Depuis 1990 nous
-pouvons observer la tendance de l'adopation d'energie renouvelable et
-les pays qui en sont les moteurs.
-
-```{r}
-#Pays OCDE les 3 premiers qui sont en tete et pays Non OCDE les 3 premiers 
-
-#Pays non OCDE
-
-#Observations
-```
-
-*B- Politiques Environnementales* Après avoir pu observer les pressions
-exercés par les composantes de notre activité économique, nous allons
-pouvoir nous interesser aux politiques mises en place pour les réguler.
-
-*B.1* tax Une taxe environnementale est caractérisée par son action sur
-les coûts des activités ou les prix des produits qui ont un effet
-négatif sur l'environnement. C'est une internalisation de l'externalité
-négative.
-
-```{r}
-#graph sur les taxes 
-
-
-#R&D : graph montrant l'évolution des efforts en R&D correlé ou non avec après les subventions ou aussi la transition vers les nergies renouvelable ?
-```
-
-*B.2* Subventions + prise de décision de protection de l'environnement
-
-```{r}
-
-#le dispositif de subvention est une aide aux entreprises afin de les aider dans leurs transitions écologique pour aller vers des énergies plus durables. 
-# nous allons pouvoir observer l'évolution des subventions via plusieurs variables: 
-
-#Soutien total aux combustibles fossiles, % recettes totales des taxes
-#Soutien aux consommateurs de combustibles fossiles, % recettes totales des taxes
-#Soutien à l'électricité, % soutien total aux combustibles fossiles
-#Zones protégées à l'échelle nationale (% du territoire total)
-#Zones terrestres et marines protégées (% du territoire total)
-#Zones marines protégées (% des eaux du territoire)
-
-#faire un graph ou une table
-
-# puis observations/ conclusion sur ces politiques 
-
-```
-
-*III- Vulnérabilités et strategies adaptives*
-
-*A- Variable démographique* La migrations des populations vers les
-espaces urbains s'est réalisé de manière continue depuis
-l'industrialisation au 19 ième siècle. Aujourd'hui les espaces ruraux
-sont vides mais à cause d'une pression environementales qui devient trop
-elevées, et dérangeante ce mouvement peut avoir changé. Nous allons
-analyser ces migrations dans un graph afin de nous rendre compte depuis
-1990 des ces évolutions. La Worldbank à plus de variables sur les
-indices urbains, tandis que l'OCDE est plus tournée vers les migrations,
-ce qui va nous permettre d'avoir un grand calibre de données.
-
-```{r}
-```
-
 *B- vulnérabilité humaine face aux changement climatiques*
 L'industrialisation intensives qui a lieu depuis le 19 ieme siècle et la
 consommation de masse des 30 glorieuses n'a pas laissé notre planète
 indemne. En effet, les catastrophes naturelles se multiplient et nous
 sommes totalement vulnérable face à cet nature déchainée.
-
-
 
 ```{r}
 vulnerabilite_OCDE <- OCDE_pays %>% filter(Variable %in% c("Pourcentage de la population exposée aux journées glacées","Pourcentage de la population exposée aux journées chaudes","Pourcentage de la population exposée aux incendies incontrôlés","Note sur les progrès de réduction des risques de catastrophes (échelle de 1 à 5, 5 étant la meilleure note)","Stress hydrique, total des prélèvements d'eau douce en % des ressources internes renouvelables","Population, total")) %>% select(-`COU`, -`VAR` ,- `Unit`, -`PowerCode`) %>% pivot_longer(cols = c(`1990`,`1991`,`1992`,`1993`,`1994`,`1995`,`1996`,`1997`,`1998`,`1999`,`2000`, `2001`, `2002`, `2003`, `2004`, `2005`, `2006`, `2007`, `2008`, `2009`,`2010`, `2011`, `2012`, `2013`, `2014`, `2015`, `2016`, `2017`, `2018`, `2019`, `2020`),  names_to = "Année", values_to = "Value") %>% mutate(Value = as.numeric(Value)) %>% pivot_wider(names_from = Variable, values_from = Value) 
@@ -482,13 +311,26 @@ vulnarabilite_OCDE_growth <- vulnarabilite_OCDE_growth %>% mutate(part_populatio
 
 vulnarabilite_OCDE_growth<- vulnarabilite_OCDE_growth %>% pivot_longer(cols = c(part_population_exposée_aux_incendies_incontrôlés,part_population_exposée_aux_journées_chaudes,part_population_exposée_aux_journées_glacées), names_to = "Variable", values_to = "Taux") 
 
-ggplot(vulnarabilite_OCDE_growth, aes(x = Année, y = Taux, color = Variable, linetype = Variable, group = Variable)) + geom_point(na.rm = TRUE)  + geom_line(na.rm = TRUE) + labs(title = "Part de la population de l'OCDE exposée aux incendies incontrôlées, aux journées chaudes et aux journées glacées", x = "Année", y = "Taux (%)", color = "Variable") +  theme(axis.text.x=element_text(angle=50, size=8, vjust=0.5)) +   geom_smooth(method = 'loess',formula = 'y ~ x' , alpha = 0.3, linewidth = 0.5, se = FALSE, color = 'black')
+ggplot(vulnarabilite_OCDE_growth, aes(x = Année, y = Taux, color = Variable, linetype = Variable, group = Variable)) + geom_point(na.rm = TRUE)  + geom_line(na.rm = TRUE) + labs(title = "Part de la population de l'OCDE exposée aux incendies incontrôlées, \n aux journées chaudes  et aux journées glacées", x = "Année", y = "Taux (%)", color = "Variable") +  theme(axis.text.x=element_text(angle=50, size=8, vjust=0.5)) +   geom_smooth(method = 'loess',formula = 'y ~ x' , alpha = 0.3, linewidth = 0.5, se = FALSE, color = 'black')
 
 
 
 ```
-Au sein des pays membres de l'OCDE nous constatons que la part de la population exposée aux journées chaudes à particulièrement augmentées. En effet bien qu'il y ait de fortes variations entre les années, la tendance montre une nette augmentation entre 1990 et 2020 d'un peu plus de 25% à un peu moins de 40%. Pour ce qui est de la part de la populaition exposée aux journées glacées, il n'y a pas eu de fort changement durant c'est 30 dernières. Enfin, sur la part de la population exposée aux incendies, il n'y a pas de valeurs avant 2000, donc on ne peut pas interpréter les valeurs entre 1990 et 2000, de plus entre 2000 et 2020 on constate une tendance constante. 
-Nous ne possedons pas de valeurs pour les pays non membres de l'OCDE, toutefois la variables Sécheresses, inondations, températures extrêmes (en % de la population, moyenne de 1990 à 2009) nous permet d'effectuer des comparaisons entre les pays membres et non-membres de l'OCDE
+
+Au sein des pays membres de l'OCDE nous constatons que la part de la
+population exposée aux journées chaudes à particulièrement augmentées.
+En effet bien qu'il y ait de fortes variations entre les années, la
+tendance montre une nette augmentation entre 1990 et 2020 d'un peu plus
+de 25% à un peu moins de 40%. Pour ce qui est de la part de la
+populaition exposée aux journées glacées, il n'y a pas eu de fort
+changement durant c'est 30 dernières. Enfin, sur la part de la
+population exposée aux incendies, il n'y a pas de valeurs avant 2000,
+donc on ne peut pas interpréter les valeurs entre 1990 et 2000, de plus
+entre 2000 et 2020 on constate une tendance constante. Nous ne possedons
+pas de valeurs pour les pays non membres de l'OCDE, toutefois la
+variables Sécheresses, inondations, températures extrêmes (en % de la
+population, moyenne de 1990 à 2009) nous permet d'effectuer des
+comparaisons entre les pays membres et non-membres de l'OCDE
 
 ```{r}
 #Sécheresses, inondations, températures extrêmes (en % de la population, moyenne de 1990 à 2009)
@@ -503,15 +345,15 @@ risque <- risque %>% filter(Pays%in%unique(risque$Pays)) %>% group_by(Pays, Grou
 
 ```
 
-
 ```{r}
 ggplot(risque, aes(x = Group, y = Secheresses_inondations_temperatures_extreme, fill = Group)) +
   geom_boxplot(na.rm = TRUE, alpha = 0.8)  +  scale_fill_manual(values = c("Non-OCDE" = "skyblue", "OCDE" = "lightcoral"))  + theme_minimal() + labs(title = "% de la population de chaque pays exposée aux Sécheresses,\n inondations, températures extrêmes (1990-2009)", x = "Groupe", y = "Population de chaque pays exposée aux risques (%)") 
   
 ```
 
-
-Par ailleurs, en 2011 certains pays du monde ont été évalué note sur les progrès de réduction des risques de catastrophes (échelle de 1 à 5, 5 étant la meilleure note)
+Par ailleurs, en 2011 certains pays du monde ont été évalué note sur les
+progrès de réduction des risques de catastrophes (échelle de 1 à 5, 5
+étant la meilleure note)
 
 ```{r}
 
@@ -531,3 +373,17 @@ ggplot(note_progres_fusion, aes(y = reorder(Pays,`Note sur les progrès de rédu
 
 ```
 
+ii. Examiner les variables en lien avec les zones en-dessous d'une
+    certaine altitudes ou à proximité du niveau de la mer et leur
+    vulnérabilité sur la hausse des niveaux des océans.
+
+Superficie des terres dont l'altitude est inférieure à 5 mètres (en % de
+la superficie totale des terres) Zones urbaines dont l'altitude est \< à
+5 m (% de la superficie totale) Population vivant sur des terres dont
+l'altitude est inférieure à 5 mètres (en % de la population totale)
+Hauteur moyenne des précipitations (mm par an)
+
+```{r}
+# Hauteur moyenne des précipitations (mm par an)
+
+```
