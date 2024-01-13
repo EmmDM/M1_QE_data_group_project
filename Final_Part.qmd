@@ -150,13 +150,12 @@ Dans cette deuxième partie, l'objectif est d'étudier les pressions
 environnementales sur les ressources exercées par les composantes du
 PIb, puis d'analyser les politiques mises en place pour réduire cela.
 
-Il nous paraît interessant dans un premier temps de comparer entre les
-pays OCDE et hors OCDE les differentes intensité sur l'eau, et la qualité
-de l'air.
 
 **A- Pression environementales** 
 *A.1 : Intensité de l'eau*
-
+Il nous paraît interessant dans un premier temps de comparer entre les
+pays OCDE et hors OCDE les differentes intensité sur l'eau, et la qualité
+de l'air.
 Afin d'évaluer l'utilisation durable de l'eau, nous allons examiner
 l'intensité de l'eau par habitant et par unité de production. Nos
 variables principales utilisés sont : Prélèvements bruts d'eau douce par
@@ -219,7 +218,7 @@ knitr :: kable(eau_stat_non_OCDE)
 
 
 
-Voici un tableau récapitulatif pour ces 4 variables qui permettent d'avoir une vue d'ensemble à l'aide d'outils statistics. Les disparités sont énorment entre tous ces pays, en effet prenons par exemple le Brésil pour le retrait annuel d'eau douce par habitant en pourcentage des resssources internes qui à un maximum de 1,32 % contrairement au Japon qui est à plus de 182% .La situation Géographique est aussi à prendre en compte, la surface océanique est plus élévée au sud qu'au Nord du globe. De plus, les précipitations et les variations des rayonnement solaires sont aussi des variables qui sont à l'origine de ces inégalités.Certains pays auront donc plus tendance à exercée une pression éléve sur lerus ressources en eau
+Voici un tableau récapitulatif pour ces 4 variables qui permettent d'avoir une vue d'ensemble à l'aide d'outils statistics. Les disparités sont énorment entre tous ces pays, en effet prenons par exemple le Brésil pour le retrait annuel d'eau douce par habitant en pourcentage des resssources internes qui à un maximum de 1,32 % contrairement au Japon qui est à plus de 182% .La situation Géographique est aussi à prendre en compte, la surface océanique est plus élévée au sud qu'au Nord du globe. De plus, les précipitations et les variations des rayonnement solaires sont aussi des variables qui sont à l'origine de ces inégalités.Certains pays auront donc plus tendance à exercée une pression plus intense sur leurs ressources en eau.
 
 ```{r}
 #On analyse les tendances des pays membres de l'OCDE
@@ -243,7 +242,7 @@ Nous pouvons observer par ces 4 tableaux, que pour chacune des variables, la moy
 D'après le scénario de reference des Perspectives à horizon 2050, 40% de la population mondiale vivront dans des bassins soumis à un stress hydrique elevé qui correspond à plus de 40% de demande d'eau dites bleues ( eau douces des aquiferes, cours d'eau et lacs). 
 Ces indicateurs ne refletent pas la réalité complexe. La diminution de la moyenne annuelle transcrit le fait que les pays de l'OCDE developpés ont finis leurs croissance exponentielles et ont souvent recours à la délocalisation. Cependant les BRIICS et les autres pays emergeants devrait voir leurs consommation augmenter fortement pour le secteur manufacturier, la production d'éléctricité et les besoins domestiques. On peut apercevoir cet écart de croissance avec le premier tableau qui montre une décroissance des prélevements bruts d'eau douce par habitant en dessous de 400 contrairement aux pays hors OCDE qui voient leurs prélevement croître depuis 2006. 
 
-
+La pression excercé sur les ressources en eau n'ont donc pas finis leurs croissance et devraut même encore augmenter selon les régions du monde. 
 
 *A.2 : Qualité de l'air* L'indice de qualité de l'air sera utilisé pour évaluer les niveaux de pollution atmoshpériques.Aujourd'hui, les émissions de CO2 et autres Gazs à effets de serre (HFC, PFC et SF6) sont concentrées dans les millieux surtout urbains et supérieurs aux règles fixées. Cette surexposition entraîne la hausse du nombre de dècés par leurs contenance de produits toxiques qui penetrent dans les poumons. En effet le nombre de décès est passé de près d'un million en 2000 à plus de 3.5 millions d'ici 2050, avec une majorité de perte au sein des BRIICS. 
 
@@ -281,16 +280,19 @@ merged_data_Ges_CO2_OCDE <- merge(CO2_emission_habitant_OCDE, Ges_emission_habit
 
 # Création du graphique
 ggplot(merged_data_Ges_CO2_OCDE, aes(x = Année)) +
-  geom_point(aes(y = Ratio_base100_Ratio ), color = "blue") +  
-  geom_point(aes(y = Ratio_base100_Autres), color = "red") +  
+  geom_point(aes(y = Ratio_base100_Ratio, color = "CO2 émission par habitant")) +
+  geom_point(aes(y = Ratio_base100_Autres, color = "GES émission par habitant")) +
   labs(
-    title = "Emissions CO2 et autres GES par personne en base 100 (1990) pour le total des pays membres de l'OCDE",
+    title = "Emissions CO2 et autres GES par personne en base 100 (1990) \n pour le total des pays membres de l'OCDE",
     x = "Année",
     y = "Ratio (Base 100 en 1990)"
   ) +
-  theme(axis.text.x = element_text(angle = 50, size = 8, vjust = 0.5))+
-  scale_color_manual(values = c("Ratio_base100_Ratio"= "blue", "Ratio_base100_Autres" = "red"),
-                     labels = c("CO2 émission par habitant", "GES émission par habitant"))
+  theme(axis.text.x = element_text(angle = 50, size = 8, vjust = 0.5)) +
+  scale_color_manual(
+    values = c("CO2 émission par habitant" = "blue", "GES émission par habitant" = "red"),
+    labels = c("CO2 émission par habitant", "GES émission par habitant")
+  ) +
+  guides(color = guide_legend(title = NULL))
 
 
 
@@ -298,7 +300,7 @@ ggplot(merged_data_Ges_CO2_OCDE, aes(x = Année)) +
 #Non OCDE
 
 
-CO2_emission_non_OCDE <-  non_OCDE_pays %>% filter(Variable %in% c("Émissions de CO2 (kt)","Population, total","Autres émissions de gaz à effet de serre, HFC, PFC et SF6 (milliers de tonnes métriques d’équivalent CO2)")) %>% select(-COU, -VAR ,- Unit, -PowerCode) %>%pivot_longer(cols = c(`1990`,`1991`,`1992`,`1993`,`1994`,`1995`,`1996`,`1997`,`1998`,`1999`,`2000`, `2001`, `2002`, `2003`, `2004`, `2005`, `2006`, `2007`, `2008`, `2009`,`2010`, `2011`, `2012`, `2013`, `2014`, `2015`, `2016`, `2017`, `2018`, `2019`, `2020`),  names_to = "Année", values_to = "Value") %>% mutate(Value = as.numeric(Value)) %>% pivot_wider(names_from = Variable, values_from = Value) 
+CO2_emission_non_OCDE <-  non_OCDE_pays %>% filter(Variable %in% c("Émissions de CO2 (kt)","Population, total","Autres émissions de gaz à effet de serre, HFC, PFC et SF6 (milliers de tonnes métriques d’équivalent CO2)")) %>% select(-COU, -VAR ,- Unit, -PowerCode) %>%pivot_longer(cols = c(`1990`,`1991`,`1992`,`1993`,`1994`,`1995`,`1996`,`1997`,`1998`,`1999`,`2000`, `2001`, `2002`, `2003`, `2004`, `2005`, `2006`, `2007`, `2008`, `2009`,`2010`, `2011`, `2012`, `2013`, `2014`, `2015`, `2016`),  names_to = "Année", values_to = "Value") %>% mutate(Value = as.numeric(Value)) %>% pivot_wider(names_from = Variable, values_from = Value) 
   
 
 #Création d'un index CO2
@@ -317,15 +319,16 @@ Ges_emission_habitant_non_OCDE <- Ges_emission_habitant_non_OCDE  %>% mutate(Rat
 
 # Création du graphique
 ggplot(Ges_emission_habitant_non_OCDE, aes(x = Année, y = Ratio_base100)) + geom_point()+
-  labs( title = "Emissions GES ( HFC, PFC et SF6 ) par personne en base 100 (1990) pour le total des pays non membres de l'OCDE",
+  labs( title = "Emissions GES ( HFC, PFC et SF6 ) par personne en base 100 (1990)\n  pour le total des pays non membres de l'OCDE",
     x = "Année",
     y = "Ratio (Base 100 en 1990)") +
   theme(axis.text.x = element_text(angle = 50, size = 8, vjust = 0.5))
 
 ```
 
-Les Emissions de CO2 sont largement au dessus des autres Gaz à effets de serres depuis 1990 et ne conaissent qu'une timide diminution depuis 2010 pour les pays de l'OCDE. Cette pollution atmoshpérique à de nombreux impacts, tout d'abord sur notre santé et le réchauffement climatique. Selon le GIEC si nous voulons limiter le réchauffement à 1,5 degrés ou 2 il faut que les émissions cessent rapidement. Pour cela, tous les secteurs doivent réaliser leurs transition énergétique simultanément et arrêter de soutenir la production et la consommation de combustibles fossiles.
-Pour les pays hors de l'OCDE nous avons seulement des informations sur leurs émissions d'autres Gazs à effets de serres.Comme expliqué plus haut, la diminution des GES pour les pays de l'OCDE provient de la délocalisation des activitées polluantes et surconsommatrices. C'est pourquoi dans les années 1995 une forte augmentation pour ces pays est marqué par une forte diminution pour les pays de l' OCDE. 
+
+Les Emissions de CO2 sont largement au dessus des autres Gaz à effets de serres depuis 1990 et ne conaissent qu'une timide diminution depuis 2010 pour les pays de l'OCDE. Cette pollution atmoshpérique à de nombreux impacts, tout d'abord sur notre santé et sur le réchauffement climatique. Selon le GIEC si nous voulons limiter le réchauffement à 1,5 degrés ou 2 il faut que les émissions cessent rapidement. Pour cela, tous les secteurs doivent réaliser leurs transition énergétique simultanément et arrêter de soutenir la production et la consommation de combustibles fossiles.
+Pour les pays hors de l'OCDE nous avons seulement des informations sur leurs émissions autres que CO2.Comme expliqué plus haut, la diminution des GES pour les pays de l'OCDE provient de la délocalisation des activitées polluantes et surconsommatrices. C'est pourquoi dans les années 1995 une forte augmentation pour ces pays est marqué par une forte diminution pour les pays de l' OCDE. 
 En plus de connaître des émissions de GES plus éleves certains pays comme les BRIICS n'ont pas le même cadre sanitaire que les pays qui délocalisent. La pollution atmosphérique est particulièrement répandue dans l'industrialisation des pays en développements.Nous allons maintenant analyser le lien de corrélation entre le taux de mortalité et la croissance de la population urbaine.
 
 ```{r}
@@ -336,7 +339,7 @@ mortalité_PM25_pop_OCDE <- mortalité_PM25_pop_OCDE %>% mutate(taux_mortalite_P
 
 reg_mortalite_PM25_OCDE=lm('taux_mortalite_PM25 ~ `Croissance de la population urbaine (% annuel)`', data = mortalité_PM25_pop_OCDE)
 summary(reg_mortalite_PM25_OCDE)
-ggplot(reg_mortalite_PM25_OCDE, aes(x = `Croissance de la population urbaine (% annuel)`,y = taux_mortalite_PM25)) + geom_point(color='gray', size=1, na.rm = TRUE) + geom_smooth(method='lm', formula = 'y ~ x', se=FALSE, color='red', na.rm = TRUE) + theme_minimal() + labs(title = "Correlation entre le taux de mortalité due à l'exposition au PM2.5 par rapport au taux de croissance de la population urbaine (%) ", x = "Croissance de la population urbaine (% annuel)", y = "taux de Mortalité due à l'exposition aux PM2.5")
+ggplot(reg_mortalite_PM25_OCDE, aes(x = `Croissance de la population urbaine (% annuel)`,y = taux_mortalite_PM25)) + geom_point(color='gray', size=1, na.rm = TRUE) + geom_smooth(method='lm', formula = 'y ~ x', se=FALSE, color='red', na.rm = TRUE) + theme_minimal() + labs(title = "Correlation entre le taux de mortalité due à l'exposition au PM2.5 \n par rapport au taux de croissance de la population urbaine (%) ", x = "Croissance de la population urbaine (% annuel)", y = "taux de Mortalité due à l'exposition aux PM2.5")
 
 
 
@@ -348,7 +351,7 @@ mortalité_PM25_pop_non_OCDE_taux <- mortalité_PM25_pop_non_OCDE %>% mutate(tau
 
 reg_mortalite_PM25_non_OCDE_taux=lm('taux_mortalite_PM25_non_OCDE ~ `Croissance de la population urbaine (% annuel)`', data = mortalité_PM25_pop_non_OCDE_taux)
 summary(reg_mortalite_PM25_non_OCDE_taux)
-ggplot(reg_mortalite_PM25_non_OCDE_taux, aes(x = `Croissance de la population urbaine (% annuel)`,y = taux_mortalite_PM25_non_OCDE)) + geom_point(color='gray', size=1, na.rm = TRUE) + geom_smooth(method='lm', formula = 'y ~ x', se=FALSE, color='red', na.rm = TRUE) + theme_minimal() + labs(title = "Correlation entre le taux de mortalité due à l'exposition au PM2.5 par rapport au taux de croissance de la population urbaine (%) ", x = "Croissance de la population urbaine (% annuel)", y = "taux de Mortalité due à l'exposition aux PM2.5")
+ggplot(reg_mortalite_PM25_non_OCDE_taux, aes(x = `Croissance de la population urbaine (% annuel)`,y = taux_mortalite_PM25_non_OCDE)) + geom_point(color='gray', size=1, na.rm = TRUE) + geom_smooth(method='lm', formula = 'y ~ x', se=FALSE, color='red', na.rm = TRUE) + theme_minimal() + labs(title = "Correlation entre le taux de mortalité due à l'exposition au PM2.5 \n par rapport au taux de croissance de la population urbaine (%) ", x = "Croissance de la population urbaine (% annuel)", y = "taux de Mortalité due à l'exposition aux PM2.5")
 
 
 ```
@@ -401,7 +404,7 @@ merged_data <- bind_rows(OCDE_pays_Taxes, non_OCDE_pays_Taxes)
 
 ggplot(merged_data, aes(x = as.numeric(Année), y = Value, color = Groupe)) +
   geom_smooth(method = "loess", se = FALSE, na.rm = TRUE)+
-  labs(title = "Recettes provenant des taxes liées à l'énergie, % recettes des taxes environnementales",
+  labs(title = "Recettes provenant des taxes liées à l'énergie, % recettes \n des taxes environnementales",
        x = "Année",
        y = "Recettes en %") +
   theme_minimal()
@@ -424,7 +427,7 @@ reg_Dévelop_recette_OCDE <- lm(`Développement de technologies liées à l'envi
 summary(reg_Dévelop_recette_OCDE)
 
 
-ggplot(reg_Dévelop_recette_OCDE, aes(x = `Développement de technologies liées à l'environnement, % inventions dans le monde`,y = `Recettes provenant des taxes liées à l'énergie, % recettes des taxes environnementales`)) + geom_point(color='gray', size=1, na.rm = TRUE) + geom_smooth(method='lm', formula = 'y ~ x', se=FALSE, color='red', na.rm = TRUE) + theme_minimal() + labs(title = "Correlation entre le développement de technologies liées à l'environnement et les recettes provenant des taxes liées à l'énergie - OCDE", x = "Développement de technologies liées à l'environnement, % inventions dans le monde", y = "Recettes provenant des taxes liées à l'énergie, % recettes des taxes environnementales")
+ggplot(reg_Dévelop_recette_OCDE, aes(x = `Développement de technologies liées à l'environnement, % inventions dans le monde`,y = `Recettes provenant des taxes liées à l'énergie, % recettes des taxes environnementales`)) + geom_point(color='gray', size=1, na.rm = TRUE) + geom_smooth(method='lm', formula = 'y ~ x', se=FALSE, color='red', na.rm = TRUE) + theme_minimal() + labs(title = "Correlation entre le développement de technologies liées à l'environnement \n et les recettes provenant des taxes liées à l'énergie - OCDE", x = "Développement de technologies liées à l'environnement, % inventions dans le monde", y = "Recettes provenant des taxes liées à l'énergie, % recettes des taxes environnementales")
 
 
 
@@ -438,7 +441,7 @@ reg_Dévelop_recette_non_OCDE <- lm(`Développement de technologies liées à l'
 summary(reg_Dévelop_recette_non_OCDE)
 
 
-ggplot(reg_Dévelop_recette_non_OCDE, aes(x = `Développement de technologies liées à l'environnement, % inventions dans le monde`,y = `Recettes provenant des taxes liées à l'énergie, % recettes des taxes environnementales`)) + geom_point(color='gray', size=1, na.rm = TRUE) + geom_smooth(method='lm', formula = 'y ~ x', se=FALSE, color='red', na.rm = TRUE) + theme_minimal() + labs(title = "Correlation entre le développement de technologies liées à l'environnement et les recettes provenant des taxes liées à l'énergie - non OCDE", x = "Développement de technologies liées à l'environnement, % inventions dans le monde", y = "Recettes provenant des taxes liées à l'énergie, % recettes des taxes environnementales")
+ggplot(reg_Dévelop_recette_non_OCDE, aes(x = `Développement de technologies liées à l'environnement, % inventions dans le monde`,y = `Recettes provenant des taxes liées à l'énergie, % recettes des taxes environnementales`)) + geom_point(color='gray', size=1, na.rm = TRUE) + geom_smooth(method='lm', formula = 'y ~ x', se=FALSE, color='red', na.rm = TRUE) + theme_minimal() + labs(title = "Correlation entre le développement de technologies liées à l'environnement \n et les recettes provenant des taxes liées à l'énergie - non OCDE", x = "Développement de technologies liées à l'environnement, % inventions dans le monde", y = "Recettes provenant des taxes liées à l'énergie, % recettes des taxes environnementales")
                                      
 
 ```
@@ -612,7 +615,7 @@ average_terrestre_marine <- merged_terrestre_marine_protégée %>%
 
 ggplot(average_terrestre_marine , aes(x = as.factor(Année), y = Average_Value, fill = Groupe)) +
   geom_bar(stat = "identity", position = "dodge", width = 0.7, na.rm = TRUE) +
-  labs(title = "Moyenne des zones terrestres et marines protégées à l'échelle nationale (% du territoire total)",
+  labs(title = "Moyenne des zones terrestres et marines protégées à l'échelle nationale \n (% du territoire total)",
        x = "Année",
        y = "Pourcentage moyen des zones terrestres et marines protégées") +
   theme_minimal()
@@ -629,15 +632,6 @@ Cela montre une prise de conscience par l'opinion mondiale et la necessité de p
 espaces urbains s'est réalisé de manière continu depuis
 l'industrialisation au 19 ième siècle. Depuis 2007, la population urbain est plus nombreuse que la population rurale. D'ici 2030, les urbains representeront 60% de la population.  Nous allons analyser ces migrations dans un graph afin de nous rendre compte depuis 1990 des ces évolutions. La Worldbank à plus de variable sur les indices urbains, tandis que l'OCDE est plus tourné vers les migrations, ce qui
 va nous permettre d'avoir un grand calibre de donnée.
-
-#Croissance de la population urbaine (% annuel)
-
-Migration nette/ Prélèvements bruts d'eau douce par habitant/Stress hydrique, total des prélèvements d'eau douce
-
-Croissance de la population (% annuel)
-Croissance de la population urbaine (% annuel)
-
-
 
 
 ```{r}
@@ -709,12 +703,23 @@ Les tendances sont plus à la hausse pour l'OCDE tandis pour l'autre groupe, la 
 
 
 
+```{r}
 
-Prélèvements bruts d'eau douce par habitant
+migration_eau_OCDE <-  OCDE_pays %>% filter(Variable %in% c("Prélèvements bruts d'eau douce par habitant", "Migration nette")) %>% select(-`COU`, -`VAR` ,- `Unit`, -`PowerCode`) %>% pivot_longer(cols = c(`1990`,`1991`,`1992`,`1993`,`1994`,`1995`,`1996`,`1997`,`1998`,`1999`,`2000`, `2001`, `2002`, `2003`, `2004`, `2005`, `2006`, `2007`, `2008`, `2009`,`2010`, `2011`, `2012`, `2013`, `2014`, `2015`, `2016`, `2017`, `2018`, `2019`, `2020`),  names_to = "Année", values_to = "Value") %>% mutate(Value = as.numeric(Value)) %>% pivot_wider(names_from = Variable, values_from = Value) 
+
+
+reg_migration_eau_OCDE <- lm(`Prélèvements bruts d'eau douce par habitant` ~ `Migration nette`, data = migration_eau_OCDE)
+
+summary(reg_migration_eau_OCDE)
+
+
+ggplot(reg_migration_eau_OCDE, aes(x = `Prélèvements bruts d'eau douce par habitant`,y = `Migration nette`)) + geom_point(color='gray', size=1, na.rm = TRUE) + geom_smooth(method='lm', formula = 'y ~ x', se=FALSE, color='red', na.rm = TRUE) + theme_minimal() + labs(title = "Correlation entre la migration nette et les prélevements bruts d'eau douce \n par habitant - OCDE", x = "Prélèvements bruts d'eau douce par habitant", y = "Migration nette")
 
 
 
-Migration nette
+```
+
+D'après le test statistiques entre la variable explicative (migration nette) et la variable réponse (Prélèvements bruts d'eau douce par habitant) une augmentation dans la migration nette d'une unité est associé à une augmentation de 0,3997 unité dans les prélèvements bruts d'eau douce par habitant. Ce test est tout de même à prendre avec précaution car même si le coefficient associé à "Migration nette" est legerement significatif, les faibles valeurs de R-squared et la p-value  suggère que le modèle explique seulement une petite portion de ces variations.En expliquant une partie plus ou moins significative, il y a quand même un lien entre la hausse de la migration et la hausse des pressions environnementales pour les pays concernés. Cependant à cause des conditions climatiques extrêmes cela devient inévitable. D'ici 2050 216 millions de personnes serait contraint de migrer à l'intérieur même de leurs pays. Une réduction des GES pourrait diminuer l'ampleur des migrations climatiques internes de 80%.
 
 
 *B- vulnérabilité humaine face aux changement climatiques*
