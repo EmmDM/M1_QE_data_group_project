@@ -230,7 +230,7 @@ eau_tendance_OCDE <- eau_OCDE %>% group_by(Année,Variable) %>% summarise(moyenn
 ggplot(eau_tendance_OCDE, aes(x=`Année`, y = moyenne_annuelle)) + geom_jitter() + scale_size_continuous("moyenne_annuelle") +  facet_wrap(~ Variable, scales = "free_y", ncol = 1) + theme(axis.text.x=element_text(angle=50, size=8, vjust=0.5)) 
 
 
-#On analyse les tendances des pays membres de l'OCDE
+#On analyse les tendances des pays non membres de l'OCDE
 #On effectue la moyenne par an de tous les pays membres de l'OCDE
 eau_tendance_non_OCDE <- eau__non_OCDE %>% group_by(Année,Variable) %>% summarise(moyenne_annuelle = mean(`Value`, na.rm =TRUE), .groups = 'drop')
 
@@ -451,7 +451,7 @@ Les taxes peuvent avoir un impact significatif sur l'incitation à l'innovation 
 
 
 *B.2* Subventions + prise de décision de protection de l'environnement
-#Le dispositif de subvention est une aide aux entreprises afin de les aider dans leurs transitions écologique pour aller vers des énergies plus durables. 
+#Le dispositif de subvention est une aide aux entreprises afin de les aider dans leurs transitions écologique pour aller vers des énergies plus durables. Cependant certaines subvention au contraire retarde la transition. 
 # Nous allons pouvoir observer l'évolution des subventions via plusieurs variables.
 
 ```{r}
@@ -553,7 +553,12 @@ ggplot(merged_data_subvention_éléctricité, aes(x = as.numeric(Année), y = Va
 
 
 ```
+Les subventions des combustibles fossiles favorisent la surconsommation et rend vain tous les efforts mis en place. Ce type de subventions sont un obstacle à l'émergence d'un avenir plus durable mais restent importantes à cause de la volatilité du prix de l'énergie. Neammoins ont peut observer un effort surtout pour les pays hors OCDE qui ont connu un pic en 2012 avec plus de 5% des recettes totales des taxes suivis d'une baisse. Les pays hors OCDE connaissent une croissance plutot stable et descendante depuis 2010 en dessous de 1%. Avec la guerre de l'Ukraine, le coût de l'énergie a connu une augmentation sans precedent ce qui devrait revoir ces graphiques à la hausse. Cependant cette hausse est ephemere et les prix reviendront petit à petit à la périod pré-guerre. 
 
+Les subventions à l'electricité ont une croissance plutôt ascendante depuis 2017 pour les pays hors OCDE et descendante pour les pays de l'OCDE. Utilisé à 41% par les ménages nous comprennons pourquoi ces subventions sont necessités cependant elle est produite à 47,2% par des combustibles fossiles, elle est donc très polluante. 
+Il est difficile de pouvoir réduire ces subventions lorsque les prix de l'énergies sont volatiles et que 760 millions de personnes n'ont pas accès à l'électricité. Il faut trouver des solutions alternatives pour compenser cela telle que l'énergie verte. Leurs suppression est tout de même un objectif pour les politiques climatiques du FMI et de la Banque Mondiale, qui les considèrent comme innéficaces et favorisant les mauvaises cibles.
+
+Pour autant certaines mesures sont prises telles que la protection des zones terrestres et marines.
 
 ```{r}
 
@@ -613,8 +618,8 @@ ggplot(average_terrestre_marine , aes(x = as.factor(Année), y = Average_Value, 
   theme_minimal()
 
 ```
-
-
+Les zones protégées inclut des lieux important pour la biodiversité et ne cessent d'augmenter depuis 2015 dans l'ensemble.Elles sont essentielles pour la conservation des espèces et des moyens de subsistances.
+Cela montre une prise de conscience par l'opinion mondiale et la necessité de preserver les ressources naturelles. Nous pouvons observer par ces graphs que la moyenne des zones protégées est plus elevés pour les pays membres de l'OCDE. Selon le pays, les zones sont plus ou moins difficile à protéger.En Amazonie par exemple où le président du Brésil laisse portes ouvertes aux industriels car elle represente un des atouts majeurs pour s'enrichir et développer le pays, il es compliqué de rendre complétement protéger cette mine d'or. 
 
 
 
@@ -622,25 +627,101 @@ ggplot(average_terrestre_marine , aes(x = as.factor(Année), y = Average_Value, 
 
 *A- Variable démographique* La migrations des populations vers les
 espaces urbains s'est réalisé de manière continu depuis
-l'industrialisation au 19 ième siècle. Aujurd'hui les espaces ruraux
-sont vides mais à cause d'une pression environementales qui devient trop
-elevés, et dérangeante ce mouvement peut avoir changer. Nous allons
-analyser ces migrations dans un graph afin de nous rendre compte depuis
-1990 des ces évolutions. La Worldbank à plus de variable sur les indices
-urbains, tandis que l'OCDE est plus tourné vers les migrations, ce qui
+l'industrialisation au 19 ième siècle. Depuis 2007, la population urbain est plus nombreuse que la population rurale. D'ici 2030, les urbains representeront 60% de la population.  Nous allons analyser ces migrations dans un graph afin de nous rendre compte depuis 1990 des ces évolutions. La Worldbank à plus de variable sur les indices urbains, tandis que l'OCDE est plus tourné vers les migrations, ce qui
 va nous permettre d'avoir un grand calibre de donnée.
 
+#Croissance de la population urbaine (% annuel)
+
+Migration nette/ Prélèvements bruts d'eau douce par habitant/Stress hydrique, total des prélèvements d'eau douce
+
+Croissance de la population (% annuel)
+Croissance de la population urbaine (% annuel)
+
+
+
+
 ```{r}
+OCDE_pop_urbaine <- OCDE_pays %>%
+  filter(Variable == "Population urbaine (% du total)") %>%
+  pivot_longer(cols = `1990`:`2020`, names_to = "Année", values_to = "Value") %>%
+  mutate(Value = as.numeric(Value), Groupe = "OCDE")
+
+non_OCDE_pop_urbaine <- non_OCDE_pays %>%
+  filter(Variable == "Population urbaine (% du total)") %>%
+  pivot_longer(cols = `1990`:`2020`, names_to = "Année", values_to = "Value") %>%
+  mutate(Value = as.numeric(Value), Groupe = "non_OCDE")
+
+merged_data_pop_urbaine <- bind_rows(OCDE_pop_urbaine, non_OCDE_pop_urbaine, OCDE_migration)
+
+average_pop_urbaine <-merged_data_pop_urbaine %>%
+  group_by(Année, Groupe) %>%
+  summarize(Average_pop_urbaine = mean(Value, na.rm = TRUE))
+
+OCDE_migration <- OCDE_pays %>%
+  filter(Variable == "Migration nette") %>%
+  pivot_longer(cols = `1990`:`2020`, names_to = "Année", values_to = "Value") %>%
+  mutate(Value = as.numeric(Value), Groupe = "OCDE")
+
+
+
+ggplot(average_pop_urbaine, aes(x = as.factor(Année), y = Average_pop_urbaine, group = Groupe, color = Groupe)) +
+  geom_line(size = 2) +
+  geom_point(size = 3) +
+  labs(title = "Évolution de la population urbaine (% du total) par groupe",
+       x = "Année",
+       y = "Pourcentage moyen de la population urbaine") +
+  theme_minimal() +
+  scale_color_manual(values = c("OCDE" = "blue", "non_OCDE" = "green")) +
+  theme(legend.position = "top")
+
 ```
+#A travers ce graphique nous pouvons confirmer l'augmentation de la population urbaine depuis les années 1990 avec un écart de taille entre les Pays de l'OCDE et hors OCDE. En moyenne la population urbaine des pays hors OCDE en 2020 atteint les 80% environ et seulement 58% pour l'autre Groupe. Cette différence s'explique par le fait que certains pays aient un taux d'urbanisation proche, voir à  100% comme le Koweit qui n'est pas dans l'OCDE.
+
+
+
+```{r}
+
+OCDE_migration <- OCDE_pays %>%
+  filter(Variable == "Migration nette") %>%
+  pivot_longer(cols = `1990`:`2020`, names_to = "Année", values_to = "Value") %>%
+  mutate(Value = as.numeric(Value), Groupe = "OCDE")
+
+non_OCDE_migration <- non_OCDE_pays %>%
+  filter(Variable == "Migration nette") %>%
+  pivot_longer(cols = `1990`:`2020`, names_to = "Année", values_to = "Value") %>%
+  mutate(Value = as.numeric(Value), Groupe = "non_OCDE")
+
+merged_migration <- bind_rows(OCDE_migration, non_OCDE_migration)
+
+ggplot(merged_migration, aes(x = as.factor(Année), y = Value, fill = Groupe)) +
+  geom_bar(stat = "identity", position = "stack", width = 0.7) +
+  labs(title = "Évolution de la migration nette par groupe",
+       x = "Année",
+       y = "Migration Nette") +
+  theme_minimal() +
+  scale_fill_manual(values = c("OCDE" = "blue", "non_OCDE" = "green")) +
+  facet_wrap(~Groupe, scales = "free_y", ncol = 1) +
+  theme(legend.position = "top")
+
+```
+L'analyse de l'immigration nette pour 1 million d'habitant peut fournir des données interessante sur la dynamique démographique et migratoire des pays. 
+Les tendances sont plus à la hausse pour l'OCDE tandis pour l'autre groupe, la migration atteint parfois les négatifs jusqu'a -5000 dans les années 93-94, 2005-2006 et 2015. Cette immigration négative signifie qu'il y a un excedent de 5000 personnes qui quittent le pays par rapport à celle qui y entrent. Il y a donc plus de sortie dans les pays hors OCDE et plus d'entrée dans les pays de l'OCDE en tendance géneral. La hausse de l'immigration de travail est l'un des facteurs à l'origine de cette tendance, étant donné que les travailleurs étrangers ont contribué à réduire les pénuries de mains d'oeuvres dans les pays de l'OCDE.Les guerres et les raisons humanitaires sont aussi des facteurs provoquant l'éxode des populations et la recherche de meilleurs conditions. 
+
+
+
+
+Prélèvements bruts d'eau douce par habitant
+
+
+
+Migration nette
+
 
 *B- vulnérabilité humaine face aux changement climatiques*
 L'industrialisation intensives qui a lieu depuis le 19 ieme siècle et la
 consommation de masse des 30 glorieuses n'a pas laissé notre planète
 indemne. En effet, les catastrophes naturelles se multiplient et nous
 sommes totalement vulnérable face à cet nature déchainé.
-
-```{r}
-
 
 ```
 
