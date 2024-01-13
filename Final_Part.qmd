@@ -17,6 +17,8 @@ library(knitr)
 library(ggplot2)
 library(readr)
 library(stringr)
+library(maps)
+library(countrycode)
 library(readxl)})
 ```
 
@@ -469,7 +471,6 @@ sommes totalement vulnérable face à cet nature déchainée.
 
 
 
-
 ```{r}
 vulnerabilite_OCDE <- OCDE_pays %>% filter(Variable %in% c("Pourcentage de la population exposée aux journées glacées","Pourcentage de la population exposée aux journées chaudes","Pourcentage de la population exposée aux incendies incontrôlés","Note sur les progrès de réduction des risques de catastrophes (échelle de 1 à 5, 5 étant la meilleure note)","Stress hydrique, total des prélèvements d'eau douce en % des ressources internes renouvelables","Population, total")) %>% select(-`COU`, -`VAR` ,- `Unit`, -`PowerCode`) %>% pivot_longer(cols = c(`1990`,`1991`,`1992`,`1993`,`1994`,`1995`,`1996`,`1997`,`1998`,`1999`,`2000`, `2001`, `2002`, `2003`, `2004`, `2005`, `2006`, `2007`, `2008`, `2009`,`2010`, `2011`, `2012`, `2013`, `2014`, `2015`, `2016`, `2017`, `2018`, `2019`, `2020`),  names_to = "Année", values_to = "Value") %>% mutate(Value = as.numeric(Value)) %>% pivot_wider(names_from = Variable, values_from = Value) 
 
@@ -486,7 +487,32 @@ ggplot(vulnarabilite_OCDE_growth, aes(x = Année, y = Taux, color = Variable, li
 
 
 ```
+Au sein des pays membres de l'OCDE nous constatons que la part de la population exposée aux journées chaudes à particulièrement augmentées. En effet bien qu'il y ait de fortes variations entre les années, la tendance montre une nette augmentation entre 1990 et 2020 d'un peu plus de 25% à un peu moins de 40%. Pour ce qui est de la part de la populaition exposée aux journées glacées, il n'y a pas eu de fort changement durant c'est 30 dernières. Enfin, sur la part de la population exposée aux incendies, il n'y a pas de valeurs avant 2000, donc on ne peut pas interpréter les valeurs entre 1990 et 2000, de plus entre 2000 et 2020 on constate une tendance constante. 
+Nous ne possedons pas de valeurs pour les pays non membres de l'OCDE, toutefois la variables Sécheresses, inondations, températures extrêmes (en % de la population, moyenne de 1990 à 2009) nous permet d'effectuer des comparaisons entre les pays membres et non-membres de l'OCDE
+
+```{r}
+#Sécheresses, inondations, températures extrêmes (en % de la population, moyenne de 1990 à 2009)
+risque_OCDE <- OCDE_pays %>% filter(Variable %in% c("Sécheresses, inondations, températures extrêmes (en % de la population, moyenne de 1990 à 2009)")) %>% select(-`VAR` ,- `Unit`, -`PowerCode`) %>% pivot_longer(cols = c(`1990`,`1991`,`1992`,`1993`,`1994`,`1995`,`1996`,`1997`,`1998`,`1999`,`2000`, `2001`, `2002`, `2003`, `2004`, `2005`, `2006`, `2007`, `2008`, `2009`,`2010`, `2011`, `2012`, `2013`, `2014`, `2015`, `2016`, `2017`, `2018`, `2019`, `2020`),  names_to = "Année", values_to = "Value") %>% mutate(Value = as.numeric(Value)) %>% pivot_wider(names_from = Variable, values_from = Value) 
+
+risque_non_OCDE <- non_OCDE_pays %>% filter(Variable %in% c("Sécheresses, inondations, températures extrêmes (en % de la population, moyenne de 1990 à 2009)")) %>% select(-`VAR` ,- `Unit`, -`PowerCode`) %>% pivot_longer(cols = c(`1990`,`1991`,`1992`,`1993`,`1994`,`1995`,`1996`,`1997`,`1998`,`1999`,`2000`, `2001`, `2002`, `2003`, `2004`, `2005`, `2006`, `2007`, `2008`, `2009`,`2010`, `2011`, `2012`, `2013`, `2014`, `2015`, `2016`, `2017`, `2018`, `2019`, `2020`),  names_to = "Année", values_to = "Value") %>% mutate(Value = as.numeric(Value)) %>% pivot_wider(names_from = Variable, values_from = Value) 
+
+risque <- bind_rows(mutate(risque_OCDE, Group = "OCDE"),mutate(risque_non_OCDE, Group = "Non-OCDE"))
+risque <- risque %>% filter(Pays%in%unique(risque$Pays)) %>% group_by(Pays, Group, COU) %>% summarise(Secheresses_inondations_temperatures_extreme = `Sécheresses, inondations, températures extrêmes (en % de la population, moyenne de 1990 à 2009)`[Année == 2009], .groups = 'drop')
+
+
+
+```
+
+
+```{r}
+ggplot(risque, aes(x = Group, y = Secheresses_inondations_temperatures_extreme, fill = Group)) +
+  geom_boxplot(na.rm = TRUE, alpha = 0.8)  +  scale_fill_manual(values = c("Non-OCDE" = "skyblue", "OCDE" = "lightcoral"))  + theme_minimal() + labs(title = "% de la population de chaque pays exposée aux Sécheresses,\n inondations, températures extrêmes (1990-2009)", x = "Groupe", y = "Population de chaque pays exposée aux risques (%)") 
+  
+```
+
+
 Par ailleurs, en 2011 certains pays du monde ont été évalué note sur les progrès de réduction des risques de catastrophes (échelle de 1 à 5, 5 étant la meilleure note)
+
 ```{r}
 
 note_progres_non_OCDE <- non_OCDE_pays %>% filter(Variable %in% c("Note sur les progrès de réduction des risques de catastrophes (échelle de 1 à 5, 5 étant la meilleure note)")) %>% select(-`COU`, -`VAR` ,- `Unit`, -`PowerCode`) %>% pivot_longer(cols = c(`1990`,`1991`,`1992`,`1993`,`1994`,`1995`,`1996`,`1997`,`1998`,`1999`,`2000`, `2001`, `2002`, `2003`, `2004`, `2005`, `2006`, `2007`, `2008`, `2009`,`2010`, `2011`, `2012`, `2013`, `2014`, `2015`, `2016`, `2017`, `2018`, `2019`, `2020`),  names_to = "Année", values_to = "Value") %>% mutate(Value = as.numeric(Value)) %>% pivot_wider(names_from = Variable, values_from = Value) 
@@ -498,5 +524,10 @@ note_progres_non_OCDE <- drop_na(note_progres_non_OCDE,`Note sur les progrès de
 
 note_progres_fusion <- bind_rows(vulnerabilite_OCDE_clean_progres, note_progres_non_OCDE)
 
-ggplot(note_progres_fusion, aes(x = reorder(Pays,`Note sur les progrès de réduction des risques de catastrophes (échelle de 1 à 5, 5 étant la meilleure note)`),y = `Note sur les progrès de réduction des risques de catastrophes (échelle de 1 à 5, 5 étant la meilleure note)`,  fill = Group)) + geom_bar(stat ="identity", position = "dodge", na.rm = TRUE) +  theme(axis.text.x=element_text(angle=45, size=8, hjust = 1, vjust=1), axis.text.y = element_text(margin = margin(r = 10)),plot.title = element_text(hjust = 0.1)) + labs(title = "Note sur les progrès de réduction des risques de catastrophes\n (échelle de 1 à 5, 5 étant la meilleure note)", x = "Pays", y = "note sur les progrès de\n réduction des risques de catastrophes") +  scale_fill_manual(values = c("OCDE" = "blue", "Non-OCDE" = "red")) 
+ggplot(note_progres_fusion, aes(y = reorder(Pays,`Note sur les progrès de réduction des risques de catastrophes (échelle de 1 à 5, 5 étant la meilleure note)`),x = `Note sur les progrès de réduction des risques de catastrophes (échelle de 1 à 5, 5 étant la meilleure note)`,  fill = Group)) + geom_bar(stat ="identity", position = "dodge", na.rm = TRUE, width =  0.7) +  theme(axis.text.y = element_text(size = 5),plot.title = element_text(hjust = 0.1)) + labs(title = "Note sur les progrès de réduction des risques de catastrophes\n (échelle de 1 à 5, 5 étant la meilleure note)", y = "Pays", x = "note sur les progrès de\n réduction des risques de catastrophes") +  scale_fill_manual(values = c("OCDE" = "blue", "Non-OCDE" = "red")) 
+
+
+
+
 ```
+
