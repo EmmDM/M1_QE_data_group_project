@@ -101,9 +101,9 @@ summary(reg_GES_PIB_OCDE)
 summary(reg_GES_PIB_non_OCDE)
 ```
 
-Les graphiques présentant le lien entre taux de croissance du PIB et taux de croissance des émissions GES ainsi que les tableaux de régression nous suggère une relation positive significative entre le taux de croissance du PIB et le taux de croissance des émissions de GES pour les deux groupes de pays (OCDE et non-OCDE). Dans le cas du groupe OCDE, chaque augmentation d'une unité dans le taux de croissance du PIB est associée à une augmentation d'environ 1,0843 unité dans le taux de croissance des émissions de GES. Tandis que dans le cas du groupe non-OCDE, chaque augmentation d'une unité dans le taux de croissance du PIB est associée à une augmentation d'environ 0.83193 unité dans le taux de croissance des émissions de GES. De plus, les R-squared élevés indiquent que les modèles expliquent une grande partie de la variabilité observée.
+Les graphiques présentant le lien entre le taux de croissance du PIB et le taux de croissance des émissions GES ainsi que les tableaux de régression, suggèrent une relation positive significative entre taux de croissance du PIB et taux de croissance des émissions de GES pour les deux groupes de pays (OCDE et non-OCDE). Dans le cas du groupe OCDE, chaque augmentation d'une unité dans le taux de croissance du PIB est associée à une augmentation d'environ 1,0843 unité dans le taux de croissance des émissions de gaz  à effet de serre (GES). Tandis que dans le cas du groupe non-OCDE, chaque augmentation d'une unité dans le taux de croissance du PIB est associée à une augmentation d'environ 0.83193 unité dans le taux de croissance des émissions de GES. De plus, les R-squared élevés indiquent que les modèles expliquent une grande partie de la variabilité observée.
 
-Ainsi, cela nous amène à nous interesser à différents indicateurs qui nous permettent de mieux comprendre l'évolution conjointe des émissions de GES et du PIB des différents pays qui constituent notre panel.
+Ainsi, cela nous conduit à examiner divers indicateurs permettant une meilleure compréhension de l'évolution conjointe des émissions de GES et du PIB des différents pays qui constituent notre panel.
 
 ## A. Le découplage
 
@@ -115,8 +115,8 @@ pertinente pour l'environnement est stable ou décroissante alors que la
 force motrice économique augmente. Le découplage est dit relatif lorsque
 le taux de croissance de la variable pertinente pour l'environnement est
 positif, mais inférieur au taux de croissance de la variable économique.
-Il existe un nombre varié d'indicateur de découplage, dans cette
-présentation nous focaliserons sur les emissions totales de gaz à effet
+Il existe un nombre varié d'indicateurs de découplage, dans cette
+présentation nous focaliserons sur les émissions totales de gaz à effet
 de serre (GES) par unité de PIB et par personne. La manière la plus
 directe d'afficher le découplage entre une pression environnementale et
 une force économique consiste à tracer deux séries temporelles indexées
@@ -128,7 +128,10 @@ commence et s'il continue.
 Pour comparer le découplage parmi les pays, le ratio de la valeur du
 découplage à la fin et au début d'une période de temps donnée est
 définie comme :
-$$ Ratio = {(PE/FM)_{findepériode} / (PE/FM)_{débutdepériode}} $$
+$$ Ratio = \frac{(PE/FM)_{findepériode}}{(PE/FM)_{débutdepériode}} $$
+
+
+
 
 avec : PE = Pression environnementale et FM = Force motrice
 
@@ -138,7 +141,7 @@ GES_fusion <- bind_rows(mutate(GES_total_OCDE, Group = "OCDE"), mutate(GES_total
 ggplot(GES_fusion, aes(x = Année, y = Ratio_base100, color = Group)) + geom_point() +  labs(title = "Emissions par unité de PIB et par personne en base 100 (1990)", x = "Année", y = "Ratio (Base 100 en 1990)") + theme(axis.text.x=element_text(angle=50, size=8, vjust=0.5)) 
 
 ```
-Le graphique indique une baisse des émissions par unité de PIB et par personne pour les deux groupes depuis 1990.En 2020 pour le groupe OCDE la valeur était environ de 65,8% du niveau de 1990, tandis qu'elle était environ de 90,8% du niveau de 1990. De plus, nous constaton une variation plus marquée dans le groupe des pays non membres de l'OCDE, probablement en raison d'un rattrapage économique observé chez certains d'entre eux qui a entrainé une hausse des émissions de GES.
+Le graphique indique une baisse des émissions par unité de PIB et par personne pour les deux groupes depuis 1990. En 2020 pour le groupe OCDE la valeur était environ de 65,8% du niveau de 1990, tandis qu'elle était environ de 90,8% du niveau de 1990. De plus, nous constatons une variation plus marquée dans le groupe des pays non membres de l'OCDE, probablement en raison d'un rattrapage économique observé chez certains d'entre eux qui a entrainé une hausse des émissions de GES.
 ```{r}
 #Ici le but est de réaliser un diagramme en nuage de point avec en abscisse le taux de croissance du PIB en pourcentage en 2020 depuis 1990 et en ordonnées le taux de croisssance des émissions de GES en pourcentage en 2020 depuis 1990. Cela nous permettra de distinguer les pays qui ont on effectué un découplage et de de quel type de découplage il s'agit
 
@@ -173,21 +176,21 @@ graph_decoupling_non_OCDE <- ggplot(decoupling_final_convert_non_OCDE, aes(x = t
 Les pays dont le point se trouve à gauche de l'axe des ordonnées ou au
 dessus de la droite d'équation y = x sont des pays où le découplage n'a
 pas eu lieu. Les pays dont le point se trouve en dessous de la droite
-d'équation y = x mais au dessus de l'axe des abscisse, sont des pays
+d'équation y = x mais au dessus de l'axe des abscisses, sont des pays
 ayant effectués un découplage relatif, c'est à dire dont les émissions
-de GES ont cru plus lentement que le PIB Les pays dont le point est à
-droite de l'axe des ordonnées et en dessous de l'axe des abscisse sont
-des pays ayant effectuées un découplage absolue, c'est à dire les pays
+de GES ont cru plus lentement que le PIB. Les pays dont le point est à
+droite de l'axe des ordonnées et en dessous de l'axe des abscisses sont
+des pays ayant effectués un découplage absolu, c'est à dire les pays
 dont les émissions de GES ont diminué tandis que le PIB a cru.
 
 ```{r}
 decoupling_table_OCDE <- decoupling_final_convert %>% mutate(Découplage = case_when(taux_GES_90_20 > taux_PIB_90_20 ~ "Pas de découplage", taux_GES_90_20 <= taux_PIB_90_20 & taux_GES_90_20 >= 0 ~"Découplage relatif", taux_GES_90_20 < 0 & taux_PIB_90_20 >= 0 ~ "Découplage absolu", TRUE ~ "Autre"))
 
-decoupling_summary_OCDE <- decoupling_table_OCDE %>% group_by(`Découplage`) %>% summarise(pourcentage = n()/nrow(decoupling_table_OCDE)*100)
+decoupling_summary_OCDE <- decoupling_table_OCDE %>% group_by(`Découplage`) %>% summarise(Pourcentage = n()/nrow(decoupling_table_OCDE)*100)
 
 decoupling_table_non_OCDE <- decoupling_final_convert_non_OCDE %>% mutate(Découplage = case_when(taux_GES_90_20 > taux_PIB_90_20 ~ "Pas de découplage", taux_GES_90_20 <= taux_PIB_90_20 & taux_GES_90_20 >= 0 ~"Découplage relatif", taux_GES_90_20 < 0 & taux_PIB_90_20 >= 0 ~ "Découplage absolu", TRUE ~ "Autre"))
 
-decoupling_summary_non_OCDE <- decoupling_table_non_OCDE %>% group_by(`Découplage`) %>% summarise(pourcentage = n()/nrow(decoupling_table_non_OCDE)*100)
+decoupling_summary_non_OCDE <- decoupling_table_non_OCDE %>% group_by(`Découplage`) %>% summarise(Pourcentage = n()/nrow(decoupling_table_non_OCDE)*100)
 
 
 knitr :: kable(decoupling_summary_OCDE, caption = "Part des pays membres de l'OCDE d'après le découplage effectué")
@@ -196,14 +199,14 @@ knitr :: kable(decoupling_summary_non_OCDE, caption = "Part des pays non membres
 ```
 D'après ces résultats une majorité des pays membres de l'OCDE ont effectué un découplage absolu (Etats-Unis, Japon,...), suivi du découplage relatif (Australie, Norvège,...). Seuls quelques pays n'ont pas montré de découplage significatif (Israël, Mexique et Turquie). Pour les pays non membres de l'OCDE, la situation est plus variée, avec une plus grande proportion de pays présentant une absense de découplage (Tunisie, Quatar,...), bien que certains ont montré un découplage absolu (Russie,
 Bulgarie,...) et relatif (	
-Uruguay,Chine,...). La catégorie "Autre" regroupe des pays dont le taux d'émission de GES ou taux de PIB sont manquants.
+Uruguay,Chine,...). La catégorie "Autre" regroupe des pays dont le taux d'émission de GES ou LE taux de PIB sont manquants.
 
 ## B. Courbe environnementale de Kuznets
 
-Dans un second temps nous nous intéressons à la courbe environnementale de Kuznets, qui selon l'économiste Éloi Laurent, spécialiste de la croissance, considère que la source de l'idée de découplage repose sur la courbe environnementale de Kuznets.
-Initiallement, la courbe de Kuznets, dont la forme est U inversé, représente l'inégalité économique dans un pays en fonction de son niveau de développement. C'est en 1994 que Grossman et Krueger postulent le modèle de courbe environnementale de Kuznets (EKC) qui donne une relation déterministe entre développement économique et qualité de l'environnement. Dans la première étape de l'industrialisation, la pollution augmente rapidement car les individus sont principalement interessées par leur travail et leur revenus que par la qualité de l'air et de l'eau. A ce stade, la société est trop pauvre pour réduire ses émissions, de fait la réglementation environnementales
-est trop failbe. Le retournement s'effectue à mesure que les revenus augmentent. Dès lors, les principaux secteurs industriels deviennent plus propres, les individus valorisent l'environnement et les institutions de régulation deviennent plus efficaces. Le long de la
-courbe, la pollution se stabilise dans la tranche des revenus moyens, puis retombe au niveau pré-industriel dans les sociétés développées. Ainsi, la CKE est une théorie intéressante qui nous permet de mieux comprendre comment une transition écologique peut avoir lieu à mesure que les pays se développe. 
+Dans un second temps nous nous intéressons à la courbe environnementale de Kuznets (CEK), qui selon l'économiste Éloi Laurent, spécialiste de la croissance, considère que la source de l'idée de découplage repose sur la courbe environnementale de Kuznets.
+Initiallement, la courbe de Kuznets, dont la forme est U inversé, représente l'inégalité économique dans un pays en fonction de son niveau de développement. C'est en 1994 que Grossman et Krueger postulent le modèle de courbe environnementale de Kuznets qui donne une relation déterministe entre développement économique et qualité de l'environnement. Dans la première étape de l'industrialisation, la pollution augmente rapidement car les individus sont principalement interessées par leur travail et leurs revenus que par la qualité de l'air et de l'eau. A ce stade, la société est trop pauvre pour réduire ses émissions, de fait la réglementation environnementale
+est trop faible. Le retournement s'effectue à mesure que les revenus augmentent. Dès lors, les principaux secteurs industriels deviennent plus propres, les individus valorisent l'environnement et les institutions de régulation deviennent plus efficaces. Le long de la
+courbe, la pollution se stabilise dans la tranche des revenus moyens, puis retombe au niveau pré-industriel dans les sociétés développées. Ainsi, la CEK est une théorie intéressante qui nous permet de mieux comprendre comment une transition écologique peut avoir lieu à mesure que les pays se développent. 
 
 ```{r}
 #CKE 1990
@@ -215,7 +218,7 @@ CKE_1990 <- bind_rows(mutate(decoupling_final, Group = "OCDE"),mutate(decoupling
 CKE_1990 <- CKE_1990 %>% group_by(Année) %>% mutate(GES_hab = `GES_tot` / `Hab_tot`)
 CKE_1990 <- CKE_1990 %>% filter(Pays%in%unique(CKE_1990$Pays)) %>% group_by(Pays, Group) %>% summarise(PIB_hab = PIB_hab[Année == 1990], GES_hab = GES_hab[Année == 1990], .groups = 'drop')
 
-CKE_1990_graph <- ggplot(CKE_1990, aes(x = PIB_hab, y = GES_hab, color = Group)) + geom_point(na.rm = TRUE) + geom_smooth(method = 'lm', formula = y ~ poly(x, 2), se = FALSE, color = 'darkorange') + labs(title = "CKE en 1990", x = "PIB par habitant", y = "Emmission de GES")
+CKE_1990_graph <- ggplot(CKE_1990, aes(x = PIB_hab, y = GES_hab, color = Group)) + geom_point(na.rm = TRUE) + geom_smooth(method = 'lm', formula = y ~ poly(x, 2), se = FALSE, color = 'darkorange') + labs(title = "CEK en 1990", x = "PIB par habitant", y = "Emmission de GES")
 
 
 #CKE 2020
@@ -223,13 +226,13 @@ CKE_2020 <- bind_rows(mutate(decoupling_final, Group = "OCDE"),mutate(decoupling
 CKE_2020 <- CKE_2020 %>% group_by(Année) %>% mutate(GES_hab = `GES_tot` / `Hab_tot`)
 CKE_2020 <- CKE_2020 %>% filter(Pays%in%unique(CKE_2020$Pays)) %>% group_by(Pays, Group) %>% summarise(PIB_hab = PIB_hab[Année == 2020], GES_hab = GES_hab[Année == 2020], .groups = 'drop')
 
-CKE_2020_graph <- ggplot(CKE_2020, aes(x = PIB_hab, y = GES_hab, color = Group)) + geom_point(na.rm = TRUE) + geom_smooth(method = 'lm', formula = y ~ poly(x, 2), se = FALSE, color = 'darkorange') + labs(title = "CKE en 2020", x = "PIB par habitant", y = "Emmission de GES")
+CKE_2020_graph <- ggplot(CKE_2020, aes(x = PIB_hab, y = GES_hab, color = Group)) + geom_point(na.rm = TRUE) + geom_smooth(method = 'lm', formula = y ~ poly(x, 2), se = FALSE, color = 'darkorange') + labs(title = "CEK en 2020", x = "PIB par habitant", y = "Emmission de GES")
 
 
-(CKE_1990_graph  | CKE_2020_graph ) + plot_annotation(title = "Les courbes de Kuznets environnementales (CKE) en 1990 et 2020")
+(CKE_1990_graph  | CKE_2020_graph ) + plot_annotation(title = "Les courbes de Kuznets environnementales (CEK) en 1990 et 2020")
 ```
 
-En utilisant les données des pays pour les emissions de GES et les PIB
+En utilisant les données des pays pour les emissions de GES et le PIB
 par habitant, nous constatons qu'il n'y a pas de courbe en U inversée,
 ni en 1990, ni en 2020. En effet, à mesure que le PIB est élevé, les
 émissions de GES devraient théoriquement diminuées dans les pays
@@ -238,20 +241,21 @@ qu'en 2020 il semble y avoir un seuil aux émissions de GES qui n'étaient
 pas constaté en 1990. Toutefois, l'année 2020 est aussi une année
 particulière en raison de la pandémie de COVID-19 qui a drastiquement
 diminué les émissions de GES, comme le montre le graphique sur le lien entre taux de croissance du PIB et taux de croissance des émissions GES  des pays non membres de l'OCDE. 
-Ainsi comme l'indiquent Bishwa S. Koirala, Hui Li et Robert P. Berrens (2011), le point de bascule du revenu correspondant est à la fois extrêmement élevé en termes relatifs (environ 10 fois le PIB mondial par habitant en parité de pouvoir d'achat de 2007), bien en dehors de la plage observée des données, et nettement supérieure à tous les scénarios de croissance des revenus (par exemple, GIEC, 2000) pour le 21ème siècle qui contrôlent le CO2 à des niveaux acceptables (par exemple, 354 ppm en 1990). Ainsi, la littérature de l’EKC n’offre aucune base permettant de prédire qu’une croissance économique continue entraînera une réduction significative des émissions de CO2, en l’absence de mesures politiques spécifiques pour y parvenir.
+Ainsi comme l'indiquent Bishwa S. Koirala, Hui Li et Robert P. Berrens (2011), le point de bascule du revenu correspondant est à la fois extrêmement élevé en termes relatifs (environ 10 fois le PIB mondial par habitant en parité de pouvoir d'achat de 2007), bien en dehors de la plage observée des données, et nettement supérieure à tous les scénarios de croissance des revenus (par exemple, GIEC, 2000) pour le 21ème siècle qui contrôlent le CO2 à des niveaux acceptables (par exemple, 354 ppm en 1990). Ainsi, la littérature de la CEK n’offre aucune base permettant de prédire qu’une croissance économique continue entraînera une réduction significative des émissions de CO2, en l’absence de mesures politiques spécifiques pour y parvenir.
 
-##C. Identité de Kaya
+## C. Identité de Kaya
 
-"L'identité de Kaya, relie les émissions anthropique de dioxyde de
-carbone à des paramètre d'ordre démographique, économique et
-énergétique. \[...\] Selon Kaya, le niveau total d'émission peut
-s'exprimer comme le produit de quatres facteurs : la population, le PIB
-par habitant, l'intensité énergétique et le contenu en CO2 de l'énergie
-consommée. Cette identité se décompose par : CO2 = POP \* (PIB/POP) \*
-(E/PIB) \* (CO2/E) Avec : CO2 : Emission de CO2 POP : la population PIB
-: Produit interieur brut E : consommation d'énergie PIB/POP : Produit
-interieur brut par habitant E/PIB : Intensité énergétique du PIB CO2/E :
-Intensité carbone de l'énergie
+Finalement, interessons6nous à l'identité de Kaya. Il s'agit d'une décomposition comptable qui relie les émissions anthropiques de dioxyde de carbone à des paramètres d'ordre démographique, économique et énergétique. Selon Kaya, le niveau total d'émissions peut s'exprimer comme le produit de quatres facteurs : la population, le PIB par habitant, l'intensité énergétique et le contenu en CO2 de l'énergie consommée. Cette identité se décompose par : 
+
+$$CO2 = POP*\frac{PIB}{POP}*\frac{E}{PIB}*\frac{CO2}{E} $$
+Avec : 
+- CO2 : Emission de CO2 
+- POP : la population 
+- PIB : Produit intérieur brut 
+- E : consommation d'énergie 
+- PIB/POP : Produit intérieur brut par habitant 
+- E/PIB : Intensité énergétique du PIB 
+- CO2/E : Intensité carbone de l'énergie
 
 ```{r}
 #Identité de Kaya pour l'ensemble des pays membres de l'OCDE
@@ -261,9 +265,6 @@ Kaya_OCDE <- Kaya_OCDE %>%  group_by(Année) %>% summarise(PIB_tot = sum(`PIB r�
 
 Kaya_OCDE_growth <- Kaya_OCDE %>% mutate(taux_PIB_hab = ((`PIB_hab` - lag( `PIB_hab`))*100/lag( `PIB_hab`)),taux_CO2 = ((`CO2_tot` - lag( `CO2_tot`))*100 /lag( `CO2_tot`)), taux_POP = ((`Hab_tot` - lag(`Hab_tot`))*100 / `Hab_tot`), taux_IEP = ((`IEP_tot` - lag( `IEP_tot`))*100 /lag( `IEP_tot`)), taux_ICE = ((`ICE_tot` - lag( `ICE_tot`))*100 /lag( `ICE_tot`)))
 
-ggplot(Kaya_OCDE_growth, aes(x = Année)) + geom_bar(aes(y = taux_PIB_hab, fill = "Taux PIB par habitant"), stat ="identity", position = "dodge", na.rm = TRUE) + geom_bar(aes(y = taux_POP, fill = "Taux population"), stat ="identity", position = "dodge", na.rm = TRUE) + geom_bar(aes(y = taux_IEP, fill = "Taux de l'intensité énergétique du PIB"), stat ="identity", position = "dodge", na.rm = TRUE) + geom_bar(aes(y = taux_ICE, fill = "Taux de l'intensité carbone de l'énergie"), stat ="identity", position = "dodge", na.rm = TRUE) + geom_point(aes(y = taux_CO2), color = 'black', size = 2, na.rm = TRUE) + theme(axis.text.x=element_text(angle=50, size=8, vjust=0.5)) +  labs(title = "Identité de Kaya des pays membres de l'OCDE", x = "Année", y = "Taux (%)") + geom_abline(intercept = 0, slope = 0, color = "black") 
-
-
 
 #Identité de Kaya pour l'ensemble des pays non membres de l'OCDE
 Kaya_non_OCDE <-  non_OCDE_pays %>% filter(Variable %in% c("Émissions de CO2 (kt)","Population, total","PIB réel","Approvisionnements totaux en énergie")) %>% select(-`COU`, -`VAR` ,- `Unit`, -`PowerCode`) %>% pivot_longer(cols = c(`1990`,`1991`,`1992`,`1993`,`1994`,`1995`,`1996`,`1997`,`1998`,`1999`,`2000`, `2001`, `2002`, `2003`, `2004`, `2005`, `2006`, `2007`, `2008`, `2009`,`2010`, `2011`, `2012`, `2013`, `2014`, `2015`, `2016`, `2017`, `2018`, `2019`, `2020`),  names_to = "Année", values_to = "Value") %>% mutate(Value = as.numeric(Value)) %>% pivot_wider(names_from = Variable, values_from = Value) 
@@ -271,21 +272,80 @@ Kaya_non_OCDE <-  non_OCDE_pays %>% filter(Variable %in% c("Émissions de CO2 (k
 Kaya_non_OCDE <- Kaya_non_OCDE %>%  group_by(Année) %>% summarise(PIB_tot = sum(`PIB réel`, na.rm = TRUE)*1000000, Hab_tot = sum(`Population, total`,na.rm = TRUE), CO2_tot = sum(`Émissions de CO2 (kt)`, na.rm = TRUE), E_tot = sum(`Approvisionnements totaux en énergie`, na.rm = TRUE)) %>% mutate(PIB_hab = `PIB_tot`/`Hab_tot`, IEP_tot = `E_tot`/`PIB_tot`, ICE_tot = `CO2_tot`/`E_tot`)
 
 Kaya_non_OCDE_growth <- Kaya_non_OCDE %>% mutate(taux_PIB_hab = ((`PIB_hab` - lag( `PIB_hab`))*100/lag( `PIB_hab`)),taux_CO2 = ((`CO2_tot` - lag( `CO2_tot`))*100 /lag( `CO2_tot`)), taux_POP = ((`Hab_tot` - lag(`Hab_tot`))*100 / `Hab_tot`), taux_IEP = ((`IEP_tot` - lag( `IEP_tot`))*100 /lag( `IEP_tot`)), taux_ICE = ((`ICE_tot` - lag( `ICE_tot`))*100 /lag( `ICE_tot`)))
-
-ggplot(Kaya_non_OCDE_growth, aes(x = Année)) + geom_bar(aes(y = taux_PIB_hab, fill = "Taux PIB par habitant"), stat ="identity", position = "dodge", na.rm = TRUE) + geom_bar(aes(y = taux_POP, fill = "Taux population"), stat ="identity", position = "dodge", na.rm = TRUE) + geom_bar(aes(y = taux_IEP, fill = "Taux de l'intensité énergétique du PIB"), stat ="identity", position = "dodge", na.rm = TRUE) + geom_bar(aes(y = taux_ICE, fill = "Taux de l'intensité carbone de l'énergie"), stat ="identity", position = "dodge", na.rm = TRUE) + geom_point(aes(y = taux_CO2), color = 'black', size = 2, na.rm = TRUE) + theme(axis.text.x=element_text(angle=50, size=8, vjust=0.5)) +  labs(title = "Identité de Kaya des pays non membres de l'OCDE", x = "Année", y = "Taux (%)") + geom_abline(intercept = 0, slope = 0, color = "black") 
-
-
 ```
 
 ```{r}
-#Kaya Table
-Kaya_table_OCDE <- Kaya_OCDE_growth %>% select(Année,taux_PIB_hab,taux_CO2,taux_POP,taux_ICE,taux_IEP)
+#OCDE
+Kaya_OCDE_90_2000 <- Kaya_OCDE %>% filter(Année %in% c("1990","2000"))  %>% mutate(taux_CO2 = (CO2_tot - lag(CO2_tot))*100 / lag(CO2_tot),taux_POP = (Hab_tot - lag(Hab_tot))*100 /lag(Hab_tot),taux_PIB_hab = (PIB_hab - lag(PIB_hab))*100 / lag(PIB_hab),taux_IEP = (IEP_tot - lag(IEP_tot))*100 / lag(IEP_tot),taux_ICE = (ICE_tot - lag(ICE_tot))*100/lag(ICE_tot))
 
-Kaya_OCDE_growth <- Kaya_OCDE %>% mutate(taux_PIB_hab = ((`PIB_hab` - lag( `PIB_hab`))*100/lag( `PIB_hab`)),taux_CO2 = ((`CO2_tot` - lag( `CO2_tot`))*100 /lag( `CO2_tot`)), taux_POP = ((`Hab_tot` - lag(`Hab_tot`))*100 / `Hab_tot`), taux_IEP = ((`IEP_tot` - lag( `IEP_tot`))*100 /lag( `IEP_tot`)), taux_ICE = ((`ICE_tot` - lag( `ICE_tot`))*100 /lag( `ICE_tot`)))
+Kaya_OCDE_00_10 <- Kaya_OCDE %>% filter(Année %in% c("2000","2010"))  %>% mutate(taux_CO2 = (CO2_tot - lag(CO2_tot))*100 / lag(CO2_tot),taux_POP = (Hab_tot - lag(Hab_tot))*100 /lag(Hab_tot),taux_PIB_hab = (PIB_hab - lag(PIB_hab))*100 / lag(PIB_hab),taux_IEP = (IEP_tot - lag(IEP_tot))*100 / lag(IEP_tot),taux_ICE = (ICE_tot - lag(ICE_tot))*100/lag(ICE_tot))  
+
+Kaya_OCDE_10_20 <- Kaya_OCDE %>% filter(Année %in% c("2010","2020"))  %>% mutate(taux_CO2 = (CO2_tot - lag(CO2_tot))*100 / lag(CO2_tot),taux_POP = (Hab_tot - lag(Hab_tot))*100 /lag(Hab_tot),taux_PIB_hab = (PIB_hab - lag(PIB_hab))*100 / lag(PIB_hab),taux_IEP = (IEP_tot - lag(IEP_tot))*100 / lag(IEP_tot),taux_ICE = (ICE_tot - lag(ICE_tot))*100/lag(ICE_tot))  
+
+
+#Kaya OCDE Table
+Kaya_table_OCDE <- data.frame(
+  Période = c("2000-2010","1990-2000",  "2010-2020"),
+  Taux_CO2 = c(Kaya_OCDE_90_2000$taux_CO2, Kaya_OCDE_00_10$taux_CO2, Kaya_OCDE_10_20$taux_CO2),
+  Taux_POP = c(Kaya_OCDE_90_2000$taux_POP, Kaya_OCDE_00_10$taux_POP, Kaya_OCDE_10_20$taux_POP),
+  Taux_PIB_hab = c(Kaya_OCDE_90_2000$taux_PIB_hab, Kaya_OCDE_00_10$taux_PIB_hab, Kaya_OCDE_10_20$taux_PIB_hab),
+  Taux_Intensite_energetique_du_PIB = c(Kaya_OCDE_90_2000$taux_IEP, Kaya_OCDE_00_10$taux_IEP, Kaya_OCDE_10_20$taux_IEP),
+  Taux_Intensite_carbone_de_l_energie = c(Kaya_OCDE_90_2000$taux_ICE, Kaya_OCDE_00_10$taux_ICE, Kaya_OCDE_10_20$taux_ICE))
+
+Kaya_table_OCDE <- Kaya_table_OCDE %>% filter(!is.na(Taux_CO2), !is.na(Taux_POP), !is.na(Taux_PIB_hab), !is.na(Taux_Intensite_energetique_du_PIB), !is.na(Taux_Intensite_carbone_de_l_energie))
+
+
+#NON-OCDE
+Kaya_non_OCDE_90_2000 <- Kaya_non_OCDE %>% filter(Année %in% c("1990","2000"))  %>% mutate(taux_CO2 = (CO2_tot - lag(CO2_tot))*100 / lag(CO2_tot),taux_POP = (Hab_tot - lag(Hab_tot))*100 /lag(Hab_tot),taux_PIB_hab = (PIB_hab - lag(PIB_hab))*100 / lag(PIB_hab),taux_IEP = (IEP_tot - lag(IEP_tot))*100 / lag(IEP_tot),taux_ICE = (ICE_tot - lag(ICE_tot))*100/lag(ICE_tot))
+
+Kaya_non_OCDE_00_10 <- Kaya_non_OCDE %>% filter(Année %in% c("2000","2010"))  %>% mutate(taux_CO2 = (CO2_tot - lag(CO2_tot))*100 / lag(CO2_tot),taux_POP = (Hab_tot - lag(Hab_tot))*100 /lag(Hab_tot),taux_PIB_hab = (PIB_hab - lag(PIB_hab))*100 / lag(PIB_hab),taux_IEP = (IEP_tot - lag(IEP_tot))*100 / lag(IEP_tot),taux_ICE = (ICE_tot - lag(ICE_tot))*100/lag(ICE_tot))  
+
+Kaya_non_OCDE_10_20 <- Kaya_non_OCDE %>% filter(Année %in% c("2010","2020"))  %>% mutate(taux_CO2 = (CO2_tot - lag(CO2_tot))*100 / lag(CO2_tot),taux_POP = (Hab_tot - lag(Hab_tot))*100 /lag(Hab_tot),taux_PIB_hab = (PIB_hab - lag(PIB_hab))*100 / lag(PIB_hab),taux_IEP = (IEP_tot - lag(IEP_tot))*100 / lag(IEP_tot),taux_ICE = (ICE_tot - lag(ICE_tot))*100/lag(ICE_tot))  
+
+
+#Kaya NON-OCDE Table
+Kaya_table_non_OCDE <- data.frame(
+  Période = c("2000-2010","1990-2000",  "2010-2020"),
+  Taux_CO2 = c(Kaya_non_OCDE_90_2000$taux_CO2, Kaya_non_OCDE_00_10$taux_CO2, Kaya_non_OCDE_10_20$taux_CO2),
+  Taux_POP = c(Kaya_non_OCDE_90_2000$taux_POP, Kaya_non_OCDE_00_10$taux_POP, Kaya_non_OCDE_10_20$taux_POP),
+  Taux_PIB_hab = c(Kaya_non_OCDE_90_2000$taux_PIB_hab, Kaya_non_OCDE_00_10$taux_PIB_hab, Kaya_non_OCDE_10_20$taux_PIB_hab),
+  Taux_Intensite_energetique_du_PIB = c(Kaya_non_OCDE_90_2000$taux_IEP, Kaya_non_OCDE_00_10$taux_IEP, Kaya_non_OCDE_10_20$taux_IEP),
+  Taux_Intensite_carbone_de_l_energie = c(Kaya_non_OCDE_90_2000$taux_ICE, Kaya_non_OCDE_00_10$taux_ICE, Kaya_non_OCDE_10_20$taux_ICE))
+
+Kaya_table_non_OCDE <- Kaya_table_non_OCDE %>% filter(!is.na(Taux_CO2), !is.na(Taux_POP), !is.na(Taux_PIB_hab), !is.na(Taux_Intensite_energetique_du_PIB), !is.na(Taux_Intensite_carbone_de_l_energie))
+
+
+ggplot(Kaya_OCDE_growth, aes(x = Année)) + 
+  geom_bar(aes(y = taux_PIB_hab, fill = "Taux PIB par habitant"), stat ="identity", position = "dodge", na.rm = TRUE) +
+  geom_bar(aes(y = taux_POP, fill = "Taux population"), stat ="identity", position = "dodge", na.rm = TRUE) +
+  geom_bar(aes(y = taux_IEP, fill = "Taux de l'intensité énergétique du PIB"), stat ="identity", position = "dodge", na.rm = TRUE) + 
+  geom_bar(aes(y = taux_ICE, fill = "Taux de l'intensité carbone de l'énergie"), stat ="identity", position = "dodge", na.rm = TRUE) + 
+  geom_point(aes(y = taux_CO2, color = "Taux d'émission de CO2"), size = 2, na.rm = TRUE) +
+  theme(axis.text.x=element_text(angle=50, size=8, vjust=0.5)) +
+  labs(title = "Identité de Kaya des pays membres de l'OCDE", x = "Année", y = "Taux (%)", fill = "Taux", color = "Taux") + 
+  geom_abline(intercept = 0, slope = 0, color = "black") +
+  scale_fill_manual(values = c("Taux PIB par habitant" = "firebrick1", "Taux population" = "royalblue1","Taux de l'intensité énergétique du PIB" = "mediumturquoise","Taux de l'intensité carbone de l'énergie" = "darkorange1")) +
+  scale_color_manual(values = c("Taux d'émission de CO2" = "black"))
+
+
+knitr :: kable(Kaya_table_OCDE, caption = "Taux d'évolution par période des termes de l'identité de Kaya pour les émissions de CO2 (1990-2020) des pays membres de l'OCDE")
+
+
+ggplot(Kaya_non_OCDE_growth, aes(x = Année)) + geom_bar(aes(y = taux_PIB_hab, fill = "Taux PIB par habitant"), stat ="identity", position = "dodge", na.rm = TRUE) + geom_bar(aes(y = taux_POP, fill = "Taux population"), stat ="identity", position = "dodge", na.rm = TRUE) + geom_bar(aes(y = taux_IEP, fill = "Taux de l'intensité énergétique du PIB"), stat ="identity", position = "dodge", na.rm = TRUE) + geom_bar(aes(y = taux_ICE, fill = "Taux de l'intensité carbone de l'énergie"), stat ="identity", position = "dodge", na.rm = TRUE) + geom_point(aes(y = taux_CO2, color = "Taux d'émission de CO2"), size = 2, na.rm = TRUE) + theme(axis.text.x=element_text(angle=50, size=8, vjust=0.5)) +  labs(title = "Identité de Kaya des pays non membres de l'OCDE", x = "Année", y = "Taux (%)", fill = "Taux", color = "Taux") + geom_abline(intercept = 0, slope = 0, color = "black") +  scale_fill_manual(values = c("Taux PIB par habitant" = "firebrick1", "Taux population" = "royalblue1","Taux de l'intensité énergétique du PIB" = "mediumturquoise","Taux de l'intensité carbone de l'énergie" = "darkorange1"))  +
+  scale_color_manual(values = c("Taux d'émission de CO2" = "black"))
+
+
+knitr :: kable(Kaya_table_non_OCDE , caption = "Taux d'évolution par période des termes de l'identité de Kaya pour les émissions de CO2 (1990-2020) des pays non membres de l'OCDE")
 ```
 
+Ces résultats représentent les taux d'évolution sur trois périodes distinctes (1990-2000, 2000-2010, 2010-2020) des différents termes de l'identité de Kaya pour les émissions de CO2. Les pays de l'OCDE ont généralement réussi à réduire leurs émissions de CO2, améliorer l'efficacité énergétique et maintenir une croissance économique soutenue. Tandis que les pays non membres de l'OCDE ont connu des taux de croissance plus élevés, tant en termes de population que de PIB par habitant, mais avec des défis persistants en matière d'intensité carbone. Ainsi, des efforts supplémentaires peuvent être nécessaires pour aider les pays non-membres de l'OCDE à concilier la croissance économique avec une réduction des émissions de CO2. 
 
-*II- Politiques*
+
+
+Finalement, nos résultats nous montrent que le découplage économique-environnemental est en cours, mais des différences existent entre les groupes. Toutefois, la CEK ne montre pas de preuves claires de la relation en U inversé entre le développement économique et les émissions de GES, il existe donc des limites au découplage entre entre croissance économique et décroissance des émissions de GES. Toutefois, l'identité de Kaya met en évidence un certain succès des pays de l'OCDE dans la réduction des émissions. Ces constats soulignent l'importance des politiques environnementales et des initiatives à promouvoir une croissance durable.
+
+
+#II- Politiques
 
 Dans cette deuxième partie, l'objectif est d'étudier les pressions
 environnementales sur les ressources exercées par les composantes du
@@ -328,7 +388,7 @@ eau_stat_OCDE <- eau_OCDE %>% group_by(Pays,Variable) %>% summarize(
   valeur_max = max(`Value`, na.rm = TRUE), 
   .groups = 'drop')
 tab_var_10_colonnes <- head(tab_var[1:10])
-knitr :: kable(eau_stat_OCDE)
+#knitr :: kable(eau_stat_OCDE)
 
 
 
@@ -351,7 +411,7 @@ eau_stat_non_OCDE <- eau_non_OCDE %>% group_by(Pays,Variable) %>% summarize(
   valeur_max = max(`Value`, na.rm = TRUE), 
   .groups = 'drop')
 tab_var_non_OCDE_10_colonnes <- head(tab_var_non_OCDE[1:10])
-knitr :: kable(eau_stat_non_OCDE)
+#knitr :: kable(eau_stat_non_OCDE)
 
 
 
