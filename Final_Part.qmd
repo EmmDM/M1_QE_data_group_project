@@ -1,5 +1,5 @@
 ---
-title: "Final Part"
+title: "Final Part (suite de data_GP.qmd)"
 author: "Victoire Truchon-Bartès & Emmanuel de MOREL"
 format: html
 echo : false
@@ -511,7 +511,8 @@ mortalité_PM25_pop_OCDE <- mortalité_PM25_pop_OCDE %>% mutate(taux_mortalite_P
 
 reg_mortalite_PM25_OCDE=lm('taux_mortalite_PM25 ~ `Croissance de la population urbaine (% annuel)`', data = mortalité_PM25_pop_OCDE)
 summary(reg_mortalite_PM25_OCDE)
-ggplot(reg_mortalite_PM25_OCDE, aes(x = `Croissance de la population urbaine (% annuel)`,y = taux_mortalite_PM25)) + geom_point(color='gray', size=1, na.rm = TRUE) + geom_smooth(method='lm', formula = 'y ~ x', se=FALSE, color='red', na.rm = TRUE) + theme_minimal() + labs(title = "Correlation entre le taux de mortalité due à l'exposition au PM2.5 \n par rapport au taux de croissance de la population urbaine (%) \n des pays membres de l'OCDE", x = "Croissance de la population urbaine (% annuel)", y = "taux de Mortalité due à l'exposition aux PM2.5")
+
+graph_reg_mortalite_PM25_OCDE <- ggplot(reg_mortalite_PM25_OCDE, aes(x = `Croissance de la population urbaine (% annuel)`,y = taux_mortalite_PM25)) + geom_point(color='gray', size=1, na.rm = TRUE) + geom_smooth(method='lm', formula = 'y ~ x', se=FALSE, color='red', na.rm = TRUE) + theme_minimal() + labs(title = "Correlation entre le taux de mortalité due à l'exposition au PM2.5 \n par rapport au taux de croissance de la population urbaine (%) \n des pays membres de l'OCDE", x = "Croissance de la population urbaine (% annuel)", y = "taux de Mortalité due \n à l'exposition aux PM2.5")
 
 #non OCDE
 mortalité_PM25_pop_non_OCDE <-  non_OCDE_pays %>% filter(Variable %in% c("Croissance de la population (% annuel)","Mortalité due à l'exposition aux PM2.5","Croissance de la population urbaine (% annuel)")) %>% select(-`COU`, -`VAR` ,- `Unit`, -`PowerCode`) %>% pivot_longer(cols = c(`1990`,`1991`,`1992`,`1993`,`1994`,`1995`,`1996`,`1997`,`1998`,`1999`,`2000`, `2001`, `2002`, `2003`, `2004`, `2005`, `2006`, `2007`, `2008`, `2009`,`2010`, `2011`, `2012`, `2013`, `2014`, `2015`, `2016`, `2017`, `2018`, `2019`, `2020`),  names_to = "Année", values_to = "Value") %>% mutate(Value = as.numeric(Value)) %>% pivot_wider(names_from = Variable, values_from = Value) 
@@ -520,9 +521,11 @@ mortalité_PM25_pop_non_OCDE_taux <- mortalité_PM25_pop_non_OCDE %>% mutate(tau
 
 reg_mortalite_PM25_non_OCDE_taux=lm('taux_mortalite_PM25_non_OCDE ~ `Croissance de la population urbaine (% annuel)`', data = mortalité_PM25_pop_non_OCDE_taux)
 summary(reg_mortalite_PM25_non_OCDE_taux)
-ggplot(reg_mortalite_PM25_non_OCDE_taux, aes(x = `Croissance de la population urbaine (% annuel)`,y = taux_mortalite_PM25_non_OCDE)) + geom_point(color='gray', size=1, na.rm = TRUE) + geom_smooth(method='lm', formula = 'y ~ x', se=FALSE, color='red', na.rm = TRUE) + theme_minimal() + labs(title = "Correlation entre le taux de mortalité due à l'exposition au PM2.5 \n par rapport au taux de croissance de la population urbaine (%) \n des pays non membres de l'OCDE", x = "Croissance de la population urbaine (% annuel)", y = "taux de Mortalité due à l'exposition aux PM2.5")
 
 
+graph_reg_mortalite_PM25_non_OCDE_taux <-ggplot(reg_mortalite_PM25_non_OCDE_taux, aes(x = `Croissance de la population urbaine (% annuel)`,y = taux_mortalite_PM25_non_OCDE)) + geom_point(color='gray', size=1, na.rm = TRUE) + geom_smooth(method='lm', formula = 'y ~ x', se=FALSE, color='red', na.rm = TRUE) + theme_minimal() + labs(title = "Correlation entre le taux de mortalité due à l'exposition au PM2.5 \n par rapport au taux de croissance de la population urbaine (%) \n des pays non membres de l'OCDE", x = "Croissance de la population urbaine (% annuel)", y = "taux de Mortalité due \n à l'exposition aux PM2.5")
+
+graph_reg_mortalite_PM25_OCDE/graph_reg_mortalite_PM25_non_OCDE_taux
 ```
 
 Les résultats de la régression linéaire pour les pays de l'OCDE montrent
@@ -608,7 +611,7 @@ reg_Dévelop_recette_OCDE <- lm(`Développement de technologies liées à l'envi
 
 summary(reg_Dévelop_recette_OCDE)
 
-ggplot(reg_Dévelop_recette_OCDE, aes(x = `Développement de technologies liées à l'environnement, % inventions dans le monde`,y = `Recettes provenant des taxes liées à l'énergie, % recettes des taxes environnementales`)) + geom_point(color='gray', size=1, na.rm = TRUE) + geom_smooth(method='lm', formula = 'y ~ x', se=FALSE, color='red', na.rm = TRUE) + theme_minimal() + labs(title = "Correlation entre le développement de technologies liées à l'environnement \n et les recettes provenant des taxes liées à l'énergie - OCDE", x = "Développement de technologies liées à l'environnement, % inventions dans le monde", y = "Recettes provenant des taxes liées à l'énergie, % recettes des taxes environnementales")
+graph_reg_Dévelop_recette_OCDE <- ggplot(reg_Dévelop_recette_OCDE, aes(x = `Développement de technologies liées à l'environnement, % inventions dans le monde`,y = `Recettes provenant des taxes liées à l'énergie, % recettes des taxes environnementales`)) + geom_point(color='gray', size=1, na.rm = TRUE) + geom_smooth(method='lm', formula = 'y ~ x', se=FALSE, color='red', na.rm = TRUE) + theme_minimal() + labs(title = "Correlation entre le développement de technologies liées à l'environnement \n et les recettes provenant des taxes liées à l'énergie - OCDE", x = "Développement de technologies liées à l'environnement, % inventions dans le monde", y = "Recettes provenant des \n taxes liées à l'énergie, \n % recettes des taxes \n environnementales")
 
 #Non OCDE
 Dévelop_recette_non_OCDE <-  non_OCDE_pays %>% filter(Variable %in% c("Développement de technologies liées à l'environnement, % inventions dans le monde", "Recettes provenant des taxes liées à l'énergie, % recettes des taxes environnementales")) %>% select(-`COU`, -`VAR` ,- `Unit`, -`PowerCode`) %>% pivot_longer(cols = c(`1990`,`1991`,`1992`,`1993`,`1994`,`1995`,`1996`,`1997`,`1998`,`1999`,`2000`, `2001`, `2002`, `2003`, `2004`, `2005`, `2006`, `2007`, `2008`, `2009`,`2010`, `2011`, `2012`, `2013`, `2014`, `2015`, `2016`, `2017`, `2018`, `2019`, `2020`),  names_to = "Année", values_to = "Value") %>% mutate(Value = as.numeric(Value)) %>% pivot_wider(names_from = Variable, values_from = Value) 
@@ -618,7 +621,9 @@ reg_Dévelop_recette_non_OCDE <- lm(`Développement de technologies liées à l'
 summary(reg_Dévelop_recette_non_OCDE)
 
 
-ggplot(reg_Dévelop_recette_non_OCDE, aes(x = `Développement de technologies liées à l'environnement, % inventions dans le monde`,y = `Recettes provenant des taxes liées à l'énergie, % recettes des taxes environnementales`)) + geom_point(color='gray', size=1, na.rm = TRUE) + geom_smooth(method='lm', formula = 'y ~ x', se=FALSE, color='red', na.rm = TRUE) + theme_minimal() + labs(title = "Correlation entre le développement de technologies liées à l'environnement \n et les recettes provenant des taxes liées à l'énergie - non OCDE", x = "Développement de technologies liées à l'environnement, % inventions dans le monde", y = "Recettes provenant des taxes liées à l'énergie, % recettes des taxes environnementales")
+graphreg_Dévelop_recette_non_OCDE <- ggplot(reg_Dévelop_recette_non_OCDE, aes(x = `Développement de technologies liées à l'environnement, % inventions dans le monde`,y = `Recettes provenant des taxes liées à l'énergie, % recettes des taxes environnementales`)) + geom_point(color='gray', size=1, na.rm = TRUE) + geom_smooth(method='lm', formula = 'y ~ x', se=FALSE, color='red', na.rm = TRUE) + theme_minimal() + labs(title = "Correlation entre le développement de technologies liées à l'environnement \n et les recettes provenant des taxes liées à l'énergie - non OCDE", x = "Développement de technologies liées à l'environnement, % inventions dans le monde", y = "Recettes provenant des \n taxes liées à l'énergie, \n % recettes des taxes \n environnementales")
+
+graph_reg_Dévelop_recette_OCDE/ graphreg_Dévelop_recette_non_OCDE
 ```
 
 Pour les deux groupes (OCDE, hors OCDE), la relation entre les recettes
@@ -663,9 +668,9 @@ non_OCDE_pays_subvention <- non_OCDE_pays%>%
 
 merged_subvention <- bind_rows(OCDE_pays_subvention, non_OCDE_pays_subvention)
 
-ggplot(merged_subvention, aes(x = as.numeric(Année), y = Value, color = Groupe)) +
+graph_subvention <- ggplot(merged_subvention, aes(x = as.numeric(Année), y = Value, color = Groupe)) +
   geom_smooth(method = "loess", se = FALSE, na.rm = TRUE)+
-  labs(title = "Soutien total aux combustibles fossiles, % recettes totales des taxes",
+  labs(title = "Soutien total aux combustibles fossiles,\n % recettes totales des taxes",
        x = "Année",
        y = "Recettes en %") +
   theme_minimal()
@@ -690,9 +695,9 @@ non_OCDE_pays_subvention_consommateur <- non_OCDE_pays%>%
 
 merged_data_subvention_consommateur <- bind_rows(OCDE_pays_subvention_consommateur, non_OCDE_pays_subvention_consommateur)
 
-ggplot(merged_data_subvention_consommateur, aes(x = as.numeric(Année), y = Value, color = Groupe)) +
+graph_subvention_consommateur <- ggplot(merged_data_subvention_consommateur, aes(x = as.numeric(Année), y = Value, color = Groupe)) +
   geom_smooth(method = "loess", se = FALSE, na.rm = TRUE)+
-  labs(title = "Soutien aux consommateurs de combustibles fossiles, % recettes totales des taxes",
+  labs(title = "Soutien aux consommateurs de \n combustibles fossiles, \n % recettes totales des taxes",
        x = "Année",
        y = "Recettes en %") +
   theme_minimal()
@@ -716,12 +721,15 @@ non_OCDE_pays_subvention_éléctricité <- non_OCDE_pays%>%
 
 merged_data_subvention_éléctricité <- bind_rows(OCDE_pays_subvention_éléctricité, non_OCDE_pays_subvention_éléctricité)
 
-ggplot(merged_data_subvention_éléctricité, aes(x = as.numeric(Année), y = Value, color = Groupe)) +
+graph_subvention_electricite <- ggplot(merged_data_subvention_éléctricité, aes(x = as.numeric(Année), y = Value, color = Groupe)) +
   geom_smooth(method = "loess", se = FALSE, na.rm = TRUE)+
   labs(title = "Soutien à l'électricité, % soutien total aux combustibles fossiles",
        x = "Année",
        y = "Recettes en %") +
   theme_minimal()
+
+
+(graph_subvention | graph_subvention_consommateur)/graph_subvention_electricite
 
 ```
 
@@ -825,7 +833,7 @@ ggplot(merged_migration, aes(x = as.factor(Année), y = Value, fill = Groupe)) +
 ```
 
 L'analyse de l'immigration nette pour 1 million d'habitants offre des
-insights sur la dynamique démographique et migratoire. Les tendances
+aperçu sur la dynamique démographique et migratoire. Les tendances
 sont à la hausse pour l'OCDE, tandis que pour l'autre groupe, la
 migration atteint parfois des valeurs négatives, indiquant un excédent
 de départs par rapport aux arrivées. La hausse de l'immigration de
@@ -844,10 +852,8 @@ summary(reg_migration_eau_OCDE)
 ggplot(reg_migration_eau_OCDE, aes(x = `Prélèvements bruts d'eau douce par habitant`,y = `Migration nette`)) + geom_point(color='gray', size=1, na.rm = TRUE) + geom_smooth(method='lm', formula = 'y ~ x', se=FALSE, color='red', na.rm = TRUE) + theme_minimal() + labs(title = "Correlation entre la migration nette et les prélevements bruts d'eau douce \n par habitant - OCDE", x = "Prélèvements bruts d'eau douce par habitant", y = "Migration nette")
 ```
 
-Le test statistique entre migration nette et prélèvements bruts d'eau
-douce par habitant indique une association, mais les faibles valeurs de
-R-squared et de la p-value soulignent que le modèle explique seulement
-partiellement les variations. Malgré un lien entre la hausse de la
+Le tableau de regression entre migration nette et prélèvements bruts d'eau
+douce par habitant inique qu'il n'y a pas suffisamment de preuves statistiques pour affirmer avec certitude que cette relation est significative. Malgré un lien entre la hausse de la
 migration et l'accroissement des pressions environnementales, ce lien
 est limité. Les conditions climatiques extrêmes rendent inévitable la
 migration forcée, prévoyant 216 millions de personnes contraintes de
@@ -856,7 +862,7 @@ migrer à l'intérieur de leurs pays d'ici 2050. Une réduction des
 80%.
 
 
-## B. vulnérabilité humaine face aux changement climatiques
+## B. vulnérabilité humaine face au changement climatique
 
 ```{r}
 vulnerabilite_OCDE <- OCDE_pays %>% filter(Variable %in% c("Pourcentage de la population exposée aux journées glacées","Pourcentage de la population exposée aux journées chaudes","Pourcentage de la population exposée aux incendies incontrôlés","Note sur les progrès de réduction des risques de catastrophes (échelle de 1 à 5, 5 étant la meilleure note)","Stress hydrique, total des prélèvements d'eau douce en % des ressources internes renouvelables","Population, total")) %>% select(-`COU`, -`VAR` ,- `Unit`, -`PowerCode`) %>% pivot_longer(cols = c(`1990`,`1991`,`1992`,`1993`,`1994`,`1995`,`1996`,`1997`,`1998`,`1999`,`2000`, `2001`, `2002`, `2003`, `2004`, `2005`, `2006`, `2007`, `2008`, `2009`,`2010`, `2011`, `2012`, `2013`, `2014`, `2015`, `2016`, `2017`, `2018`, `2019`, `2020`),  names_to = "Année", values_to = "Value") %>% mutate(Value = as.numeric(Value)) %>% pivot_wider(names_from = Variable, values_from = Value) 
@@ -1032,9 +1038,18 @@ pour instaurer une transition écologique globale, équitable et efficace.
 
 ## Bibliographie
 
+- Sustainable Development, Indicators to measure decoupling of environmental pressure from economic growth, (2002), OECD
+
+- PELLEGRIS, Alban. Le découplage entre la consommation d’énergie et le PIB : questionnements théoriques et évaluations empiriques du rôle de l’énergie dans le processus de croissance économique - 2022
+
 - Grossman G. & Krueger A. (1994). Economic Growth and the Environment. NBER Working Papers n°4634
 
 - Bishwa S. Koirala, Hui Li et Robert P. Berrens, « Further Investigation of Environmental Kuznets Curve Studies Using Meta-Analysis », International Journal of Ecological Economics and Statistics, vol. 22, no S11,16 juin 2011, p. 13–32
+
+-Formation et déformation de la Courbe de Kuznets Environnementale pour les émissions de CO2
+Thomas Jobert, Fatih Karanfil, Dans Innovations 2012/1 (n°37), pages 11 à 26
+
+- Wei Ming Huanga, Grace W.M. Leea, Chih Cheng Wub, (2007), GHG emissions, GDP growth and the Kyoto Protocol:A revisit of Environmental Kuznets Curve hypothesis 
 
 - Organisation de Coopération et de Développement Économiques (OCDE).
 (2012). Perspectives de l'environnement de l'OCDE à l'horizon 2050. OECD
