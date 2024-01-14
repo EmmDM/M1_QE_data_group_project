@@ -40,7 +40,6 @@ GES_total_OCDE_index <- decoupling_GES_OCDE %>% filter(Pays%in%unique(decoupling
 GES_total_OCDE <- GES_total_OCDE_index %>% group_by(Année) %>% summarise(Ratio = `GES_tot`/`PIB_hab`)
 GES_total_OCDE <- GES_total_OCDE %>% mutate(Ratio_base100 = Ratio / Ratio[which(GES_total_OCDE$Année == 1990)]*100)
 
-
 #Tous les pays NON membres de l'OCDE 
 #Variables : PIB par habitant / Emission de GES
 decoupling_GES_non_OCDE <-  non_OCDE_pays %>% filter(Variable %in% c("PIB réel","Émissions totales de GES (kt d’équivalent CO2)", "Population, total")) %>% select(-`COU`, -`VAR` ,- `Unit`, -`PowerCode`) %>% pivot_longer(cols = c(`1990`,`1991`,`1992`,`1993`,`1994`,`1995`,`1996`,`1997`,`1998`,`1999`,`2000`, `2001`, `2002`, `2003`, `2004`, `2005`, `2006`, `2007`, `2008`, `2009`,`2010`, `2011`, `2012`, `2013`, `2014`, `2015`, `2016`, `2017`, `2018`, `2019`, `2020`),  names_to = "Année", values_to = "Value") %>% mutate(Value = as.numeric(Value)) %>% pivot_wider(names_from = Variable, values_from = Value) 
@@ -51,7 +50,6 @@ GES_total_non_OCDE_index <- decoupling_GES_non_OCDE %>% filter(Pays%in%unique(de
 GES_total_non_OCDE <- GES_total_non_OCDE_index %>% group_by(Année) %>% summarise(Ratio = `GES_tot`/`PIB_hab`) 
 
 GES_total_non_OCDE <- GES_total_non_OCDE %>% mutate(Ratio_base100 = Ratio / Ratio[which(GES_total_non_OCDE$Année == 1990)]*100)
-
 ```
 
 # I. Constat sur la transition écologique
@@ -60,7 +58,6 @@ GES_total_non_OCDE <- GES_total_non_OCDE %>% mutate(Ratio_base100 = Ratio / Rati
 #On va faire des graphs en considérant la croissance du PIB et la croissance des émissions
 #On s'intéresse aux pays membres de l'OCDE
 #On calcule les taux de croissance par an du PIB réel par habitant et des Émissions totales de GES (kt d’équivalent CO2)
-
 #OCDE
 decoupling_GES_OCDE_growth <- GES_total_OCDE_index %>% mutate(taux_PIB = ((`PIB_hab` - lag( `PIB_hab`)) *100/lag( `PIB_hab`)), taux_GES = ((`GES_tot` - lag( `GES_tot`))*100 /lag( `GES_tot`)))
 
@@ -82,15 +79,11 @@ GES_PIB_non_OCDE_graph1 <- ggplot(decoupling_GES_non_OCDE_growth_convert, aes(x 
 ```{r}
 reg_GES_PIB_OCDE=lm('taux_GES ~ taux_PIB', data = decoupling_GES_OCDE_growth)
 
-
-
 GES_PIB_OCDE_graph2 <- ggplot(reg_GES_PIB_OCDE, aes(x = taux_PIB,y = taux_GES)) + geom_point(color='gray', size=1, na.rm = TRUE) + geom_smooth(method='lm', formula = 'y ~ x', se=TRUE, color='red', na.rm = TRUE) + theme_minimal() + labs(x = "Taux de croissance du PIB/hab (%)", y = "Taux de croissance des émissions de GES (%)")
 
 reg_GES_PIB_non_OCDE=lm('taux_GES ~ taux_PIB', data = decoupling_GES_non_OCDE_growth)
 
-
 GES_PIB_non_OCDE_graph2 <- ggplot(reg_GES_PIB_non_OCDE, aes(x = taux_PIB,y = taux_GES)) + geom_point(color='gray', size=1, na.rm = TRUE) + geom_smooth(method='lm',formula = 'y ~ x', se=TRUE, na.rm = TRUE) +  labs(x = "Taux de croissance du PIB/hab (%)", y = "Taux de croissance des émissions de GES (%)") + theme_minimal() 
-
 ```
 
 ```{r}
@@ -144,8 +137,6 @@ ggplot(GES_fusion, aes(x = Année, y = Ratio_base100, color = Group)) + geom_poi
 Le graphique indique une baisse des émissions par unité de PIB et par personne pour les deux groupes depuis 1990. En 2020 pour le groupe OCDE la valeur était environ de 65,8% du niveau de 1990, tandis qu'elle était environ de 90,8% du niveau de 1990. De plus, nous constatons une variation plus marquée dans le groupe des pays non membres de l'OCDE, probablement en raison d'un rattrapage économique observé chez certains d'entre eux qui a entrainé une hausse des émissions de GES.
 ```{r}
 #Ici le but est de réaliser un diagramme en nuage de point avec en abscisse le taux de croissance du PIB en pourcentage en 2020 depuis 1990 et en ordonnées le taux de croisssance des émissions de GES en pourcentage en 2020 depuis 1990. Cela nous permettra de distinguer les pays qui ont on effectué un découplage et de de quel type de découplage il s'agit
-
-
 #OCDE
 decoupling_final <- decoupling_GES_OCDE %>% group_by(Année, Pays) %>% summarise(PIB_tot = sum(`PIB réel`, na.rm = TRUE)*1000000, Hab_tot = sum(`Population, total`,na.rm = TRUE), GES_tot = sum(`Émissions totales de GES (kt d’équivalent CO2)`, na.rm = TRUE), .groups = 'drop') %>% mutate(PIB_hab = `PIB_tot`/`Hab_tot`)
 
@@ -153,9 +144,7 @@ decoupling_final_convert <- decoupling_final %>% filter(Pays%in%unique(decouplin
 
 decoupling_final_convert  <- decoupling_final_convert  %>% filter(!is.infinite(taux_PIB_90_20) & !is.infinite(taux_GES_90_20))
   
-graph_decoupling_final_convert <- ggplot(decoupling_final_convert, aes(x = taux_PIB_90_20,y = taux_GES_90_20)) + geom_point( size=1, na.rm = TRUE, , color = "lightseagreen")  +  labs(title = "Découplage au sein de l'OCDE", x = "Taux de croissance du PIB/hab \n en 2020 par rapport à 1990 (%)", y = "Taux de croissance des émissions de GES \n en 2020 par rapport à 1990 (%)") + theme_minimal()  +  geom_abline(intercept = 0, slope = 1, color = "black") + geom_abline(intercept = 0, slope = 0, color = "black") + geom_abline(intercept = 0, slope = 0, color = "black") + geom_vline(xintercept = 0, color = "black") + annotate("text", x = 150, y = -40, label = "Découplage absolu", size = 3, color = "red")  + annotate("text", x = 170, y = 80, label = "Découplage relatif", size = 3, color = "red")  + annotate("text", x = 32, y = 110, label = "Pas de découplage", size = 3, color = "red")
-
-
+graph_decoupling_final_convert <- ggplot(decoupling_final_convert, aes(x = taux_PIB_90_20,y = taux_GES_90_20)) + geom_point( size=1, na.rm = TRUE, , color = "lightseagreen")  +  labs(title = "Découplage au sein de l'OCDE", x = "Taux de croissance du PIB/hab \n en 2020 par rapport à 1990 (%)", y = "Taux de croissance des émissions de GES \n en 2020 par rapport à 1990 (%)") + theme_minimal()  +  geom_abline(intercept = 0, slope = 1, color = "black") + geom_abline(intercept = 0, slope = 0, color = "black") + geom_abline(intercept = 0, slope = 0, color = "black") + geom_vline(xintercept = 0, color = "black") + annotate("text", x = 150, y = -40, label = "Découplage absolu", size = 3, color = "red")  + annotate("text", x = 170, y = 80, label = "Découplage relatif", size = 3, color = "red")  + annotate("text", x = 34, y = 110, label = "Pas de découplage", size = 3, color = "red")
 
 #Non - OCDE
 decoupling_final_non_OCDE <- decoupling_GES_non_OCDE %>% group_by(Année, Pays) %>% summarise(PIB_tot = sum(`PIB réel`, na.rm = TRUE)*1000000, Hab_tot = sum(`Population, total`,na.rm = TRUE), GES_tot = sum(`Émissions totales de GES (kt d’équivalent CO2)`, na.rm = TRUE),  .groups = 'drop') %>% mutate(PIB_hab = `PIB_tot`/`Hab_tot`)
@@ -167,8 +156,6 @@ decoupling_final_convert_non_OCDE  <- decoupling_final_convert_non_OCDE  %>% fil
 x_limits <- c(-70,1000)
 y_limits <- c(-75,1000)
 graph_decoupling_non_OCDE <- ggplot(decoupling_final_convert_non_OCDE, aes(x = taux_PIB_90_20,y = taux_GES_90_20)) + geom_point( size=1, na.rm = TRUE, color = "#FF6666")  +  labs(title = "Découplage des pays non membres de l'OCDE", x = "Taux de croissance du PIB/hab \n en 2020 par rapport à 1990 (%)", y = "Taux de croissance des émissions de GES en 2020 \n par rapport à 1990 (%)") + theme_minimal() + coord_cartesian(xlim = x_limits, ylim = y_limits)  + geom_abline(intercept = 0, slope = 1, color = "black") + geom_abline(intercept = 0, slope = 0, color = "black") + geom_abline(intercept = 0, slope = 0, color = "black") + geom_vline(xintercept = 0, color = "black") + annotate("text", x = 500, y = -50, label = "Découplage absolu", size = 3, color = "red")  + annotate("text", x = 700, y = 400, label = "Découplage relatif", size = 3, color = "red")  + annotate("text", x = 110, y = 750, label = "Pas de découplage", size = 3, color = "red")
-
-
 
 (graph_decoupling_final_convert  | graph_decoupling_non_OCDE ) + plot_annotation(title = "Le découplage, comparaison entre les groupes OCDE et non-OCDE")
 ```
@@ -194,7 +181,6 @@ decoupling_summary_non_OCDE <- decoupling_table_non_OCDE %>% group_by(`Découpla
 
 
 knitr :: kable(decoupling_summary_OCDE, caption = "Part des pays membres de l'OCDE d'après le découplage effectué")
-
 knitr :: kable(decoupling_summary_non_OCDE, caption = "Part des pays non membres de l'OCDE d'après le découplage effectué")
 ```
 D'après ces résultats une majorité des pays membres de l'OCDE ont effectué un découplage absolu (Etats-Unis, Japon,...), suivi du découplage relatif (Australie, Norvège,...). Seuls quelques pays n'ont pas montré de découplage significatif (Israël, Mexique et Turquie). Pour les pays non membres de l'OCDE, la situation est plus variée, avec une plus grande proportion de pays présentant une absense de découplage (Tunisie, Quatar,...), bien que certains ont montré un découplage absolu (Russie,
@@ -220,14 +206,12 @@ CKE_1990 <- CKE_1990 %>% filter(Pays%in%unique(CKE_1990$Pays)) %>% group_by(Pays
 
 CKE_1990_graph <- ggplot(CKE_1990, aes(x = PIB_hab, y = GES_hab, color = Group)) + geom_point(na.rm = TRUE) + geom_smooth(method = 'lm', formula = y ~ poly(x, 2), se = FALSE, color = 'darkorange') + labs(title = "CEK en 1990", x = "PIB par habitant", y = "Emmission de GES")
 
-
 #CKE 2020
 CKE_2020 <- bind_rows(mutate(decoupling_final, Group = "OCDE"),mutate(decoupling_final_non_OCDE, Group = "Non-OCDE"))
 CKE_2020 <- CKE_2020 %>% group_by(Année) %>% mutate(GES_hab = `GES_tot` / `Hab_tot`)
 CKE_2020 <- CKE_2020 %>% filter(Pays%in%unique(CKE_2020$Pays)) %>% group_by(Pays, Group) %>% summarise(PIB_hab = PIB_hab[Année == 2020], GES_hab = GES_hab[Année == 2020], .groups = 'drop')
 
 CKE_2020_graph <- ggplot(CKE_2020, aes(x = PIB_hab, y = GES_hab, color = Group)) + geom_point(na.rm = TRUE) + geom_smooth(method = 'lm', formula = y ~ poly(x, 2), se = FALSE, color = 'darkorange') + labs(title = "CEK en 2020", x = "PIB par habitant", y = "Emmission de GES")
-
 
 (CKE_1990_graph  | CKE_2020_graph ) + plot_annotation(title = "Les courbes de Kuznets environnementales (CEK) en 1990 et 2020")
 ```
@@ -282,7 +266,6 @@ Kaya_OCDE_00_10 <- Kaya_OCDE %>% filter(Année %in% c("2000","2010"))  %>% mutat
 
 Kaya_OCDE_10_20 <- Kaya_OCDE %>% filter(Année %in% c("2010","2020"))  %>% mutate(taux_CO2 = (CO2_tot - lag(CO2_tot))*100 / lag(CO2_tot),taux_POP = (Hab_tot - lag(Hab_tot))*100 /lag(Hab_tot),taux_PIB_hab = (PIB_hab - lag(PIB_hab))*100 / lag(PIB_hab),taux_IEP = (IEP_tot - lag(IEP_tot))*100 / lag(IEP_tot),taux_ICE = (ICE_tot - lag(ICE_tot))*100/lag(ICE_tot))  
 
-
 #Kaya OCDE Table
 Kaya_table_OCDE <- data.frame(
   Période = c("2000-2010","1990-2000",  "2010-2020"),
@@ -293,7 +276,6 @@ Kaya_table_OCDE <- data.frame(
   Taux_Intensite_carbone_de_l_energie = c(Kaya_OCDE_90_2000$taux_ICE, Kaya_OCDE_00_10$taux_ICE, Kaya_OCDE_10_20$taux_ICE))
 
 Kaya_table_OCDE <- Kaya_table_OCDE %>% filter(!is.na(Taux_CO2), !is.na(Taux_POP), !is.na(Taux_PIB_hab), !is.na(Taux_Intensite_energetique_du_PIB), !is.na(Taux_Intensite_carbone_de_l_energie))
-
 
 #NON-OCDE
 Kaya_non_OCDE_90_2000 <- Kaya_non_OCDE %>% filter(Année %in% c("1990","2000"))  %>% mutate(taux_CO2 = (CO2_tot - lag(CO2_tot))*100 / lag(CO2_tot),taux_POP = (Hab_tot - lag(Hab_tot))*100 /lag(Hab_tot),taux_PIB_hab = (PIB_hab - lag(PIB_hab))*100 / lag(PIB_hab),taux_IEP = (IEP_tot - lag(IEP_tot))*100 / lag(IEP_tot),taux_ICE = (ICE_tot - lag(ICE_tot))*100/lag(ICE_tot))
@@ -339,7 +321,6 @@ knitr :: kable(Kaya_table_non_OCDE , caption = "Taux d'évolution par période d
 ```
 
 Ces résultats représentent les taux d'évolution sur trois périodes distinctes (1990-2000, 2000-2010, 2010-2020) des différents termes de l'identité de Kaya pour les émissions de CO2. Les pays de l'OCDE ont généralement réussi à réduire leurs émissions de CO2, améliorer l'efficacité énergétique et maintenir une croissance économique soutenue. Tandis que les pays non membres de l'OCDE ont connu des taux de croissance plus élevés, tant en termes de population que de PIB par habitant, mais avec des défis persistants en matière d'intensité carbone. Ainsi, des efforts supplémentaires peuvent être nécessaires pour aider les pays non-membres de l'OCDE à concilier la croissance économique avec une réduction des émissions de CO2. 
-
 
 
 Finalement, nos résultats nous montrent que le découplage économique-environnemental est en cours, mais des différences existent entre les groupes. Toutefois, la CEK ne montre pas de preuves claires de la relation en U inversé entre le développement économique et les émissions de GES, il existe donc des limites au découplage entre entre croissance économique et décroissance des émissions de GES. Toutefois, l'identité de Kaya met en évidence un certain succès des pays de l'OCDE dans la réduction des émissions. Ces constats soulignent l'importance des politiques environnementales et des initiatives à promouvoir une croissance durable.
@@ -819,9 +800,9 @@ Cela montre une prise de conscience par l'opinion mondiale et la necessité de p
 
 
 
-*III- Vulnérabilités et strategies adaptives*
+# III- Vulnérabilités
 
-*A- Variable démographique* La migrations des populations vers les
+## A- Variable démographique La migrations des populations vers les
 espaces urbains s'est réalisé de manière continu depuis
 l'industrialisation au 19 ième siècle. Depuis 2007, la population urbain est plus nombreuse que la population rurale. D'ici 2030, les urbains representeront 60% de la population.  Nous allons analyser ces migrations dans un graph afin de nous rendre compte depuis 1990 des ces évolutions. La Worldbank à plus de variable sur les indices urbains, tandis que l'OCDE est plus tourné vers les migrations, ce qui
 va nous permettre d'avoir un grand calibre de donnée.
@@ -862,7 +843,7 @@ ggplot(average_pop_urbaine, aes(x = as.factor(Année), y = Average_pop_urbaine, 
   theme(legend.position = "top")
 
 ```
-#A travers ce graphique nous pouvons confirmer l'augmentation de la population urbaine depuis les années 1990 avec un écart de taille entre les Pays de l'OCDE et hors OCDE. En moyenne la population urbaine des pays hors OCDE en 2020 atteint les 80% environ et seulement 58% pour l'autre Groupe. Cette différence s'explique par le fait que certains pays aient un taux d'urbanisation proche, voir à  100% comme le Koweit qui n'est pas dans l'OCDE.
+A travers ce graphique nous pouvons confirmer l'augmentation de la population urbaine depuis les années 1990 avec un écart de taille entre les Pays de l'OCDE et hors OCDE. En moyenne la population urbaine des pays hors OCDE en 2020 atteint les 80% environ et seulement 58% pour l'autre Groupe. Cette différence s'explique par le fait que certains pays aient un taux d'urbanisation proche, voir à  100% comme le Koweit qui n'est pas dans l'OCDE.
 
 
 
@@ -915,11 +896,7 @@ ggplot(reg_migration_eau_OCDE, aes(x = `Prélèvements bruts d'eau douce par hab
 D'après le test statistiques entre la variable explicative (migration nette) et la variable réponse (Prélèvements bruts d'eau douce par habitant) une augmentation dans la migration nette d'une unité est associé à une augmentation de 0,3997 unité dans les prélèvements bruts d'eau douce par habitant. Ce test est tout de même à prendre avec précaution car même si le coefficient associé à "Migration nette" est legerement significatif, les faibles valeurs de R-squared et la p-value  suggère que le modèle explique seulement une petite portion de ces variations.En expliquant une partie plus ou moins significative, il y a quand même un lien entre la hausse de la migration et la hausse des pressions environnementales pour les pays concernés. Cependant à cause des conditions climatiques extrêmes cela devient inévitable. D'ici 2050 216 millions de personnes serait contraint de migrer à l'intérieur même de leurs pays. Une réduction des GES pourrait diminuer l'ampleur des migrations climatiques internes de 80%.
 
 
-*B- vulnérabilité humaine face aux changement climatiques*
-L'industrialisation intensives qui a lieu depuis le 19 ieme siècle et la
-consommation de masse des 30 glorieuses n'a pas laissé notre planète
-indemne. En effet, les catastrophes naturelles se multiplient et nous
-sommes totalement vulnérable face à cet nature déchainé.
+## B- vulnérabilité humaine face aux changement climatiques
 
 
 ```{r}
@@ -940,19 +917,19 @@ ggplot(vulnarabilite_OCDE_growth, aes(x = Année, y = Taux, color = Variable, li
 ```
 
 Au sein des pays membres de l'OCDE nous constatons que la part de la
-population exposée aux journées chaudes à particulièrement augmentées.
-En effet bien qu'il y ait de fortes variations entre les années, la
+population exposée aux journées chaudes a particulièrement augmentée.
+En effet, bien qu'il y ait de fortes variations entre les années, la
 tendance montre une nette augmentation entre 1990 et 2020 d'un peu plus
 de 25% à un peu moins de 40%. Pour ce qui est de la part de la
-populaition exposée aux journées glacées, il n'y a pas eu de fort
-changement durant c'est 30 dernières. Enfin, sur la part de la
+population exposée aux journées glacées, il n'y a pas eu de fort
+changement durant ces 30 dernières. Enfin, sur la part de la
 population exposée aux incendies, il n'y a pas de valeurs avant 2000,
 donc on ne peut pas interpréter les valeurs entre 1990 et 2000, de plus
-entre 2000 et 2020 on constate une tendance constante. Nous ne possedons
+entre 2000 et 2020 nous constatons une tendance constante. Nous ne possédons
 pas de valeurs pour les pays non membres de l'OCDE, toutefois la
 variables Sécheresses, inondations, températures extrêmes (en % de la
 population, moyenne de 1990 à 2009) nous permet d'effectuer des
-comparaisons entre les pays membres et non-membres de l'OCDE
+comparaisons entre les pays membres et non-membres de l'OCDE.
 
 ```{r}
 #Sécheresses, inondations, températures extrêmes (en % de la population, moyenne de 1990 à 2009)
@@ -964,19 +941,22 @@ risque <- bind_rows(mutate(risque_OCDE, Group = "OCDE"),mutate(risque_non_OCDE, 
 risque <- risque %>% filter(Pays%in%unique(risque$Pays)) %>% group_by(Pays, Group, COU) %>% summarise(Secheresses_inondations_temperatures_extreme = `Sécheresses, inondations, températures extrêmes (en % de la population, moyenne de 1990 à 2009)`[Année == 2009], .groups = 'drop')
 
 
-
+resume_donnee_risque <- risque %>% group_by(Group) %>% summarise(moyenne = mean(Secheresses_inondations_temperatures_extreme, na.rm = TRUE), maximum = max(Secheresses_inondations_temperatures_extreme, na.rm = TRUE))
 ```
 
 ```{r}
 ggplot(risque, aes(x = Group, y = Secheresses_inondations_temperatures_extreme, fill = Group)) +
-  geom_boxplot(na.rm = TRUE, alpha = 0.8)  +  scale_fill_manual(values = c("Non-OCDE" = "skyblue", "OCDE" = "lightcoral"))  + theme_minimal() + labs(title = "% de la population de chaque pays exposée aux Sécheresses,\n inondations, températures extrêmes (1990-2009)", x = "Groupe", y = "Population de chaque pays exposée aux risques (%)") 
+  geom_boxplot(na.rm = TRUE, alpha = 0.8)  +  scale_fill_manual(values = c("Non-OCDE" = "lightseagreen", "OCDE" =  "#FF6666"))  + theme_minimal() + labs(title = "% de la population de chaque pays exposée aux Sécheresses,\n inondations, températures extrêmes (1990-2009)", x = "Groupe", y = "Population de chaque pays exposée aux risques (%)")  + geom_text(data = resume_donnee_risque, aes(x = Group, y = moyenne, label = paste("Moyenne:",round(moyenne, 2), "%")), vjust = -2, color = "darkorange", size = 3, fontface = "bold") + geom_text(data = resume_donnee_risque, aes(x = Group, y = maximum, label = paste("Max:",round(maximum, 2), "%")), vjust = 2, color = "red", size = 3, fontface = "bold")
   
 ```
 
-Par ailleurs, en 2011 certains pays du monde ont été évalué note sur les
-progrès de réduction des risques de catastrophes (échelle de 1 à 5, 5
-étant la meilleure note)
+Les valeurs observées sur le graphique indique une exposition significative de la population aux risques liées aux sécheresses, inondations et températures extrêmes, avec des différences marquées entre les groupes OCDE et non-OCDE. Les pays non-OCDE semblent avoir une plus grande variabilité dans l'exposition, avec un maximum de 9.23% en
+Eswatini. De plus la moyenne pour les pays non-OCDE (1.46%) est également supérieure à celle des pays de l'OCDE (0.18%), suggérant une exposition globale plus élevée dans les pays non-OCDE. 
 
+
+Par ailleurs, en 2011 certains pays du monde ont été auto-évalué sur les progrès de réduction des risques de catastrophes (échelle de 1 à 5, 5 étant la meilleure note) dans le cadre de la priorité 1 des rapports nationaux d'avancement du cadre de Hyogo.
+
+ 
 ```{r}
 
 note_progres_non_OCDE <- non_OCDE_pays %>% filter(Variable %in% c("Note sur les progrès de réduction des risques de catastrophes (échelle de 1 à 5, 5 étant la meilleure note)")) %>% select(-`COU`, -`VAR` ,- `Unit`, -`PowerCode`) %>% pivot_longer(cols = c(`1990`,`1991`,`1992`,`1993`,`1994`,`1995`,`1996`,`1997`,`1998`,`1999`,`2000`, `2001`, `2002`, `2003`, `2004`, `2005`, `2006`, `2007`, `2008`, `2009`,`2010`, `2011`, `2012`, `2013`, `2014`, `2015`, `2016`, `2017`, `2018`, `2019`, `2020`),  names_to = "Année", values_to = "Value") %>% mutate(Value = as.numeric(Value)) %>% pivot_wider(names_from = Variable, values_from = Value) 
@@ -988,28 +968,14 @@ note_progres_non_OCDE <- drop_na(note_progres_non_OCDE,`Note sur les progrès de
 
 note_progres_fusion <- bind_rows(vulnerabilite_OCDE_clean_progres, note_progres_non_OCDE)
 
-ggplot(note_progres_fusion, aes(y = reorder(Pays,`Note sur les progrès de réduction des risques de catastrophes (échelle de 1 à 5, 5 étant la meilleure note)`),x = `Note sur les progrès de réduction des risques de catastrophes (échelle de 1 à 5, 5 étant la meilleure note)`,  fill = Group)) + geom_bar(stat ="identity", position = "dodge", na.rm = TRUE, width =  0.7) +  theme(axis.text.y = element_text(size = 5),plot.title = element_text(hjust = 0.1)) + labs(title = "Note sur les progrès de réduction des risques de catastrophes\n (échelle de 1 à 5, 5 étant la meilleure note)", y = "Pays", x = "note sur les progrès de\n réduction des risques de catastrophes") +  scale_fill_manual(values = c("OCDE" = "blue", "Non-OCDE" = "red")) 
+resume_progres <- note_progres_fusion %>% group_by(Group) %>% summarise(Moyenne = mean(`Note sur les progrès de réduction des risques de catastrophes (échelle de 1 à 5, 5 étant la meilleure note)`, na.rm = TRUE))
 
-
+ggplot(note_progres_fusion, aes(y = reorder(Pays,`Note sur les progrès de réduction des risques de catastrophes (échelle de 1 à 5, 5 étant la meilleure note)`),x = `Note sur les progrès de réduction des risques de catastrophes (échelle de 1 à 5, 5 étant la meilleure note)`,  fill = Group)) + geom_bar(stat ="identity", position = "dodge", na.rm = TRUE, width =  0.7) +  theme(axis.text.y = element_text(size = 5),plot.title = element_text(hjust = 0.1)) + labs(title = "Note sur les progrès de réduction des risques de catastrophes\n (échelle de 1 à 5, 5 étant la meilleure note)", y = "Pays", x = "note sur les progrès de\n réduction des risques de catastrophes") +  scale_fill_manual(values = c("OCDE" = "lightseagreen", "Non-OCDE" =  "#FF6666"))
 
 
 ```
 
-ii. Examiner les variables en lien avec les zones en-dessous d'une
-    certaine altitudes ou à proximité du niveau de la mer et leur
-    vulnérabilité sur la hausse des niveaux des océans.
-
-Superficie des terres dont l'altitude est inférieure à 5 mètres (en % de
-la superficie totale des terres) Zones urbaines dont l'altitude est \< à
-5 m (% de la superficie totale) Population vivant sur des terres dont
-l'altitude est inférieure à 5 mètres (en % de la population totale)
-Hauteur moyenne des précipitations (mm par an)
-
-```{r}
-# Hauteur moyenne des précipitations (mm par an)
-
-```
-
+Bien que tous les pays n'ont pas été évalués, la moyenne de l'OCDE est de 3.80 et celle du groupe Non-OCDE de 3.14, cela mnontre un effort global dans la volonté de réduire les risques de catastrophes, toutefois nons n'avons pas plus de données pour déterminer une évolution de cette note. Par ailleurs, selon les rapports du GIEC, la vulnérabilité des pays aux événements climatiques extrêmes devraient augmenter à l'avenir en raison du réchauffement climatique. Les impacts potentiels de cette vulnérabilité accrue pourraient inclure des perturbations majeurs dans les systèmes sociaux, économiques et environnementaux, avec des conséquences sur la sécurité alimentaire, la santé publique et la stabilité sociale. Il est donc essentiel que l'ensemble des pays progresse dans la réduction des risques de catastrophes.
 
 Sources : 
 Grossman G. & Krueger A. (1994). Economic Growth and the Environment. NBER Working Papers n°4634
