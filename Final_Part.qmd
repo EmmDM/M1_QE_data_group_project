@@ -1046,7 +1046,7 @@ pour instaurer une transition écologique globale, équitable et efficace.
 
 - Bishwa S. Koirala, Hui Li et Robert P. Berrens, « Further Investigation of Environmental Kuznets Curve Studies Using Meta-Analysis », International Journal of Ecological Economics and Statistics, vol. 22, no S11,16 juin 2011, p. 13–32
 
--Formation et déformation de la Courbe de Kuznets Environnementale pour les émissions de CO2
+- Formation et déformation de la Courbe de Kuznets Environnementale pour les émissions de CO2
 Thomas Jobert, Fatih Karanfil, Dans Innovations 2012/1 (n°37), pages 11 à 26
 
 - Wei Ming Huanga, Grace W.M. Leea, Chih Cheng Wub, (2007), GHG emissions, GDP growth and the Kyoto Protocol:A revisit of Environmental Kuznets Curve hypothesis 
@@ -1060,16 +1060,15 @@ Publishing.
 contraindre 216 millions de personnes à migrer à l'intérieur de leur
 propre pays d'ici 2050. Communiqué de presse. <https://www.banquemondiale.org/fr/news/press-release/2021/09/13/climate-change-could-force-216-million-people-to-migrate-within-their-own-countries-by-2050>
 
-- OCDE. (année). Exposition à la pollution de l'air \[Graphique\].
-Data.OECD.
+- OCDE. Exposition à la pollution de l'air.
 <https://data.oecd.org/fr/air/exposition-a-la-pollution-de-l-air.htm#indicator-chart>
 
-Santé Publique France. (année). Impacts de l'exposition chronique aux
+- Santé Publique France. Impacts de l'exposition chronique aux
 particules fines sur la mortalité en France continentale et analyse des
-gains en santé de plusieurs scénarios \[Rapport de synthèse\].
+gains en santé de plusieurs scénarios.
 <https://www.santepubliquefrance.fr/determinants-de-sante/pollution-et-sante/air/documents/rapport-synthese/impacts-de-l-exposition-chronique-aux-particules-fines-sur-la-mortalite-en-france-continentale-et-analyse-des-gains-en-sante-de-plusieurs-scenarios>
 
-Alternatives Économiques. (2017, 1er février). Population urbaine et
+- Alternatives Économiques. (2017, 1er février). Population urbaine et
 population rurale dans le monde : les milliards de projections selon le
 scénario médian.
 <https://www.alternatives-economiques.fr/population-urbaine-population-rurale-monde-milliards-projections-selon-scenario-median-0102201777461.html>
