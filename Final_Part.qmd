@@ -333,9 +333,9 @@ Dans cette deuxième partie, l'objectif est d'étudier les pressions
 environnementales sur les ressources exercées par les composantes du
 PIB, puis d'analyser les politiques mises en place pour réduire cela.
 
-## A- Pressions environnementales
+## A. Pressions environnementales
 
-*A.1 : Intensité de l'eau*
+*A.1. Intensité de l'eau*
 
 Nous envisageons de comparer les intensités sur l'eau et la qualité de
 l'air entre les pays de l'OCDE et hors OCDE. Pour évaluer l'utilisation
@@ -377,12 +377,12 @@ plus intense sur leurs ressources en eau.
 #On analyse les tendances des pays membres de l'OCDE
 eau_tendance_OCDE <- eau_OCDE %>% group_by(Année,Variable) %>% summarise(moyenne_annuelle = mean(`Value`, na.rm =TRUE), .groups = 'drop')
 
-ggplot(eau_tendance_OCDE, aes(x=`Année`, y = moyenne_annuelle)) + geom_jitter(na.rm = TRUE, , color = "lightseagreen") + scale_size_continuous("moyenne annuelle") +  facet_wrap(~ Variable, scales = "free_y", ncol = 1) + theme(axis.text.x=element_text(angle=50, size=8, vjust=0.5)) 
+ggplot(eau_tendance_OCDE, aes(x=`Année`, y = moyenne_annuelle)) + geom_jitter(na.rm = TRUE, , color = "lightseagreen") + scale_size_continuous("moyenne annuelle") +  facet_wrap(~ Variable, scales = "free_y", ncol = 1) + theme(axis.text.x=element_text(angle=50, size=8, vjust=0.5)) + labs(title = "Intensité de l'eau des pays membres de l'OCDE")
 
 #On analyse les tendances des pays non membres de l'OCDE
 eau_tendance_non_OCDE <- eau_non_OCDE %>% group_by(Année,Variable) %>% summarise(moyenne_annuelle = mean(`Value`, na.rm =TRUE), .groups = 'drop')
 
-ggplot(eau_tendance_non_OCDE, aes(x=`Année`, y = moyenne_annuelle)) + geom_jitter( na.rm = TRUE, color = "#FF6666") + scale_size_continuous("moyenne annuelle") +  facet_wrap(~ Variable, scales = "free_y", ncol = 1) + theme(axis.text.x=element_text(angle=50, size=8, vjust=0.5)) 
+ggplot(eau_tendance_non_OCDE, aes(x=`Année`, y = moyenne_annuelle)) + geom_jitter( na.rm = TRUE, color = "#FF6666") + scale_size_continuous("moyenne annuelle") +  facet_wrap(~ Variable, scales = "free_y", ncol = 1) + theme(axis.text.x=element_text(angle=50, size=8, vjust=0.5))  + labs(title = "Intensité de l'eau des pays non membres de l'OCDE")
 ```
 
 À travers ces quatre tableaux, on observe que, pour chacune des
@@ -412,7 +412,7 @@ prélèvements augmentent depuis 2006. Ainsi, la pression exercée sur les
 ressources en eau n'a pas fini d'augmenter, surtout selon les régions du
 monde.
 
-*A.2 : Qualité de l'air*
+*A.2. Qualité de l'air*
 
 L'indice de qualité de l'air est utilisé pour évaluer les niveaux de
 pollution atmosphérique. Actuellement, les émissions de CO2 et d'autres
@@ -438,47 +438,46 @@ CO2_emission_habitant_OCDE <- CO2_emission_OCDE_index %>% group_by(Année) %>%su
 CO2_emission_habitant_OCDE <- CO2_emission_habitant_OCDE  %>% mutate(Ratio_base100 = Ratio / Ratio[which(CO2_emission_habitant_OCDE$Année == 1990)]*100)
   
 #Création index GEs
-Ges_emission_OCDE_index <- CO2_emission_OCDE %>% filter(Pays%in%unique(CO2_emission_OCDE$Pays)) %>% group_by(Année) %>% summarise(Ges_emi_tot = sum(`Autres émissions de gaz à effet de serre, HFC, PFC et SF6 (milliers de tonnes métriques d’équivalent CO2)`, na.rm = TRUE), Hab_tot = sum(`Population, total`,na.rm = TRUE)) %>% mutate(Ges_hab = `Ges_emi_tot`/`Hab_tot`)
+Ges_emission_OCDE_index <- CO2_emission_OCDE %>% filter(Pays%in%unique(CO2_emission_OCDE$Pays)) %>% group_by(Année) %>%
+summarise(Ges_emi_tot = sum(`Autres émissions de gaz à effet de serre, HFC, PFC et SF6 (milliers de tonnes métriques d’équivalent CO2)`, na.rm = TRUE), Hab_tot = sum(`Population, total`,na.rm = TRUE)) %>% mutate(Ges_hab = `Ges_emi_tot`/`Hab_tot`)
          
+
 Ges_emission_habitant_OCDE <-Ges_emission_OCDE_index  %>% group_by(Année) %>%summarise(Ratio = `Ges_emi_tot`/`Hab_tot` )
 Ges_emission_habitant_OCDE <- Ges_emission_habitant_OCDE  %>% mutate(Ratio_base100 = Ratio / Ratio[which(Ges_emission_habitant_OCDE$Année == 1990)]*100)
   
 # Fusion des deux bases de données
 merged_Ges_CO2_OCDE <- merge(CO2_emission_habitant_OCDE, Ges_emission_habitant_OCDE, by = "Année", suffixes = c("_Ratio", "_Autres"))
 
-ggplot(merged_Ges_CO2_OCDE, aes(x = Année)) +
-  geom_point(aes(y = Ratio_base100_Ratio, color = "CO2 émission par habitant")) +
-  geom_point(aes(y = Ratio_base100_Autres, color = "GES émission par habitant")) +
-  labs(
-    title = "Emissions CO2 et autres GES par personne en base 100 (1990) \n pour le total des pays membres de l'OCDE",
-    x = "Année",
-    y = "Ratio (Base 100 en 1990)"
-  ) +
-  theme(axis.text.x = element_text(angle = 50, size = 8, vjust = 0.5)) +
-  scale_color_manual(
-    values = c("CO2 émission par habitant" = "lightseagreen", "GES émission par habitant" = "#FF6666"),
-    labels = c("CO2 émission par habitant", "GES émission par habitant")
-  ) +
-  guides(color = guide_legend(title = NULL))
+ggplot(merged_Ges_CO2_OCDE, aes(x = Année)) + geom_point(aes(y = Ratio_base100_Ratio, color = "CO2 émission par habitant")) + geom_point(aes(y = Ratio_base100_Autres, color = "GES émission par habitant")) + labs(title = "Emissions CO2 et autres GES par personne en base 100 (1990) \n pour le total des pays membres de l'OCDE",x = "Année", y = "Ratio (Base 100 en 1990)") + theme(axis.text.x = element_text(angle = 50, size = 8, vjust = 0.5)) + scale_color_manual(values = c("CO2 émission par habitant" = "lightseagreen", "GES émission par habitant" = "#FF6666"),labels = c("CO2 émission par habitant", "GES émission par habitant")) +guides(color = guide_legend(title = NULL))
 
 #Non OCDE
 CO2_emission_non_OCDE <-  non_OCDE_pays %>% filter(Variable %in% c("Émissions de CO2 (kt)","Population, total","Autres émissions de gaz à effet de serre, HFC, PFC et SF6 (milliers de tonnes métriques d’équivalent CO2)")) %>% select(-COU, -VAR ,- Unit, -PowerCode) %>%pivot_longer(cols = c(`1990`,`1991`,`1992`,`1993`,`1994`,`1995`,`1996`,`1997`,`1998`,`1999`,`2000`, `2001`, `2002`, `2003`, `2004`, `2005`, `2006`, `2007`, `2008`, `2009`,`2010`, `2011`, `2012`, `2013`, `2014`, `2015`, `2016`),  names_to = "Année", values_to = "Value") %>% mutate(Value = as.numeric(Value)) %>% pivot_wider(names_from = Variable, values_from = Value) 
   
-
 #Création d'un index autres GES
 Ges_emission_non_OCDE_index <- CO2_emission_non_OCDE %>% filter(Pays%in%unique(CO2_emission_non_OCDE$Pays)) %>% group_by(Année) %>%
-summarise(Ges_emi_tot = sum(`Autres émissions de gaz à effet de serre, HFC, PFC et SF6 (milliers de tonnes métriques d’équivalent CO2)`, na.rm = TRUE), Hab_tot = sum(`Population, total`,na.rm = TRUE), Autre_CO2 = sum(`Autres émissions de gaz à effet de serre, HFC, PFC et SF6 (milliers de tonnes métriques d’équivalent CO2)`, na.rm = TRUE)) %>% mutate(Ges_hab = `Ges_emi_tot`/`Hab_tot`)
-         
+summarise(Ges_emi_tot = sum(`Autres émissions de gaz à effet de serre, HFC, PFC et SF6 (milliers de tonnes métriques d’équivalent CO2)`, na.rm = TRUE), Hab_tot = sum(`Population, total`,na.rm = TRUE)) %>% mutate(Ges_hab = `Ges_emi_tot`/`Hab_tot`)
+  
+CO2_emission_non_OCDE_index <- CO2_emission_non_OCDE %>% filter(Pays%in%unique(CO2_emission_non_OCDE$Pays)) %>% group_by(Année) %>%
+summarise(CO2_emi_tot = sum(`Émissions de CO2 (kt)`, na.rm = TRUE), Hab_tot = sum(`Population, total`,na.rm = TRUE)) %>% mutate(CO2_hab = `CO2_emi_tot`/`Hab_tot`)
+
+
+CO2_emission_habitant_non_OCDE <- CO2_emission_non_OCDE_index %>% group_by(Année) %>%summarise(Ratio = `CO2_emi_tot`/`Hab_tot` )
+CO2_emission_habitant_non_OCDE <- CO2_emission_habitant_non_OCDE  %>% mutate(Ratio_base100 = Ratio / Ratio[which(CO2_emission_habitant_OCDE$Année == 1990)]*100)
+
 Ges_emission_habitant_non_OCDE <-Ges_emission_non_OCDE_index  %>% group_by(Année) %>%summarise(Ratio = `Ges_emi_tot`/`Hab_tot` )
 Ges_emission_habitant_non_OCDE <- Ges_emission_habitant_non_OCDE  %>% mutate(Ratio_base100 = Ratio / Ratio[which(Ges_emission_habitant_non_OCDE$Année == 1990)]*100)
 
-ggplot(Ges_emission_habitant_non_OCDE, aes(x = Année, y = Ratio_base100)) + geom_point()+
-  labs( title = "Emissions GES ( HFC, PFC et SF6 ) par personne en base 100 (1990)\n  pour le total des pays ,on membres de l'OCDE",
+merged_Ges_CO2_non_OCDE <- merge(CO2_emission_habitant_non_OCDE , Ges_emission_habitant_non_OCDE, by = "Année", suffixes = c("_Ratio", "_Autres"))
+
+ggplot(merged_Ges_CO2_non_OCDE , aes(x = Année)) +
+  geom_point(aes(y = Ratio_base100_Ratio, color = "CO2 émission par habitant")) +
+  geom_point(aes(y = Ratio_base100_Autres, color = "GES émission par habitant")) +
+  labs( title = "Emissions GES ( HFC, PFC et SF6 ) par personne en base 100 (1990)\n  pour le total des pays non membres de l'OCDE",
     x = "Année",
     y = "Ratio (Base 100 en 1990)") +
-  theme(axis.text.x = element_text(angle = 50, size = 8, vjust = 0.5))
-
+  theme(axis.text.x = element_text(angle = 50, size = 8, vjust = 0.5)) + scale_color_manual(values = c("CO2 émission par habitant" = "lightseagreen", "GES émission par habitant" = "#FF6666"),labels = c("CO2 émission par habitant", "GES émission par habitant")) +guides(color = guide_legend(title = NULL))
 ```
+
 
 Les émissions de CO2 ont largement dépassé celles des autres gaz à effet
 de serre depuis 1990, avec une diminution modeste depuis 2010 pour les
@@ -512,7 +511,7 @@ mortalité_PM25_pop_OCDE <- mortalité_PM25_pop_OCDE %>% mutate(taux_mortalite_P
 
 reg_mortalite_PM25_OCDE=lm('taux_mortalite_PM25 ~ `Croissance de la population urbaine (% annuel)`', data = mortalité_PM25_pop_OCDE)
 summary(reg_mortalite_PM25_OCDE)
-ggplot(reg_mortalite_PM25_OCDE, aes(x = `Croissance de la population urbaine (% annuel)`,y = taux_mortalite_PM25)) + geom_point(color='gray', size=1, na.rm = TRUE) + geom_smooth(method='lm', formula = 'y ~ x', se=FALSE, color='red', na.rm = TRUE) + theme_minimal() + labs(title = "Correlation entre le taux de mortalité due à l'exposition au PM2.5 \n par rapport au taux de croissance de la population urbaine (%) ", x = "Croissance de la population urbaine (% annuel)", y = "taux de Mortalité due à l'exposition aux PM2.5")
+ggplot(reg_mortalite_PM25_OCDE, aes(x = `Croissance de la population urbaine (% annuel)`,y = taux_mortalite_PM25)) + geom_point(color='gray', size=1, na.rm = TRUE) + geom_smooth(method='lm', formula = 'y ~ x', se=FALSE, color='red', na.rm = TRUE) + theme_minimal() + labs(title = "Correlation entre le taux de mortalité due à l'exposition au PM2.5 \n par rapport au taux de croissance de la population urbaine (%) \n des pays membres de l'OCDE", x = "Croissance de la population urbaine (% annuel)", y = "taux de Mortalité due à l'exposition aux PM2.5")
 
 #non OCDE
 mortalité_PM25_pop_non_OCDE <-  non_OCDE_pays %>% filter(Variable %in% c("Croissance de la population (% annuel)","Mortalité due à l'exposition aux PM2.5","Croissance de la population urbaine (% annuel)")) %>% select(-`COU`, -`VAR` ,- `Unit`, -`PowerCode`) %>% pivot_longer(cols = c(`1990`,`1991`,`1992`,`1993`,`1994`,`1995`,`1996`,`1997`,`1998`,`1999`,`2000`, `2001`, `2002`, `2003`, `2004`, `2005`, `2006`, `2007`, `2008`, `2009`,`2010`, `2011`, `2012`, `2013`, `2014`, `2015`, `2016`, `2017`, `2018`, `2019`, `2020`),  names_to = "Année", values_to = "Value") %>% mutate(Value = as.numeric(Value)) %>% pivot_wider(names_from = Variable, values_from = Value) 
@@ -521,7 +520,7 @@ mortalité_PM25_pop_non_OCDE_taux <- mortalité_PM25_pop_non_OCDE %>% mutate(tau
 
 reg_mortalite_PM25_non_OCDE_taux=lm('taux_mortalite_PM25_non_OCDE ~ `Croissance de la population urbaine (% annuel)`', data = mortalité_PM25_pop_non_OCDE_taux)
 summary(reg_mortalite_PM25_non_OCDE_taux)
-ggplot(reg_mortalite_PM25_non_OCDE_taux, aes(x = `Croissance de la population urbaine (% annuel)`,y = taux_mortalite_PM25_non_OCDE)) + geom_point(color='gray', size=1, na.rm = TRUE) + geom_smooth(method='lm', formula = 'y ~ x', se=FALSE, color='red', na.rm = TRUE) + theme_minimal() + labs(title = "Correlation entre le taux de mortalité due à l'exposition au PM2.5 \n par rapport au taux de croissance de la population urbaine (%) ", x = "Croissance de la population urbaine (% annuel)", y = "taux de Mortalité due à l'exposition aux PM2.5")
+ggplot(reg_mortalite_PM25_non_OCDE_taux, aes(x = `Croissance de la population urbaine (% annuel)`,y = taux_mortalite_PM25_non_OCDE)) + geom_point(color='gray', size=1, na.rm = TRUE) + geom_smooth(method='lm', formula = 'y ~ x', se=FALSE, color='red', na.rm = TRUE) + theme_minimal() + labs(title = "Correlation entre le taux de mortalité due à l'exposition au PM2.5 \n par rapport au taux de croissance de la population urbaine (%) \n des pays non membres de l'OCDE", x = "Croissance de la population urbaine (% annuel)", y = "taux de Mortalité due à l'exposition aux PM2.5")
 
 
 ```
@@ -537,13 +536,10 @@ seulement une petite partie de la variabilité du taux de mortalité.
 De manière similaire, pour les pays hors OCDE, une corrélation
 statistiquement significative est observée entre les deux variables. Une
 augmentation unitaire du taux de croissance est associée à une
-diminution attendue de 0,04564 du taux de mortalité dû au PM2.5.
+diminution attendue de 0,04584 du taux de mortalité dû au PM2.5.
 Cependant, la R-squared, encore plus faible que pour l'OCDE, indique que
 la croissance de la population urbaine explique seulement une infime
-partie du taux de mortalité lié au PM2.5. Cette disparité peut
-s'expliquer par les conditions sanitaires dramatiques dans les pays
-pauvres, où l'exposition aux particules n'est qu'un facteur parmi tant
-d'autres.
+partie du taux de mortalité lié au PM2.5.
 
 Malgré cela, la pollution de l'air reste la principale cause
 environnementale de décès prématurés, favorisant le développement de
@@ -551,26 +547,20 @@ maladies respiratoires et de cancers. Cela entraîne également une
 augmentation des dépenses médicales. Un écart significatif persiste dans
 l'accès aux soins selon les pays.
 
-## **B- Politiques Environnementales**
+## B. Politiques Environnementales
+
+*B.1. Taxe environnementale*
+
 
 Après avoir pu observer les pressions exercées par les composantes de
-notre activité économique, nous allons pouvoir nous interesser aux
+notre activité économique, nous allons nous interesser aux
 politiques mises en place pour les réguler.
 
-*B.1* tax
 
-Une taxe environnementale est caractérisée par son action sur les coûts
-des activités ou les prix des produits qui ont un effet négatif sur
-l'environnement. C'est une internalisation de l'externalité négative.La
-taxe carbone est la plus utilisé, elle taxe les émissions de dioxyde de
-carbone, le gaz à effet de serre qui contribue majoritairement à la
+D'une part les pays ont la possibilité de mettre en place une taxe environnementale qui est caractérisée par son action sur les coûts des activités ou les prix des produits qui ont un effet négatif sur l'environnement. C'est une internalisation de l'externalité négative.La taxe carbone est la plus utilisé, elle taxe les émissions de dioxyde de carbone, le gaz à effet de serre qui contribue majoritairement à la
 deterioration du capital naturel.
 
 ```{r}
-
-library(ggplot2)
-library(tidyr)
-
 #pour OCDE
 OCDE_pays_Taxes <- OCDE_pays %>%
   filter(Variable == "Recettes provenant des taxes liées à l'énergie, % recettes des taxes environnementales") %>%
@@ -585,7 +575,7 @@ non_OCDE_pays_Taxes <- non_OCDE_pays%>%
   pivot_longer(cols = c(`1990`, `1991`, `1992`, `1993`, `1994`, `1995`, `1996`, `1997`, `1998`, `1999`, `2000`, `2001`, `2002`, `2003`, `2004`, `2005`, `2006`, `2007`, `2008`, `2009`, `2010`, `2011`, `2012`, `2013`, `2014`, `2015`, `2016`, `2017`, `2018`, `2019`, `2020`),
                names_to = "Année",
                values_to = "Value") %>%
-  mutate(Value = as.numeric(Value), Groupe = "non_OCDE")
+  mutate(Value = as.numeric(Value), Groupe = "Non-OCDE")
 
 #Fusion des deux bases de données 
 
@@ -601,8 +591,7 @@ ggplot(merged_Taxes, aes(x = as.numeric(Année), y = Value, color = Groupe)) +
 
 Le graphique des recettes issues des taxes liées à l'énergie montre que
 le taux pour les pays de l'OCDE est nettement plus élevé, restant stable
-autour de 70%, tandis que les pays hors OCDE ont connu une croissance
-asymptomatique jusqu'à un pic entre 2010 et 2015, dépassant les 50%. Les
+autour de 70%, tandis que les pays hors OCDE ont connu une croissance jusqu'à un pic entre 2010 et 2015, dépassant les 50%. Les
 recettes plus élevées de l'OCDE permettent la mise en place de mesures
 environnementales significatives. L'innovation technologique,
 essentielle pour une économie plus durable, est freinée par des défis
@@ -619,10 +608,7 @@ reg_Dévelop_recette_OCDE <- lm(`Développement de technologies liées à l'envi
 
 summary(reg_Dévelop_recette_OCDE)
 
-
 ggplot(reg_Dévelop_recette_OCDE, aes(x = `Développement de technologies liées à l'environnement, % inventions dans le monde`,y = `Recettes provenant des taxes liées à l'énergie, % recettes des taxes environnementales`)) + geom_point(color='gray', size=1, na.rm = TRUE) + geom_smooth(method='lm', formula = 'y ~ x', se=FALSE, color='red', na.rm = TRUE) + theme_minimal() + labs(title = "Correlation entre le développement de technologies liées à l'environnement \n et les recettes provenant des taxes liées à l'énergie - OCDE", x = "Développement de technologies liées à l'environnement, % inventions dans le monde", y = "Recettes provenant des taxes liées à l'énergie, % recettes des taxes environnementales")
-
-
 
 #Non OCDE
 Dévelop_recette_non_OCDE <-  non_OCDE_pays %>% filter(Variable %in% c("Développement de technologies liées à l'environnement, % inventions dans le monde", "Recettes provenant des taxes liées à l'énergie, % recettes des taxes environnementales")) %>% select(-`COU`, -`VAR` ,- `Unit`, -`PowerCode`) %>% pivot_longer(cols = c(`1990`,`1991`,`1992`,`1993`,`1994`,`1995`,`1996`,`1997`,`1998`,`1999`,`2000`, `2001`, `2002`, `2003`, `2004`, `2005`, `2006`, `2007`, `2008`, `2009`,`2010`, `2011`, `2012`, `2013`, `2014`, `2015`, `2016`, `2017`, `2018`, `2019`, `2020`),  names_to = "Année", values_to = "Value") %>% mutate(Value = as.numeric(Value)) %>% pivot_wider(names_from = Variable, values_from = Value) 
@@ -633,8 +619,6 @@ summary(reg_Dévelop_recette_non_OCDE)
 
 
 ggplot(reg_Dévelop_recette_non_OCDE, aes(x = `Développement de technologies liées à l'environnement, % inventions dans le monde`,y = `Recettes provenant des taxes liées à l'énergie, % recettes des taxes environnementales`)) + geom_point(color='gray', size=1, na.rm = TRUE) + geom_smooth(method='lm', formula = 'y ~ x', se=FALSE, color='red', na.rm = TRUE) + theme_minimal() + labs(title = "Correlation entre le développement de technologies liées à l'environnement \n et les recettes provenant des taxes liées à l'énergie - non OCDE", x = "Développement de technologies liées à l'environnement, % inventions dans le monde", y = "Recettes provenant des taxes liées à l'énergie, % recettes des taxes environnementales")
-                                     
-
 ```
 
 Pour les deux groupes (OCDE, hors OCDE), la relation entre les recettes
@@ -650,7 +634,7 @@ de moitié le coût de cette transition. L'investissement public est
 essentiel, et une coopération internationale, surtout pour les pays en
 développement, est nécessaire pour atténuer les disparités existantes.
 
-*B.2* Subventions + prise de décision de protection de l'environnement
+*B.2. Subventions* Subventions + prise de décision de protection de l'environnement
 
 Le dispositif de subvention est une aide aux entreprises pour les
 accompagner dans leur transition écologique vers des énergies plus
@@ -659,9 +643,6 @@ transition. Nous allons observer l'évolution des subventions à travers
 plusieurs variables.
 
 ```{r}
-library(ggplot2)
-library(tidyr)
-
 #OCDE
 OCDE_pays_subvention <- OCDE_pays %>%
   filter(Variable == "Soutien total aux combustibles fossiles, % recettes totales des taxes" ) %>%
@@ -676,7 +657,7 @@ non_OCDE_pays_subvention <- non_OCDE_pays%>%
   pivot_longer(cols = c(`1990`, `1991`, `1992`, `1993`, `1994`, `1995`, `1996`, `1997`, `1998`, `1999`, `2000`, `2001`, `2002`, `2003`, `2004`, `2005`, `2006`, `2007`, `2008`, `2009`, `2010`, `2011`, `2012`, `2013`, `2014`, `2015`, `2016`, `2017`, `2018`, `2019`, `2020`),
                names_to = "Année",
                values_to = "Value") %>%
-  mutate(Value = as.numeric(Value), Groupe = "non_OCDE")
+  mutate(Value = as.numeric(Value), Groupe = "Non-OCDE")
 
 #Fusion des deux bases de données
 
@@ -689,10 +670,7 @@ ggplot(merged_subvention, aes(x = as.numeric(Année), y = Value, color = Groupe)
        y = "Recettes en %") +
   theme_minimal()
 
-
 # Nouveau graph pour les subvention pour les consommateur de combustibles fossiles
-
-
 #pour OCDE
 OCDE_pays_subvention_consommateur <- OCDE_pays %>%
   filter(Variable == "Soutien aux consommateurs de combustibles fossiles, % recettes totales des taxes") %>%
@@ -707,9 +685,8 @@ non_OCDE_pays_subvention_consommateur <- non_OCDE_pays%>%
   pivot_longer(cols = c(`1990`, `1991`, `1992`, `1993`, `1994`, `1995`, `1996`, `1997`, `1998`, `1999`, `2000`, `2001`, `2002`, `2003`, `2004`, `2005`, `2006`, `2007`, `2008`, `2009`, `2010`, `2011`, `2012`, `2013`, `2014`, `2015`, `2016`, `2017`, `2018`, `2019`, `2020`),
                names_to = "Année",
                values_to = "Value") %>%
-  mutate(Value = as.numeric(Value), Groupe = "non_OCDE")
+  mutate(Value = as.numeric(Value), Groupe = "Non-OCDE")
 
-#Merged data 
 
 merged_data_subvention_consommateur <- bind_rows(OCDE_pays_subvention_consommateur, non_OCDE_pays_subvention_consommateur)
 
@@ -720,12 +697,7 @@ ggplot(merged_data_subvention_consommateur, aes(x = as.numeric(Année), y = Valu
        y = "Recettes en %") +
   theme_minimal()
 
-
-
-
 #Nouveau graph pour Soutien à l'électricité, % soutien total aux combustibles fossiles
-
-
 #pour OCDE
 OCDE_pays_subvention_éléctricité <- OCDE_pays %>%
   filter(Variable == "Soutien à l'électricité, % soutien total aux combustibles fossiles") %>%
@@ -740,9 +712,7 @@ non_OCDE_pays_subvention_éléctricité <- non_OCDE_pays%>%
   pivot_longer(cols = c(`1990`, `1991`, `1992`, `1993`, `1994`, `1995`, `1996`, `1997`, `1998`, `1999`, `2000`, `2001`, `2002`, `2003`, `2004`, `2005`, `2006`, `2007`, `2008`, `2009`, `2010`, `2011`, `2012`, `2013`, `2014`, `2015`, `2016`, `2017`, `2018`, `2019`, `2020`),
                names_to = "Année",
                values_to = "Value") %>%
-  mutate(Value = as.numeric(Value), Groupe = "non_OCDE")
-
-#Merged data 
+  mutate(Value = as.numeric(Value), Groupe = "Non-OCDE")
 
 merged_data_subvention_éléctricité <- bind_rows(OCDE_pays_subvention_éléctricité, non_OCDE_pays_subvention_éléctricité)
 
@@ -752,9 +722,6 @@ ggplot(merged_data_subvention_éléctricité, aes(x = as.numeric(Année), y = Va
        x = "Année",
        y = "Recettes en %") +
   theme_minimal()
-
-
-
 
 ```
 
