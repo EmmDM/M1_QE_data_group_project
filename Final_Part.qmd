@@ -449,6 +449,7 @@ Ges_emission_OCDE_index <- CO2_emission_OCDE %>% filter(Pays%in%unique(CO2_emiss
 summarise(Ges_emi_tot = sum(`Autres émissions de gaz à effet de serre, HFC, PFC et SF6 (milliers de tonnes métriques d’équivalent CO2)`, na.rm = TRUE), Hab_tot = sum(`Population, total`,na.rm = TRUE), Autre_CO2 = sum(`Autres émissions de gaz à effet de serre, HFC, PFC et SF6 (milliers de tonnes métriques d’équivalent CO2)`, na.rm = TRUE)) %>% mutate(Ges_hab = `Ges_emi_tot`/`Hab_tot`)
          
 
+
 Ges_emission_habitant_OCDE <-Ges_emission_OCDE_index  %>% group_by(Année) %>%summarise(Ratio = `Ges_emi_tot`/`Hab_tot` )
 Ges_emission_habitant_OCDE <- Ges_emission_habitant_OCDE  %>% mutate(Ratio_base100 = Ratio / Ratio[which(Ges_emission_habitant_OCDE$Année == 1990)]*100)
   
@@ -475,19 +476,35 @@ ggplot(merged_Ges_CO2_OCDE, aes(x = Année)) +
 
 
 #Non OCDE
+
+
 CO2_emission_non_OCDE <-  non_OCDE_pays %>% filter(Variable %in% c("Émissions de CO2 (kt)","Population, total","Autres émissions de gaz à effet de serre, HFC, PFC et SF6 (milliers de tonnes métriques d’équivalent CO2)")) %>% select(-COU, -VAR ,- Unit, -PowerCode) %>%pivot_longer(cols = c(`1990`,`1991`,`1992`,`1993`,`1994`,`1995`,`1996`,`1997`,`1998`,`1999`,`2000`, `2001`, `2002`, `2003`, `2004`, `2005`, `2006`, `2007`, `2008`, `2009`,`2010`, `2011`, `2012`, `2013`, `2014`, `2015`, `2016`),  names_to = "Année", values_to = "Value") %>% mutate(Value = as.numeric(Value)) %>% pivot_wider(names_from = Variable, values_from = Value) 
   
 
 #Création d'un index autres GES
+
+
 Ges_emission_non_OCDE_index <- CO2_emission_non_OCDE %>% filter(Pays%in%unique(CO2_emission_non_OCDE$Pays)) %>% group_by(Année) %>%
 summarise(Ges_emi_tot = sum(`Autres émissions de gaz à effet de serre, HFC, PFC et SF6 (milliers de tonnes métriques d’équivalent CO2)`, na.rm = TRUE), Hab_tot = sum(`Population, total`,na.rm = TRUE), Autre_CO2 = sum(`Autres émissions de gaz à effet de serre, HFC, PFC et SF6 (milliers de tonnes métriques d’équivalent CO2)`, na.rm = TRUE)) %>% mutate(Ges_hab = `Ges_emi_tot`/`Hab_tot`)
-         
+  
+CO2_emission_non_OCDE_index <- CO2_emission_non_OCDE %>% filter(Pays%in%unique(CO2_emission_non_OCDE$Pays)) %>% group_by(Année) %>%
+summarise(CO2_emi_tot = sum(`Émissions de CO2 (kt)`, na.rm = TRUE), Hab_tot = sum(`Population, total`,na.rm = TRUE), Autre_CO2 = sum(`Autres émissions de gaz à effet de serre, HFC, PFC et SF6 (milliers de tonnes métriques d’équivalent CO2)`, na.rm = TRUE)) %>% mutate(CO2_hab = `CO2_emi_tot`/`Hab_tot`)
+
+
+
+CO2_emission_habitant_non_OCDE <- CO2_emission_non_OCDE_index %>% group_by(Année) %>%summarise(Ratio = `CO2_emi_tot`/`Hab_tot` )
+CO2_emission_habitant_non_OCDE <- CO2_emission_habitant_non_OCDE  %>% mutate(Ratio_base100 = Ratio / Ratio[which(CO2_emission_habitant_OCDE$Année == 1990)]*100)
+
 
 Ges_emission_habitant_non_OCDE <-Ges_emission_non_OCDE_index  %>% group_by(Année) %>%summarise(Ratio = `Ges_emi_tot`/`Hab_tot` )
 Ges_emission_habitant_non_OCDE <- Ges_emission_habitant_non_OCDE  %>% mutate(Ratio_base100 = Ratio / Ratio[which(Ges_emission_habitant_non_OCDE$Année == 1990)]*100)
-  
 
-ggplot(Ges_emission_habitant_non_OCDE, aes(x = Année, y = Ratio_base100)) + geom_point()+
+
+merged_Ges_CO2_non_OCDE <- merge(CO2_emission_habitant_non_OCDE , Ges_emission_habitant_non_OCDE, by = "Année", suffixes = c("_Ratio", "_Autres"))
+
+ggplot(merged_Ges_CO2_non_OCDE , aes(x = Année)) +
+  geom_point(aes(y = Ratio_base100_Ratio, color = "CO2 émission par habitant")) +
+  geom_point(aes(y = Ratio_base100_Autres, color = "GES émission par habitant")) +
   labs( title = "Emissions GES ( HFC, PFC et SF6 ) par personne en base 100 (1990)\n  pour le total des pays Non membres de l'OCDE",
     x = "Année",
     y = "Ratio (Base 100 en 1990)") +
@@ -504,11 +521,11 @@ Selon le GIEC, pour limiter le réchauffement à 1,5 ou 2 degrés, les
 simultanée de tous les secteurs, avec l'arrêt du soutien à la production
 et à la consommation de combustibles fossiles, est nécessaire.
 
-Pour les pays hors OCDE, seules des informations sur les émissions
-autres que le CO2 sont disponibles. La diminution des gaz à effet de
-serre pour les pays de l'OCDE est due à la délocalisation des activités
-polluantes. Dans les années 1995, une forte augmentation pour ces pays
-est marquée par une diminution correspondante pour les pays de l'OCDE.
+Pour les pays hors OCDE, les autres GES sont à la baisse tandis que le
+CO2 est en augmentation . La diminution des gaz à effet de serre pour
+les pays de l'OCDE est due à la délocalisation des activités polluantes.
+Dans les années 2000, une forte augmentation pour ces pays est marquée
+par une diminution correspondante pour les pays de l'OCDE.
 
 Outre des émissions de GES plus élevées, certains pays comme les BRIICS
 n'ont pas le même cadre sanitaire que les pays qui délocalisent. La

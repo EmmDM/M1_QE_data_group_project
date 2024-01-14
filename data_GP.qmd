@@ -361,7 +361,8 @@ OCDE_pays <- dataframe_new %>% filter(`Pays` %in% OCDE_to_select)
 
 # On effectue une base de données des pays non membres de l'OCDE
 non_OCDE_pays <- dataframe_new %>%  filter(!(`Pays` %in% OCDE_to_select))
-
+non_OCDE_pays <- non_OCDE_pays %>%
+  filter(Pays != "Amérique latine et Caraïbes (hors revenu élevé)" & Pays!="Monde")
 ```
 
 
