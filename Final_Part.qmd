@@ -102,9 +102,12 @@ summary(reg_GES_PIB_non_OCDE)
 ```
 
 Les graphiques présentant le lien entre taux de croissance du PIB et taux de croissance des émissions GES ainsi que les tableaux de régression nous suggère une relation positive significative entre le taux de croissance du PIB et le taux de croissance des émissions de GES pour les deux groupes de pays (OCDE et non-OCDE). Dans le cas du groupe OCDE, chaque augmentation d'une unité dans le taux de croissance du PIB est associée à une augmentation d'environ 1,0843 unité dans le taux de croissance des émissions de GES. Tandis que dans le cas du groupe non-OCDE, chaque augmentation d'une unité dans le taux de croissance du PIB est associée à une augmentation d'environ 0.83193 unité dans le taux de croissance des émissions de GES. De plus, les R-squared élevés indiquent que les modèles expliquent une grande partie de la variabilité observée.
-## *A) Découplage*
 
-Le découplage se produit lorsque le taux de croissance d'une pression
+Ainsi, cela nous amène à nous interesser à différents indicateurs qui nous permettent de mieux comprendre l'évolution conjointe des émissions de GES et du PIB des différents pays qui constituent notre panel.
+
+## A. Le découplage
+
+En premier lieu, le découplage se produit lorsque le taux de croissance d'une pression
 environnementale est inférieur à celui de sa force motrice économique
 (par exemple le PIB) sur une période donnée. Le découplage peut être
 absolu ou relatif. On parle de découplage absolu lorsque la variable
@@ -135,7 +138,7 @@ GES_fusion <- bind_rows(mutate(GES_total_OCDE, Group = "OCDE"), mutate(GES_total
 ggplot(GES_fusion, aes(x = Année, y = Ratio_base100, color = Group)) + geom_point() +  labs(title = "Emissions par unité de PIB et par personne en base 100 (1990)", x = "Année", y = "Ratio (Base 100 en 1990)") + theme(axis.text.x=element_text(angle=50, size=8, vjust=0.5)) 
 
 ```
-
+Le graphique indique une baisse des émissions par unité de PIB et par personne pour les deux groupes depuis 1990.En 2020 pour le groupe OCDE la valeur était environ de 65,8% du niveau de 1990, tandis qu'elle était environ de 90,8% du niveau de 1990. De plus, nous constaton une variation plus marquée dans le groupe des pays non membres de l'OCDE, probablement en raison d'un rattrapage économique observé chez certains d'entre eux qui a entrainé une hausse des émissions de GES.
 ```{r}
 #Ici le but est de réaliser un diagramme en nuage de point avec en abscisse le taux de croissance du PIB en pourcentage en 2020 depuis 1990 et en ordonnées le taux de croisssance des émissions de GES en pourcentage en 2020 depuis 1990. Cela nous permettra de distinguer les pays qui ont on effectué un découplage et de de quel type de découplage il s'agit
 
@@ -147,7 +150,8 @@ decoupling_final_convert <- decoupling_final %>% filter(Pays%in%unique(decouplin
 
 decoupling_final_convert  <- decoupling_final_convert  %>% filter(!is.infinite(taux_PIB_90_20) & !is.infinite(taux_GES_90_20))
   
-graph_decoupling_final_convert <- ggplot(decoupling_final_convert, aes(x = taux_PIB_90_20,y = taux_GES_90_20)) + geom_point( size=1, na.rm = TRUE)  +  labs(title = "Découplage au sein de l'OCDE", x = "Taux de croissance du PIB/hab \n en 2020 par rapport à 1990 (%)", y = "Taux de croissance des émissions de GES \n en 2020 par rapport à 1990 (%)") + theme_minimal()  +  geom_abline(intercept = 0, slope = 1, color = "black") + geom_abline(intercept = 0, slope = 0, color = "black") + geom_abline(intercept = 0, slope = 0, color = "black") + geom_vline(xintercept = 0, color = "black") 
+graph_decoupling_final_convert <- ggplot(decoupling_final_convert, aes(x = taux_PIB_90_20,y = taux_GES_90_20)) + geom_point( size=1, na.rm = TRUE, , color = "lightseagreen")  +  labs(title = "Découplage au sein de l'OCDE", x = "Taux de croissance du PIB/hab \n en 2020 par rapport à 1990 (%)", y = "Taux de croissance des émissions de GES \n en 2020 par rapport à 1990 (%)") + theme_minimal()  +  geom_abline(intercept = 0, slope = 1, color = "black") + geom_abline(intercept = 0, slope = 0, color = "black") + geom_abline(intercept = 0, slope = 0, color = "black") + geom_vline(xintercept = 0, color = "black") + annotate("text", x = 150, y = -40, label = "Découplage absolu", size = 3, color = "red")  + annotate("text", x = 170, y = 80, label = "Découplage relatif", size = 3, color = "red")  + annotate("text", x = 32, y = 110, label = "Pas de découplage", size = 3, color = "red")
+
 
 
 #Non - OCDE
@@ -159,10 +163,11 @@ decoupling_final_convert_non_OCDE  <- decoupling_final_convert_non_OCDE  %>% fil
 
 x_limits <- c(-70,1000)
 y_limits <- c(-75,1000)
-graph_decoupling_non_OCDE <- ggplot(decoupling_final_convert_non_OCDE, aes(x = taux_PIB_90_20,y = taux_GES_90_20)) + geom_point( size=1, na.rm = TRUE)  +  labs(title = "Découplage des pays non membres de l'OCDE", x = "Taux de croissance du PIB/hab \n en 2020 par rapport à 1990 (%)", y = "Taux de croissance des émissions de GES en 2020 \n par rapport à 1990 (%)") + theme_minimal() + coord_cartesian(xlim = x_limits, ylim = y_limits)  + geom_abline(intercept = 0, slope = 1, color = "black") + geom_abline(intercept = 0, slope = 0, color = "black") + geom_abline(intercept = 0, slope = 0, color = "black") + geom_vline(xintercept = 0, color = "black")
+graph_decoupling_non_OCDE <- ggplot(decoupling_final_convert_non_OCDE, aes(x = taux_PIB_90_20,y = taux_GES_90_20)) + geom_point( size=1, na.rm = TRUE, color = "#FF6666")  +  labs(title = "Découplage des pays non membres de l'OCDE", x = "Taux de croissance du PIB/hab \n en 2020 par rapport à 1990 (%)", y = "Taux de croissance des émissions de GES en 2020 \n par rapport à 1990 (%)") + theme_minimal() + coord_cartesian(xlim = x_limits, ylim = y_limits)  + geom_abline(intercept = 0, slope = 1, color = "black") + geom_abline(intercept = 0, slope = 0, color = "black") + geom_abline(intercept = 0, slope = 0, color = "black") + geom_vline(xintercept = 0, color = "black") + annotate("text", x = 500, y = -50, label = "Découplage absolu", size = 3, color = "red")  + annotate("text", x = 700, y = 400, label = "Découplage relatif", size = 3, color = "red")  + annotate("text", x = 110, y = 750, label = "Pas de découplage", size = 3, color = "red")
 
 
-(graph_decoupling_final_convert  | graph_decoupling_non_OCDE ) + plot_annotation(title = "Comparaison entre les groupes OCDE et non-OCDE")
+
+(graph_decoupling_final_convert  | graph_decoupling_non_OCDE ) + plot_annotation(title = "Le découplage, comparaison entre les groupes OCDE et non-OCDE")
 ```
 
 Les pays dont le point se trouve à gauche de l'axe des ordonnées ou au
@@ -189,35 +194,16 @@ knitr :: kable(decoupling_summary_OCDE, caption = "Part des pays membres de l'OC
 
 knitr :: kable(decoupling_summary_non_OCDE, caption = "Part des pays non membres de l'OCDE d'après le découplage effectué")
 ```
+D'après ces résultats une majorité des pays membres de l'OCDE ont effectué un découplage absolu (Etats-Unis, Japon,...), suivi du découplage relatif (Australie, Norvège,...). Seuls quelques pays n'ont pas montré de découplage significatif (Israël, Mexique et Turquie). Pour les pays non membres de l'OCDE, la situation est plus variée, avec une plus grande proportion de pays présentant une absense de découplage (Tunisie, Quatar,...), bien que certains ont montré un découplage absolu (Russie,
+Bulgarie,...) et relatif (	
+Uruguay,Chine,...). La catégorie "Autre" regroupe des pays dont le taux d'émission de GES ou taux de PIB sont manquants.
 
-I.2 Nous analyserons aussi les tendances en matière d'intensité carbone
-et d'efficacité énergétique.
+## B. Courbe environnementale de Kuznets
 
-A. Courbe environnementale de Kuznets "Selon l'économiste Éloi Laurent,
-spécialiste de la croissance, la source de l'idée de découplage repose
-sur la courbe environnementale de Kuznets, théorie construite dans les
-années 1990 selon laquelle les dommages environnementaux augmentent dans
-les premières phases du développement d'une société, puis reculent alors
-que la croissance économique se poursuit" (Wikipedia, découplage
-(écologie))
-
-La courbe de Kuznets, dont la forme est U inversé, représente
-initiallement l'inégalité économique dans un pays en fonction de son
-niveau de développement. C'est selon Grossman et Krueger (1994), que
-cette forme de courbe peut être observée dans le domaine de
-l'environnement.Le modèle de courbe environnementale de Kuznets (EKC)
-postule une relation déterministe entre développement économique et
-qualité de l'environnement. Dans la première étape de
-l'industrialisation, la pollution augmente rapidement car les individus
-sont principalement interessées par leur travail et leur revenus que par
-la qualité de l'air et de l'eau. A ce stade, la société est trop pauvre
-pour réduire ses émissions, de fait la réglementations environnementales
-est trop failbe. Le retournement s'effectue à mesure que les revenus
-augmentent. Dès lors, les principaux secteurs industriels deviennent
-plus propres, les individus valorisent l'environnement et les
-institutions de régulation deviennent plus efficaces. Le long de la
-courbe, la pollution se stabilise dans la tranche des revenus moyens,
-puis retombe au niveau pré-industriel dans les sociétés développées.
+Dans un second temps nous nous intéressons à la courbe environnementale de Kuznets, qui selon l'économiste Éloi Laurent, spécialiste de la croissance, considère que la source de l'idée de découplage repose sur la courbe environnementale de Kuznets.
+Initiallement, la courbe de Kuznets, dont la forme est U inversé, représente l'inégalité économique dans un pays en fonction de son niveau de développement. C'est en 1994 que Grossman et Krueger postulent le modèle de courbe environnementale de Kuznets (EKC) qui donne une relation déterministe entre développement économique et qualité de l'environnement. Dans la première étape de l'industrialisation, la pollution augmente rapidement car les individus sont principalement interessées par leur travail et leur revenus que par la qualité de l'air et de l'eau. A ce stade, la société est trop pauvre pour réduire ses émissions, de fait la réglementation environnementales
+est trop failbe. Le retournement s'effectue à mesure que les revenus augmentent. Dès lors, les principaux secteurs industriels deviennent plus propres, les individus valorisent l'environnement et les institutions de régulation deviennent plus efficaces. Le long de la
+courbe, la pollution se stabilise dans la tranche des revenus moyens, puis retombe au niveau pré-industriel dans les sociétés développées. Ainsi, la CKE est une théorie intéressante qui nous permet de mieux comprendre comment une transition écologique peut avoir lieu à mesure que les pays se développe. 
 
 ```{r}
 #CKE 1990
@@ -229,7 +215,7 @@ CKE_1990 <- bind_rows(mutate(decoupling_final, Group = "OCDE"),mutate(decoupling
 CKE_1990 <- CKE_1990 %>% group_by(Année) %>% mutate(GES_hab = `GES_tot` / `Hab_tot`)
 CKE_1990 <- CKE_1990 %>% filter(Pays%in%unique(CKE_1990$Pays)) %>% group_by(Pays, Group) %>% summarise(PIB_hab = PIB_hab[Année == 1990], GES_hab = GES_hab[Année == 1990], .groups = 'drop')
 
-ggplot(CKE_1990, aes(x = PIB_hab, y = GES_hab, color = Group)) + geom_point(na.rm = TRUE) + geom_smooth(method = 'lm', formula = y ~ poly(x, 2), se = FALSE, color = 'darkorange') + labs(title = "Courbe de Kuznets environnementale en 1990", x = "PIB par habitant", y = "Emmission de GES")
+CKE_1990_graph <- ggplot(CKE_1990, aes(x = PIB_hab, y = GES_hab, color = Group)) + geom_point(na.rm = TRUE) + geom_smooth(method = 'lm', formula = y ~ poly(x, 2), se = FALSE, color = 'darkorange') + labs(title = "CKE en 1990", x = "PIB par habitant", y = "Emmission de GES")
 
 
 #CKE 2020
@@ -237,10 +223,10 @@ CKE_2020 <- bind_rows(mutate(decoupling_final, Group = "OCDE"),mutate(decoupling
 CKE_2020 <- CKE_2020 %>% group_by(Année) %>% mutate(GES_hab = `GES_tot` / `Hab_tot`)
 CKE_2020 <- CKE_2020 %>% filter(Pays%in%unique(CKE_2020$Pays)) %>% group_by(Pays, Group) %>% summarise(PIB_hab = PIB_hab[Année == 2020], GES_hab = GES_hab[Année == 2020], .groups = 'drop')
 
-ggplot(CKE_2020, aes(x = PIB_hab, y = GES_hab, color = Group)) + geom_point(na.rm = TRUE) + geom_smooth(method = 'lm', formula = y ~ poly(x, 2), se = FALSE, color = 'darkorange') + labs(title = "Courbe de Kuznets environnementale en 2020", x = "PIB par habitant", y = "Emmission de GES")
+CKE_2020_graph <- ggplot(CKE_2020, aes(x = PIB_hab, y = GES_hab, color = Group)) + geom_point(na.rm = TRUE) + geom_smooth(method = 'lm', formula = y ~ poly(x, 2), se = FALSE, color = 'darkorange') + labs(title = "CKE en 2020", x = "PIB par habitant", y = "Emmission de GES")
 
 
-
+(CKE_1990_graph  | CKE_2020_graph ) + plot_annotation(title = "Les courbes de Kuznets environnementales (CKE) en 1990 et 2020")
 ```
 
 En utilisant les données des pays pour les emissions de GES et les PIB
@@ -251,10 +237,10 @@ développées, or ce n'est pas ce qui est observées empiriquement, bien
 qu'en 2020 il semble y avoir un seuil aux émissions de GES qui n'étaient
 pas constaté en 1990. Toutefois, l'année 2020 est aussi une année
 particulière en raison de la pandémie de COVID-19 qui a drastiquement
-diminué les émissions de CO2, comme le montre l'un des graphiques
-précédent.
+diminué les émissions de GES, comme le montre le graphique sur le lien entre taux de croissance du PIB et taux de croissance des émissions GES  des pays non membres de l'OCDE. 
+Ainsi comme l'indiquent Bishwa S. Koirala, Hui Li et Robert P. Berrens (2011), le point de bascule du revenu correspondant est à la fois extrêmement élevé en termes relatifs (environ 10 fois le PIB mondial par habitant en parité de pouvoir d'achat de 2007), bien en dehors de la plage observée des données, et nettement supérieure à tous les scénarios de croissance des revenus (par exemple, GIEC, 2000) pour le 21ème siècle qui contrôlent le CO2 à des niveaux acceptables (par exemple, 354 ppm en 1990). Ainsi, la littérature de l’EKC n’offre aucune base permettant de prédire qu’une croissance économique continue entraînera une réduction significative des émissions de CO2, en l’absence de mesures politiques spécifiques pour y parvenir.
 
-I.3 Identité de Kaya
+##C. Identité de Kaya
 
 "L'identité de Kaya, relie les émissions anthropique de dioxyde de
 carbone à des paramètre d'ordre démographique, économique et
@@ -887,7 +873,7 @@ vulnarabilite_OCDE_growth <- vulnarabilite_OCDE_growth %>% mutate(part_populatio
 
 vulnarabilite_OCDE_growth<- vulnarabilite_OCDE_growth %>% pivot_longer(cols = c(part_population_exposée_aux_incendies_incontrôlés,part_population_exposée_aux_journées_chaudes,part_population_exposée_aux_journées_glacées), names_to = "Variable", values_to = "Taux") 
 
-ggplot(vulnarabilite_OCDE_growth, aes(x = Année, y = Taux, color = Variable, linetype = Variable, group = Variable)) + geom_point(na.rm = TRUE)  + geom_line(na.rm = TRUE) + labs(title = "Part de la population de l'OCDE exposée aux incendies incontrôlées, \n aux journées chaudes  et aux journées glacées", x = "Année", y = "Taux (%)", color = "Variable") +  theme(axis.text.x=element_text(angle=50, size=8, vjust=0.5)) +   geom_smooth(method = 'loess',formula = 'y ~ x' , alpha = 0.3, linewidth = 0.5, se = FALSE, color = 'black')
+ggplot(vulnarabilite_OCDE_growth, aes(x = Année, y = Taux, color = Variable, linetype = Variable, group = Variable)) + geom_point(na.rm = TRUE)  + geom_line(na.rm = TRUE) + labs(title = "Part de la population de l'OCDE exposée aux incendies incontrôlées, \n aux journées chaudes  et aux journées glacées", x = "Année", y = "Taux (%)", color = "Variable") +  theme(axis.text.x=element_text(angle=50, size=8, vjust=0.5)) +   geom_smooth(method = 'loess',formula = 'y ~ x' , alpha = 0.3, linewidth = 0.5, se = FALSE, color = 'darkorange')
 
 
 
@@ -963,3 +949,8 @@ Hauteur moyenne des précipitations (mm par an)
 # Hauteur moyenne des précipitations (mm par an)
 
 ```
+
+
+Sources : 
+Grossman G. & Krueger A. (1994). Economic Growth and the Environment. NBER Working Papers n°4634
+Bishwa S. Koirala, Hui Li et Robert P. Berrens, « Further Investigation of Environmental Kuznets Curve Studies Using Meta-Analysis », International Journal of Ecological Economics and Statistics, vol. 22, no S11,‎ 16 juin 2011, p. 13–32
