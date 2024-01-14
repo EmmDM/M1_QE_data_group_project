@@ -169,7 +169,7 @@ dessus de la droite d'équation y = x sont des pays où le découplage n'a
 pas eu lieu. Les pays dont le point se trouve en dessous de la droite
 d'équation y = x mais au dessus de l'axe des abscisse, sont des pays
 ayant effectués un découplage relatif, c'est à dire dont les émissions
-de GES ont cru plus lentement que le PIB Les pays dont le point est à
+de GES ont cru plus lentement que le PIB. Les pays dont le point est à
 droite de l'axe des ordonnées et en dessous de l'axe des abscisse sont
 des pays ayant effectuées un découplage absolue, c'est à dire les pays
 dont les émissions de GES ont diminué tandis que le PIB a cru
@@ -317,16 +317,13 @@ une ressource cruciale confrontée à des défis mondiaux.
 
 ```{r}
 
-tab_var<- c("Prélèvements bruts d'eau douce par habitant",
-    "Stress hydrique, total des prélèvements d'eau douce en % des ressources internes renouvelables",
-    "Retraits annuels d’eau douce, total (% des ressources internes)",
-    "Retraits annuels d’eau douce, total (milliards de mètres cubes)")
 
- 
+
 
 eau_OCDE <- OCDE_pays %>% filter(Variable %in% c("Prélèvements bruts d'eau douce par habitant","Stress hydrique, total des prélèvements d'eau douce en % des ressources internes renouvelables","Retraits annuels d’eau douce, total (% des ressources internes)","Retraits annuels d’eau douce, total (milliards de mètres cubes)")) %>% select(-`COU`, -`VAR` ,- `Unit`, -`PowerCode`)%>% pivot_longer(cols = c(`1990`,`1991`,`1992`,`1993`,`1994`,`1995`,`1996`,`1997`,`1998`,`1999`,`2000`, `2001`, `2002`, `2003`, `2004`, `2005`, `2006`, `2007`, `2008`, `2009`,`2010`, `2011`, `2012`, `2013`, `2014`, `2015`, `2016`, `2017`, `2018`, `2019`, `2020`),  names_to = "Année", values_to = "Value") %>% mutate(Value = as.numeric(Value))
 
-eau_stat_OCDE <- eau_OCDE %>% group_by(Pays,Variable) %>% summarize(
+eau_stat_OCDE <- eau_OCDE %>% group_by(Pays,Variable) %>% 
+  summarize(
   Valeur_moyenne = mean(`Value`, na.rm = TRUE), 
   valeur_median = median(`Value`, na.rm = TRUE), 
   valeur_min = min(`Value`, na.rm = TRUE), 
@@ -770,9 +767,9 @@ non_OCDE_pays_subvention_éléctricité <- non_OCDE_pays%>%
 
 #Merged data 
 
-merged_data_subvention_éléctricité <- bind_rows(OCDE_pays_subvention_éléctricité, non_OCDE_pays_subvention_éléctricité)
+merged_subvention_éléctricité <- bind_rows(OCDE_pays_subvention_éléctricité, non_OCDE_pays_subvention_éléctricité)
 
-ggplot(merged_data_subvention_éléctricité, aes(x = as.numeric(Année), y = Value, color = Groupe)) +
+ggplot(merged_subvention_éléctricité, aes(x = as.numeric(Année), y = Value, color = Groupe)) +
   geom_smooth(method = "loess", se = FALSE, na.rm = TRUE)+
   labs(title = "Soutien à l'électricité, % soutien total aux combustibles fossiles",
        x = "Année",
@@ -801,8 +798,7 @@ Pour autant certaines mesures sont prises telles que la protection des
 zones terrestres et marines.
 
 ```{r}
-#OCDE
-# pour Zones terrestres et marines protégées (% du territoire total)
+# pour Zones protégées (% du territoire total)
 
 OCDE_zones_protégées_totales <- OCDE_pays %>%
   filter(Variable == "Zones protégées à l'échelle nationale (% du territoire total)") %>%
