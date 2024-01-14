@@ -95,7 +95,7 @@ summary(reg_GES_PIB_OCDE)
 summary(reg_GES_PIB_non_OCDE)
 ```
 
-Les graphiques présentant le lien entre le taux de croissance du PIB et le taux de croissance des émissions GES ainsi que les tableaux de régression, suggèrent une relation positive significative entre taux de croissance du PIB et taux de croissance des émissions de GES pour les deux groupes de pays (OCDE et non-OCDE). Dans le cas du groupe OCDE, chaque augmentation d'une unité dans le taux de croissance du PIB est associée à une augmentation d'environ 1,0843 unité dans le taux de croissance des émissions de gaz  à effet de serre (GES). Tandis que dans le cas du groupe non-OCDE, chaque augmentation d'une unité dans le taux de croissance du PIB est associée à une augmentation d'environ 0.83193 unité dans le taux de croissance des émissions de GES. De plus, les R-squared élevés indiquent que les modèles expliquent une grande partie de la variabilité observée.
+Les graphiques présentant le lien entre le taux de croissance du PIB et le taux de croissance des émissions GES ainsi que les tableaux de régression, suggèrent une relation positive significative entre taux de croissance du PIB et taux de croissance des émissions de GES pour les deux groupes de pays (OCDE et non-OCDE). Dans le cas du groupe OCDE, chaque augmentation d'une unité dans le taux de croissance du PIB est associée à une augmentation d'environ 1,0843 unité dans le taux de croissance des émissions de gaz  à effet de serre (GES). Tandis que dans le cas du groupe non-OCDE, chaque augmentation d'une unité dans le taux de croissance du PIB est associée à une augmentation d'environ 0.73067 unité dans le taux de croissance des émissions de GES. De plus, les R-squared élevés indiquent que les modèles expliquent une grande partie de la variabilité observée.
 
 Ainsi, cela nous conduit à examiner divers indicateurs permettant une meilleure compréhension de l'évolution conjointe des émissions de GES et du PIB des différents pays qui constituent notre panel.
 
@@ -135,7 +135,7 @@ GES_fusion <- bind_rows(mutate(GES_total_OCDE, Group = "OCDE"), mutate(GES_total
 ggplot(GES_fusion, aes(x = Année, y = Ratio_base100, color = Group)) + geom_point() +  labs(title = "Emissions par unité de PIB et par personne en base 100 (1990)", x = "Année", y = "Ratio (Base 100 en 1990)") + theme(axis.text.x=element_text(angle=50, size=8, vjust=0.5)) 
 
 ```
-Le graphique indique une baisse des émissions par unité de PIB et par personne pour les deux groupes depuis 1990. En 2020 pour le groupe OCDE la valeur était environ de 65,8% du niveau de 1990, tandis qu'elle était environ de 90,8% du niveau de 1990. De plus, nous constatons une variation plus marquée dans le groupe des pays non membres de l'OCDE, probablement en raison d'un rattrapage économique observé chez certains d'entre eux qui a entrainé une hausse des émissions de GES.
+Le graphique indique une baisse des émissions par unité de PIB et par personne pour les deux groupes depuis 1990. En 2020 pour le groupe OCDE la valeur était environ de 65,8% du niveau de 1990, tandis qu'elle était environ de 87.4% du niveau de 1990. De plus, nous constatons une variation plus marquée dans le groupe des pays non membres de l'OCDE, probablement en raison d'un rattrapage économique observé chez certains d'entre eux qui a entrainé une hausse des émissions de GES.
 ```{r}
 #Ici le but est de réaliser un diagramme en nuage de point avec en abscisse le taux de croissance du PIB en pourcentage en 2020 depuis 1990 et en ordonnées le taux de croisssance des émissions de GES en pourcentage en 2020 depuis 1990. Cela nous permettra de distinguer les pays qui ont on effectué un découplage et de de quel type de découplage il s'agit
 #OCDE
@@ -407,7 +407,7 @@ consommation augmenter considérablement, notamment pour le secteur
 manufacturier, la production d'électricité et les besoins domestiques.
 Cet écart de croissance est perceptible dans le premier tableau,
 montrant une décroissance des prélèvements bruts d'eau douce par
-habitant en dessous de 400, contrairement aux pays hors OCDE, où les
+habitant en dessous de 400 mètres cubes par habitant, contrairement aux pays hors OCDE, où les
 prélèvements augmentent depuis 2006. Ainsi, la pression exercée sur les
 ressources en eau n'a pas fini d'augmenter, surtout selon les régions du
 monde.
@@ -420,33 +420,29 @@ gaz à effet de serre (HFC, PFC et SF6) sont concentrées principalement
 dans les zones urbaines, dépassant souvent les normes établies. Cette
 surexposition contribue à une augmentation du nombre de décès en raison
 de la présence de produits toxiques dans l'air qui pénètrent les
-poumons. Le nombre de décès a augmenté, passant d'environ un million en
+poumons. 
+Entre 2000 et 2050, le nombre de décès attribuables à la pollution de l'air devrait passer d'environ un million à plus de 3,5 millions. 
+
+Le nombre de décès a augmenté, passant d'environ un million en
 2000 à plus de 3,5 millions d'ici 2050, avec une majorité de pertes
 prévues dans les pays BRIICS.
 
 ```{r}
 CO2_emission_OCDE <-  OCDE_pays %>% filter(Variable %in% c("Émissions de CO2 (kt)","Population, total","Autres émissions de gaz à effet de serre, HFC, PFC et SF6 (milliers de tonnes métriques d’équivalent CO2)")) %>% select(-COU, -VAR ,- Unit, -PowerCode) %>%pivot_longer(cols = c(`1990`,`1991`,`1992`,`1993`,`1994`,`1995`,`1996`,`1997`,`1998`,`1999`,`2000`, `2001`, `2002`, `2003`, `2004`, `2005`, `2006`, `2007`, `2008`, `2009`,`2010`, `2011`, `2012`, `2013`, `2014`, `2015`, `2016`, `2017`, `2018`, `2019`, `2020`),  names_to = "Année", values_to = "Value") %>% mutate(Value = as.numeric(Value)) %>% pivot_wider(names_from = Variable, values_from = Value) 
   
-
 #Création d'un index CO2
 CO2_emission_OCDE_index <- CO2_emission_OCDE %>% filter(Pays%in%unique(CO2_emission_OCDE$Pays)) %>% group_by(Année) %>%
-summarise(CO2_emi_tot = sum(`Émissions de CO2 (kt)`, na.rm = TRUE), Hab_tot = sum(`Population, total`,na.rm = TRUE), Autre_CO2 = sum(`Autres émissions de gaz à effet de serre, HFC, PFC et SF6 (milliers de tonnes métriques d’équivalent CO2)`, na.rm = TRUE)) %>% mutate(CO2_hab = `CO2_emi_tot`/`Hab_tot`)
-
-
+summarise(CO2_emi_tot = sum(`Émissions de CO2 (kt)`, na.rm = TRUE), Hab_tot = sum(`Population, total`,na.rm = TRUE)) %>% mutate(CO2_hab = `CO2_emi_tot`/`Hab_tot`)
 
 CO2_emission_habitant_OCDE <- CO2_emission_OCDE_index %>% group_by(Année) %>%summarise(Ratio = `CO2_emi_tot`/`Hab_tot` )
 CO2_emission_habitant_OCDE <- CO2_emission_habitant_OCDE  %>% mutate(Ratio_base100 = Ratio / Ratio[which(CO2_emission_habitant_OCDE$Année == 1990)]*100)
   
-
 #Création index GEs
-Ges_emission_OCDE_index <- CO2_emission_OCDE %>% filter(Pays%in%unique(CO2_emission_OCDE$Pays)) %>% group_by(Année) %>%
-summarise(Ges_emi_tot = sum(`Autres émissions de gaz à effet de serre, HFC, PFC et SF6 (milliers de tonnes métriques d’équivalent CO2)`, na.rm = TRUE), Hab_tot = sum(`Population, total`,na.rm = TRUE), Autre_CO2 = sum(`Autres émissions de gaz à effet de serre, HFC, PFC et SF6 (milliers de tonnes métriques d’équivalent CO2)`, na.rm = TRUE)) %>% mutate(Ges_hab = `Ges_emi_tot`/`Hab_tot`)
+Ges_emission_OCDE_index <- CO2_emission_OCDE %>% filter(Pays%in%unique(CO2_emission_OCDE$Pays)) %>% group_by(Année) %>% summarise(Ges_emi_tot = sum(`Autres émissions de gaz à effet de serre, HFC, PFC et SF6 (milliers de tonnes métriques d’équivalent CO2)`, na.rm = TRUE), Hab_tot = sum(`Population, total`,na.rm = TRUE)) %>% mutate(Ges_hab = `Ges_emi_tot`/`Hab_tot`)
          
-
 Ges_emission_habitant_OCDE <-Ges_emission_OCDE_index  %>% group_by(Année) %>%summarise(Ratio = `Ges_emi_tot`/`Hab_tot` )
 Ges_emission_habitant_OCDE <- Ges_emission_habitant_OCDE  %>% mutate(Ratio_base100 = Ratio / Ratio[which(Ges_emission_habitant_OCDE$Année == 1990)]*100)
   
-
 # Fusion des deux bases de données
 merged_Ges_CO2_OCDE <- merge(CO2_emission_habitant_OCDE, Ges_emission_habitant_OCDE, by = "Année", suffixes = c("_Ratio", "_Autres"))
 
@@ -465,7 +461,6 @@ ggplot(merged_Ges_CO2_OCDE, aes(x = Année)) +
   ) +
   guides(color = guide_legend(title = NULL))
 
-
 #Non OCDE
 CO2_emission_non_OCDE <-  non_OCDE_pays %>% filter(Variable %in% c("Émissions de CO2 (kt)","Population, total","Autres émissions de gaz à effet de serre, HFC, PFC et SF6 (milliers de tonnes métriques d’équivalent CO2)")) %>% select(-COU, -VAR ,- Unit, -PowerCode) %>%pivot_longer(cols = c(`1990`,`1991`,`1992`,`1993`,`1994`,`1995`,`1996`,`1997`,`1998`,`1999`,`2000`, `2001`, `2002`, `2003`, `2004`, `2005`, `2006`, `2007`, `2008`, `2009`,`2010`, `2011`, `2012`, `2013`, `2014`, `2015`, `2016`),  names_to = "Année", values_to = "Value") %>% mutate(Value = as.numeric(Value)) %>% pivot_wider(names_from = Variable, values_from = Value) 
   
@@ -474,13 +469,11 @@ CO2_emission_non_OCDE <-  non_OCDE_pays %>% filter(Variable %in% c("Émissions d
 Ges_emission_non_OCDE_index <- CO2_emission_non_OCDE %>% filter(Pays%in%unique(CO2_emission_non_OCDE$Pays)) %>% group_by(Année) %>%
 summarise(Ges_emi_tot = sum(`Autres émissions de gaz à effet de serre, HFC, PFC et SF6 (milliers de tonnes métriques d’équivalent CO2)`, na.rm = TRUE), Hab_tot = sum(`Population, total`,na.rm = TRUE), Autre_CO2 = sum(`Autres émissions de gaz à effet de serre, HFC, PFC et SF6 (milliers de tonnes métriques d’équivalent CO2)`, na.rm = TRUE)) %>% mutate(Ges_hab = `Ges_emi_tot`/`Hab_tot`)
          
-
 Ges_emission_habitant_non_OCDE <-Ges_emission_non_OCDE_index  %>% group_by(Année) %>%summarise(Ratio = `Ges_emi_tot`/`Hab_tot` )
 Ges_emission_habitant_non_OCDE <- Ges_emission_habitant_non_OCDE  %>% mutate(Ratio_base100 = Ratio / Ratio[which(Ges_emission_habitant_non_OCDE$Année == 1990)]*100)
-  
 
 ggplot(Ges_emission_habitant_non_OCDE, aes(x = Année, y = Ratio_base100)) + geom_point()+
-  labs( title = "Emissions GES ( HFC, PFC et SF6 ) par personne en base 100 (1990)\n  pour le total des pays Non membres de l'OCDE",
+  labs( title = "Emissions GES ( HFC, PFC et SF6 ) par personne en base 100 (1990)\n  pour le total des pays ,on membres de l'OCDE",
     x = "Année",
     y = "Ratio (Base 100 en 1990)") +
   theme(axis.text.x = element_text(angle = 50, size = 8, vjust = 0.5))
@@ -520,8 +513,6 @@ mortalité_PM25_pop_OCDE <- mortalité_PM25_pop_OCDE %>% mutate(taux_mortalite_P
 reg_mortalite_PM25_OCDE=lm('taux_mortalite_PM25 ~ `Croissance de la population urbaine (% annuel)`', data = mortalité_PM25_pop_OCDE)
 summary(reg_mortalite_PM25_OCDE)
 ggplot(reg_mortalite_PM25_OCDE, aes(x = `Croissance de la population urbaine (% annuel)`,y = taux_mortalite_PM25)) + geom_point(color='gray', size=1, na.rm = TRUE) + geom_smooth(method='lm', formula = 'y ~ x', se=FALSE, color='red', na.rm = TRUE) + theme_minimal() + labs(title = "Correlation entre le taux de mortalité due à l'exposition au PM2.5 \n par rapport au taux de croissance de la population urbaine (%) ", x = "Croissance de la population urbaine (% annuel)", y = "taux de Mortalité due à l'exposition aux PM2.5")
-
-
 
 #non OCDE
 mortalité_PM25_pop_non_OCDE <-  non_OCDE_pays %>% filter(Variable %in% c("Croissance de la population (% annuel)","Mortalité due à l'exposition aux PM2.5","Croissance de la population urbaine (% annuel)")) %>% select(-`COU`, -`VAR` ,- `Unit`, -`PowerCode`) %>% pivot_longer(cols = c(`1990`,`1991`,`1992`,`1993`,`1994`,`1995`,`1996`,`1997`,`1998`,`1999`,`2000`, `2001`, `2002`, `2003`, `2004`, `2005`, `2006`, `2007`, `2008`, `2009`,`2010`, `2011`, `2012`, `2013`, `2014`, `2015`, `2016`, `2017`, `2018`, `2019`, `2020`),  names_to = "Année", values_to = "Value") %>% mutate(Value = as.numeric(Value)) %>% pivot_wider(names_from = Variable, values_from = Value) 
