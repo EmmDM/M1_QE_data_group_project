@@ -1090,12 +1090,28 @@ Hauteur moyenne des précipitations (mm par an)
 
 ```
 
-Pour conclure, afin de répondre à notre question de recherche intitulée
-"Comment la transition écologique a-t-elle évolué entre 1990 et 2020
-pour les groupes de pays de l’OCDE et ceux hors de cette organisation? "
-nous nous sommes basés sur 3 grand aspects. Le découplage de la
-croissance économique par rapport à l'impact environnementale à travers
-des an
+# **Conclusion**
+
+Entre 1990 et 2020, la transition écologique a engendré des disparités
+marquées entre les pays de l'OCDE et les autres. Bien que certains pays
+de l'OCDE aient réussi à découpler la croissance économique des
+émissions de CO2, des défis persistent, particulièrement pour les pays
+hors OCDE. Les pressions environnementales, mesurées par les
+prélèvements d'eau douce, affichent des corrélations variables avec les
+migrations nettes, soulignant la nécessité d'approches spécifiques.
+
+Les migrations ont suivi des tendances divergentes, avec une
+urbanisation croissante hors OCDE et des migrations nettes positives
+dans l'OCDE, largement motivées par l'immigration de travail. Les
+impacts des changements climatiques se traduisent par une vulnérabilité
+croissante dans les pays de l'OCDE, en particulier face aux journées
+chaudes.
+
+En résumé, la transition écologique dévoile des parcours différents
+entre les deux groupes de pays. Les défis environnementaux et
+climatiques exigent des approches adaptées, tant dans l'OCDE que hors de
+cette organisation. La collaboration internationale demeure cruciale
+pour instaurer une transition écologique globale, équitable et efficace.
 
 ## Bibliographie
 
