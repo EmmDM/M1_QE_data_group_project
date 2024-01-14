@@ -634,7 +634,7 @@ de moitié le coût de cette transition. L'investissement public est
 essentiel, et une coopération internationale, surtout pour les pays en
 développement, est nécessaire pour atténuer les disparités existantes.
 
-*B.2. Subventions* Subventions + prise de décision de protection de l'environnement
+*B.2. Subventions* 
 
 Le dispositif de subvention est une aide aux entreprises pour les
 accompagner dans leur transition écologique vers des énergies plus
@@ -738,85 +738,9 @@ subventions. Des solutions alternatives, telles que l'énergie verte,
 doivent être explorées pour atteindre les objectifs climatiques
 mondiaux.
 
-Pour autant certaines mesures sont prises telles que la protection des
-zones terrestres et marines.
+# III. Vulnérabilités et stratégies adaptives
 
-```{r}
-#OCDE
-# pour Zones terrestres et marines protégées (% du territoire total)
-
-OCDE_zones_protégées_totales <- OCDE_pays %>%
-  filter(Variable == "Zones protégées à l'échelle nationale (% du territoire total)") %>%
-  pivot_longer(cols = `2016`:`2020`, names_to = "Année", values_to = "Value") %>%
-  mutate(Value = as.numeric(Value), Groupe = "OCDE")
-
-non_OCDE_zones_protégées_totales <- non_OCDE_pays %>%
-  filter(Variable == "Zones protégées à l'échelle nationale (% du territoire total)") %>%
-  pivot_longer(cols = `2016`:`2020`, names_to = "Année", values_to = "Value") %>%
-  mutate(Value = as.numeric(Value), Groupe = "non_OCDE")
-
-# Fusion des deux bases de données
-merged_zones_protégées <- bind_rows(OCDE_zones_protégées_totales, non_OCDE_zones_protégées_totales)
-
-
-average_zones_protégées <- merged_zones_protégées %>%
-  group_by(Année, Groupe) %>%
-  summarize(Average_Value = mean(Value, na.rm = TRUE), .groups = 'drop')
-
-
-ggplot(average_zones_protégées, aes(x = as.factor(Année), y = Average_Value, fill = Groupe)) +
-  geom_bar(stat = "identity", position = "dodge", width = 0.7, na.rm = TRUE) +
-  labs(title = "Moyenne des zones protégées à l'échelle nationale (% du territoire total)",
-       x = "Année",
-       y = "Pourcentage moyen des zones protégées") +
-  theme_minimal()
-
-
-# pour Zones terrestres et marines protégées (% du territoire total)
-
-OCDE_terrestres_marines_protégées_totales <- OCDE_pays %>%
-  filter(Variable == "Zones terrestres et marines protégées (% du territoire total)") %>%
-  pivot_longer(cols = `2016`:`2020`, names_to = "Année", values_to = "Value") %>%
-  mutate(Value = as.numeric(Value), Groupe = "OCDE")
-
-non_OCDE_terrestres_marines_protégées_totales <- non_OCDE_pays %>%
-  filter(Variable == "Zones terrestres et marines protégées (% du territoire total)") %>%
-  pivot_longer(cols = `2016`:`2020`, names_to = "Année", values_to = "Value") %>%
-  mutate(Value = as.numeric(Value), Groupe = "non_OCDE")
-
-# Fusion des deux bases de données
-merged_terrestres_marines_protégées <- bind_rows(OCDE_terrestres_marines_protégées_totales, non_OCDE_terrestres_marines_protégées_totales)
-
-average_terrestres_marines <- merged_terrestres_marines_protégées %>%
-  group_by(Année, Groupe) %>%
-  summarize(Average_Value = mean(Value, na.rm = TRUE), .groups = 'drop')
-
-
-ggplot(average_terrestres_marines , aes(x = as.factor(Année), y = Average_Value, fill = Groupe)) +
-  geom_bar(stat = "identity", position = "dodge", width = 0.7, na.rm = TRUE) +
-  labs(title = "Moyenne des zones terrestres et marines protégées à l'échelle nationale \n (% du territoire total)",
-       x = "Année",
-       y = "Pourcentage moyen des zones terrestres et marines protégées") +
-  theme_minimal()
-
-```
-
-Notre graph commence en 2016 car il n'y a pas de donnée avant cette
-date. Les zones protégées, comprenant des sites cruciaux pour la
-biodiversité, ne cessent d'augmenter depuis 2015 à l'échelle mondiale.
-Elles jouent un rôle essentiel dans la conservation des espèces et des
-moyens de subsistance, reflétant une prise de conscience mondiale sur la
-nécessité de préserver les ressources naturelles. Les graphiques
-indiquent une moyenne plus élevée des zones protégées pour les pays
-membres de l'OCDE. Toutefois, selon le pays, les zones sont plus ou
-moins difficile à protéger.En Amazonie par exemple où le président du
-Brésil laisse portes ouvertes aux industriels, car elle represente un
-des atouts majeurs pour s'enrichir et développer le pays, il es
-compliqué de rendre complétement protéger cette mine d'or.
-
-# **III- Vulnérabilités et stratégies adaptives**
-
-## **A- Variables démographiques**
+## A. Variables démographiques
 
 La migration des populations vers les espaces urbains s'est réalisée de
 manière continue depuis l'industrialisation au 19ᵉ siècle. Depuis 2007,
@@ -850,7 +774,6 @@ OCDE_migration <- OCDE_pays %>%
   filter(Variable == "Migration nette") %>%
   pivot_longer(cols = `1990`:`2020`, names_to = "Année", values_to = "Value") %>%
   mutate(Value = as.numeric(Value), Groupe = "OCDE")
-
 
 
 ggplot(average_pop_urbaine, aes(x = as.factor(Année), y = Average_pop_urbaine, group = Groupe, color = Groupe)) +
@@ -914,16 +837,11 @@ populations hors OCDE.
 #OCDE
 migration_eau_OCDE <-  OCDE_pays %>% filter(Variable %in% c("Prélèvements bruts d'eau douce par habitant", "Migration nette")) %>% select(-`COU`, -`VAR` ,- `Unit`, -`PowerCode`) %>% pivot_longer(cols = c(`1990`,`1991`,`1992`,`1993`,`1994`,`1995`,`1996`,`1997`,`1998`,`1999`,`2000`, `2001`, `2002`, `2003`, `2004`, `2005`, `2006`, `2007`, `2008`, `2009`,`2010`, `2011`, `2012`, `2013`, `2014`, `2015`, `2016`, `2017`, `2018`, `2019`, `2020`),  names_to = "Année", values_to = "Value") %>% mutate(Value = as.numeric(Value)) %>% pivot_wider(names_from = Variable, values_from = Value) 
 
-
 reg_migration_eau_OCDE <- lm(`Prélèvements bruts d'eau douce par habitant` ~ `Migration nette`, data = migration_eau_OCDE)
 
 summary(reg_migration_eau_OCDE)
 
-
 ggplot(reg_migration_eau_OCDE, aes(x = `Prélèvements bruts d'eau douce par habitant`,y = `Migration nette`)) + geom_point(color='gray', size=1, na.rm = TRUE) + geom_smooth(method='lm', formula = 'y ~ x', se=FALSE, color='red', na.rm = TRUE) + theme_minimal() + labs(title = "Correlation entre la migration nette et les prélevements bruts d'eau douce \n par habitant - OCDE", x = "Prélèvements bruts d'eau douce par habitant", y = "Migration nette")
-
-
-
 ```
 
 Le test statistique entre migration nette et prélèvements bruts d'eau
@@ -938,8 +856,7 @@ migrer à l'intérieur de leurs pays d'ici 2050. Une réduction des
 80%.
 
 
-## B- vulnérabilité humaine face aux changement climatiques
-
+## B. vulnérabilité humaine face aux changement climatiques
 
 ```{r}
 vulnerabilite_OCDE <- OCDE_pays %>% filter(Variable %in% c("Pourcentage de la population exposée aux journées glacées","Pourcentage de la population exposée aux journées chaudes","Pourcentage de la population exposée aux incendies incontrôlés","Note sur les progrès de réduction des risques de catastrophes (échelle de 1 à 5, 5 étant la meilleure note)","Stress hydrique, total des prélèvements d'eau douce en % des ressources internes renouvelables","Population, total")) %>% select(-`COU`, -`VAR` ,- `Unit`, -`PowerCode`) %>% pivot_longer(cols = c(`1990`,`1991`,`1992`,`1993`,`1994`,`1995`,`1996`,`1997`,`1998`,`1999`,`2000`, `2001`, `2002`, `2003`, `2004`, `2005`, `2006`, `2007`, `2008`, `2009`,`2010`, `2011`, `2012`, `2013`, `2014`, `2015`, `2016`, `2017`, `2018`, `2019`, `2020`),  names_to = "Année", values_to = "Value") %>% mutate(Value = as.numeric(Value)) %>% pivot_wider(names_from = Variable, values_from = Value) 
@@ -996,11 +913,82 @@ Les valeurs observées sur le graphique indique une exposition significative de 
 Eswatini. De plus la moyenne pour les pays non-OCDE (1.46%) est également supérieure à celle des pays de l'OCDE (0.18%), suggérant une exposition globale plus élevée dans les pays non-OCDE. 
 
 
+## C. Stratégies adaptatives 
+
+Pour autant certaines mesures sont prises telles que la protection des zones terrestres et marines.
+
+```{r}
+#OCDE
+# pour Zones terrestres et marines protégées (% du territoire total)
+
+OCDE_zones_protégées_totales <- OCDE_pays %>%
+  filter(Variable == "Zones protégées à l'échelle nationale (% du territoire total)") %>%
+  pivot_longer(cols = `2016`:`2020`, names_to = "Année", values_to = "Value") %>%
+  mutate(Value = as.numeric(Value), Groupe = "OCDE")
+
+non_OCDE_zones_protégées_totales <- non_OCDE_pays %>%
+  filter(Variable == "Zones protégées à l'échelle nationale (% du territoire total)") %>%
+  pivot_longer(cols = `2016`:`2020`, names_to = "Année", values_to = "Value") %>%
+  mutate(Value = as.numeric(Value), Groupe = "non_OCDE")
+
+# Fusion des deux bases de données
+merged_zones_protégées <- bind_rows(OCDE_zones_protégées_totales, non_OCDE_zones_protégées_totales)
+
+average_zones_protégées <- merged_zones_protégées %>%
+  group_by(Année, Groupe) %>%
+  summarize(Average_Value = mean(Value, na.rm = TRUE), .groups = 'drop')
+
+ggplot(average_zones_protégées, aes(x = as.factor(Année), y = Average_Value, fill = Groupe)) +
+  geom_bar(stat = "identity", position = "dodge", width = 0.7, na.rm = TRUE) +
+  labs(title = "Moyenne des zones protégées à l'échelle nationale (% du territoire total)",
+       x = "Année",
+       y = "Pourcentage moyen des zones protégées") +
+  theme_minimal()
+
+# pour Zones terrestres et marines protégées (% du territoire total)
+OCDE_terrestres_marines_protégées_totales <- OCDE_pays %>%
+  filter(Variable == "Zones terrestres et marines protégées (% du territoire total)") %>%
+  pivot_longer(cols = `2016`:`2020`, names_to = "Année", values_to = "Value") %>%
+  mutate(Value = as.numeric(Value), Groupe = "OCDE")
+
+non_OCDE_terrestres_marines_protégées_totales <- non_OCDE_pays %>%
+  filter(Variable == "Zones terrestres et marines protégées (% du territoire total)") %>%
+  pivot_longer(cols = `2016`:`2020`, names_to = "Année", values_to = "Value") %>%
+  mutate(Value = as.numeric(Value), Groupe = "non_OCDE")
+
+# Fusion des deux bases de données
+merged_terrestres_marines_protégées <- bind_rows(OCDE_terrestres_marines_protégées_totales, non_OCDE_terrestres_marines_protégées_totales)
+
+average_terrestres_marines <- merged_terrestres_marines_protégées %>%
+  group_by(Année, Groupe) %>%
+  summarize(Average_Value = mean(Value, na.rm = TRUE), .groups = 'drop')
+
+
+ggplot(average_terrestres_marines , aes(x = as.factor(Année), y = Average_Value, fill = Groupe)) +
+  geom_bar(stat = "identity", position = "dodge", width = 0.7, na.rm = TRUE) +
+  labs(title = "Moyenne des zones terrestres et marines protégées à l'échelle nationale \n (% du territoire total)",
+       x = "Année",
+       y = "Pourcentage moyen des zones terrestres et marines protégées") +
+  theme_minimal()
+
+```
+
+Notre graphique commence en 2016 car il n'y a pas de donnée avant cette
+date. Les zones protégées, comprenant des sites cruciaux pour la
+biodiversité, ne cessent d'augmenter depuis 2015 à l'échelle mondiale.
+Elles jouent un rôle essentiel dans la conservation des espèces et des
+moyens de subsistance, reflétant une prise de conscience mondiale sur la
+nécessité de préserver les ressources naturelles. Les graphiques
+indiquent une moyenne plus élevée des zones protégées pour les pays
+membres de l'OCDE. Toutefois, selon le pays, les zones sont plus ou
+moins difficile à protéger.Par exemple, au Brésil les gouvernements succéssifs laissent portes ouvertes aux industriels, car la forêt amozienne représente un des atouts majeurs pour s'enrichir et développer le pays, il est
+compliqué de protéger cette mine d'or.
+
+
 Par ailleurs, en 2011 certains pays du monde ont été auto-évalué sur les progrès de réduction des risques de catastrophes (échelle de 1 à 5, 5 étant la meilleure note) dans le cadre de la priorité 1 des rapports nationaux d'avancement du cadre de Hyogo.
 
  
 ```{r}
-
 note_progres_non_OCDE <- non_OCDE_pays %>% filter(Variable %in% c("Note sur les progrès de réduction des risques de catastrophes (échelle de 1 à 5, 5 étant la meilleure note)")) %>% select(-`COU`, -`VAR` ,- `Unit`, -`PowerCode`) %>% pivot_longer(cols = c(`1990`,`1991`,`1992`,`1993`,`1994`,`1995`,`1996`,`1997`,`1998`,`1999`,`2000`, `2001`, `2002`, `2003`, `2004`, `2005`, `2006`, `2007`, `2008`, `2009`,`2010`, `2011`, `2012`, `2013`, `2014`, `2015`, `2016`, `2017`, `2018`, `2019`, `2020`),  names_to = "Année", values_to = "Value") %>% mutate(Value = as.numeric(Value)) %>% pivot_wider(names_from = Variable, values_from = Value) 
 
 
@@ -1017,8 +1005,57 @@ ggplot(note_progres_fusion, aes(y = reorder(Pays,`Note sur les progrès de rédu
 
 ```
 
-Bien que tous les pays n'ont pas été évalués, la moyenne de l'OCDE est de 3.80 et celle du groupe Non-OCDE de 3.14, cela mnontre un effort global dans la volonté de réduire les risques de catastrophes, toutefois nons n'avons pas plus de données pour déterminer une évolution de cette note. Par ailleurs, selon les rapports du GIEC, la vulnérabilité des pays aux événements climatiques extrêmes devraient augmenter à l'avenir en raison du réchauffement climatique. Les impacts potentiels de cette vulnérabilité accrue pourraient inclure des perturbations majeurs dans les systèmes sociaux, économiques et environnementaux, avec des conséquences sur la sécurité alimentaire, la santé publique et la stabilité sociale. Il est donc essentiel que l'ensemble des pays progresse dans la réduction des risques de catastrophes.
+Bien que tous les pays n'ont pas été évalués, la moyenne de l'OCDE est de 3.80 et celle du groupe Non-OCDE de 3.14, cela montre un effort global dans la volonté de réduire les risques de catastrophes, toutefois nons n'avons pas plus de données pour déterminer une évolution de cette note. Par ailleurs, selon les rapports du GIEC, la vulnérabilité des pays aux événements climatiques extrêmes devraient augmenter à l'avenir en raison du réchauffement climatique. Les impacts potentiels de cette vulnérabilité accrue pourraient inclure des perturbations majeurs dans les systèmes sociaux, économiques et environnementaux, avec des conséquences sur la sécurité alimentaire, la santé publique et la stabilité sociale. Il est donc essentiel que l'ensemble des pays progresse dans la réduction des risques de catastrophes.
 
-Sources : 
-Grossman G. & Krueger A. (1994). Economic Growth and the Environment. NBER Working Papers n°4634
-Bishwa S. Koirala, Hui Li et Robert P. Berrens, « Further Investigation of Environmental Kuznets Curve Studies Using Meta-Analysis », International Journal of Ecological Economics and Statistics, vol. 22, no S11,‎ 16 juin 2011, p. 13–32
+# Conclusion
+
+Pour conclure, entre 1990 et 2020, la transition écologique a engendré des disparités
+marquées entre les pays de l'OCDE et les autres pays. Bien que certains pays
+de l'OCDE aient réussi à découpler la croissance économique des
+émissions de CO2, des défis persistent, notamment car ce n'est pas le seul indicateur environnemental à prendre en compte dans la crise climatique. Des plus, les pressions environnementales, mesurées par les
+prélèvements d'eau douce, affichent des corrélations variables avec les
+migrations nettes, soulignant la nécessité d'approches spécifiques.
+
+Les migrations ont suivi des tendances divergentes, avec une
+urbanisation croissante hors OCDE et des migrations nettes positives
+dans l'OCDE, largement motivées par l'immigration de travail. Les
+impacts des changements climatiques se traduisent par une vulnérabilité
+croissante dans les pays de l'OCDE, en particulier face aux journées
+chaudes.
+
+En résumé, la transition écologique dévoile des parcours différents
+entre les deux groupes de pays. Les défis environnementaux et
+climatiques exigent des approches adaptées, tant dans l'OCDE que hors de
+cette organisation. La collaboration internationale demeure cruciale
+pour instaurer une transition écologique globale, équitable et efficace.
+
+
+## Bibliographie
+
+- Grossman G. & Krueger A. (1994). Economic Growth and the Environment. NBER Working Papers n°4634
+
+- Bishwa S. Koirala, Hui Li et Robert P. Berrens, « Further Investigation of Environmental Kuznets Curve Studies Using Meta-Analysis », International Journal of Ecological Economics and Statistics, vol. 22, no S11,16 juin 2011, p. 13–32
+
+- Organisation de Coopération et de Développement Économiques (OCDE).
+(2012). Perspectives de l'environnement de l'OCDE à l'horizon 2050. OECD
+Publishing. 
+<https://read.oecd-ilibrary.org/environment/perspectives-de-l-environnement-de-l-ocde-a-l-horizon-2050_env_outlook-2012-fr#page15>
+
+-Banque mondiale. (2021, 13 septembre). Le changement climatique pourrait
+contraindre 216 millions de personnes à migrer à l'intérieur de leur
+propre pays d'ici 2050. Communiqué de presse. <https://www.banquemondiale.org/fr/news/press-release/2021/09/13/climate-change-could-force-216-million-people-to-migrate-within-their-own-countries-by-2050>
+
+- OCDE. (année). Exposition à la pollution de l'air \[Graphique\].
+Data.OECD.
+<https://data.oecd.org/fr/air/exposition-a-la-pollution-de-l-air.htm#indicator-chart>
+
+Santé Publique France. (année). Impacts de l'exposition chronique aux
+particules fines sur la mortalité en France continentale et analyse des
+gains en santé de plusieurs scénarios \[Rapport de synthèse\].
+<https://www.santepubliquefrance.fr/determinants-de-sante/pollution-et-sante/air/documents/rapport-synthese/impacts-de-l-exposition-chronique-aux-particules-fines-sur-la-mortalite-en-france-continentale-et-analyse-des-gains-en-sante-de-plusieurs-scenarios>
+
+Alternatives Économiques. (2017, 1er février). Population urbaine et
+population rurale dans le monde : les milliards de projections selon le
+scénario médian.
+<https://www.alternatives-economiques.fr/population-urbaine-population-rurale-monde-milliards-projections-selon-scenario-median-0102201777461.html>
+
