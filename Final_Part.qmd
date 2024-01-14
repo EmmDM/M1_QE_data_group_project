@@ -305,8 +305,6 @@ PIB, puis d'analyser les politiques mises en place pour réduire cela.
 
 ## **A- Pression environnementales**
 
-*A.1 : Intensité de l'eau*
-
 Nous envisageons de comparer les intensités sur l'eau et la qualité de
 l'air entre les pays de l'OCDE et hors OCDE. Pour évaluer l'utilisation
 durable de l'eau, nous examinerons l'intensité de l'eau par habitant et
@@ -377,7 +375,7 @@ print(tableau_non_OCDE)
 Voici un tableau synthétique des quatre variables, offrant une vision
 globale à l'aide d'outils statistiques. Les disparités entre les pays
 sont significatives. Par exemple, l'Allemagne a un retrait annuel d'eau
-douce par habitant en pourcentage des ressources internes maximal
+douce par habitant en pourcentage des ressources internes maximales
 d'environ 46 %, tandis que l'Australie ne dépasse pas les 4,5%. La
 situation géographique, avec une surface océanique plus vaste au sud,
 ainsi que les variations des précipitations et du rayonnement solaire,
@@ -413,10 +411,10 @@ de la population mondiale vivra dans des bassins soumis à un stress
 hydrique élevé, correspondant à plus de 40 % de demande en eau dite
 "bleue" (eau douce des aquifères, cours d'eau et lacs). Ces indicateurs
 ne reflètent pas la réalité complexe. La diminution de la moyenne
-annuelle traduit le fait que les pays de l'OCDE, ayant achevé leurs
-croissances exponentielles, ont souvent recours à la délocalisation.
+annuelle traduit le fait que les pays de l'OCDE, ayant achevé leur
+croissance exponentielle, ont souvent recours à la délocalisation.
 
-Cependant, les BRICS et les autres pays émergents devraient voir leur
+Cependant, les BRIICS et les autres pays émergents devraient voir leur
 consommation augmenter considérablement, notamment pour le secteur
 manufacturier, la production d'électricité et les besoins domestiques.
 Cet écart de croissance est perceptible dans le premier tableau,
@@ -426,17 +424,14 @@ prélèvements augmentent depuis 2006. Ainsi, la pression exercée sur les
 ressources en eau n'a pas fini d'augmenter, surtout selon les régions du
 monde.
 
-*A.2 : Qualité de l'air*
-
-L'indice de qualité de l'air est utilisé pour évaluer les niveaux de
-pollution atmosphérique. Actuellement, les émissions de CO2 et d'autres
-gaz à effet de serre (HFC, PFC et SF6) sont concentrées principalement
-dans les zones urbaines, dépassant souvent les normes établies. Cette
-surexposition contribue à une augmentation du nombre de décès en raison
-de la présence de produits toxiques dans l'air qui pénètrent les
-poumons. Le nombre de décès a augmenté, passant d'environ un million en
-2000 à plus de 3,5 millions d'ici 2050, avec une majorité de pertes
-prévues dans les pays BRIICS.
+En parallèle, la polluton atmosphérique, évaluée par l'indice de qualité
+de l'air présente des risques accrus dans les zones urbaines notamme,t
+en raison des émissions de CO2et d'autrezs gaz à effet de serre (HFC,
+PFC, SF6). Cette surexposition contribue à une augmentation du nombre de
+décès en raison de la présence de produits toxiques dans l'air qui
+pénètrent les poumons. Le nombre de décès a augmenté, passant d'environ
+un million en 2000 à plus de 3,5 millions d'ici 2050, avec une majorité
+de pertes prévues dans les pays BRIICS.
 
 ```{r}
 CO2_emission_OCDE <-  OCDE_pays %>% filter(Variable %in% c("Émissions de CO2 (kt)","Population, total","Autres émissions de gaz à effet de serre, HFC, PFC et SF6 (milliers de tonnes métriques d’équivalent CO2)")) %>% select(-COU, -VAR ,- Unit, -PowerCode) %>%pivot_longer(cols = c(`1990`,`1991`,`1992`,`1993`,`1994`,`1995`,`1996`,`1997`,`1998`,`1999`,`2000`, `2001`, `2002`, `2003`, `2004`, `2005`, `2006`, `2007`, `2008`, `2009`,`2010`, `2011`, `2012`, `2013`, `2014`, `2015`, `2016`, `2017`, `2018`, `2019`, `2020`),  names_to = "Année", values_to = "Value") %>% mutate(Value = as.numeric(Value)) %>% pivot_wider(names_from = Variable, values_from = Value) 
@@ -579,17 +574,15 @@ l'accès aux soins selon les pays.
 ## **B- Politiques Environnementales**
 
 Après avoir pu observer les pressions exercées par les composantes de
-notre activité économique, nous allons pouvoir nous interesser aux
+notre activité économique, nous allons pouvoir nous intéresser aux
 politiques mises en place pour les réguler.
-
-*B.1* tax
 
 Une taxe environnementale est caractérisée par son action sur les coûts
 des activités ou les prix des produits qui ont un effet négatif sur
 l'environnement. C'est une internalisation de l'externalité négative.La
-taxe carbone est la plus utilisé, elle taxe les émissions de dioxyde de
+taxe carbone est la plus utilisée, elle taxe les émissions de dioxyde de
 carbone, le gaz à effet de serre qui contribue majoritairement à la
-deterioration du capital naturel.
+détérioration du capital naturel.
 
 ```{r}
 
@@ -675,13 +668,21 @@ de moitié le coût de cette transition. L'investissement public est
 essentiel, et une coopération internationale, surtout pour les pays en
 développement, est nécessaire pour atténuer les disparités existantes.
 
-*B.2* Subventions + prise de décision de protection de l'environnement
+En transitionnant de la discussion sur les investissements en R&D et la
+coopération internationale vers l'examen des subventions, nous passons
+du niveau macro-économique aux mécanismes spécifiques de soutien aux
+entreprises. Alors que les investissements en R&D sont identifiés comme
+un levier clé pour faciliter la transition écologique, l'efficacité des
+subventions dans cette démarche est une question plus détaillée.
 
-Le dispositif de subvention est une aide aux entreprises pour les
-accompagner dans leur transition écologique vers des énergies plus
-durables. Cependant, certaines subventions, au contraire, retardent la
-transition. Nous allons observer l'évolution des subventions à travers
-plusieurs variables.
+Les subventions peuvent jouer un rôle significatif dans l'encouragement
+des entreprises à adopter des pratiques plus durables, mais il est
+crucial d'évaluer leur impact réel. Certaines subventions peuvent
+contribuer positivement à la transition, tandis que d'autres pourraient
+avoir des effets contraires. En examinant l'évolution de ces subventions
+à travers diverses variables, nous chercherons à mieux comprendre
+comment ces incitations financières peuvent influencer concrètement le
+chemin vers des énergies plus durables.
 
 ```{r}
 library(ggplot2)
@@ -859,7 +860,7 @@ ggplot(average_terrestres_marines , aes(x = as.factor(Année), y = Average_Value
 
 ```
 
-Notre graph commence en 2016 car il n'y a pas de donnée avant cette
+Notre graphe commence en 2016, car il n'y a pas de donnée avant cette
 date. Les zones protégées, comprenant des sites cruciaux pour la
 biodiversité, ne cessent d'augmenter depuis 2015 à l'échelle mondiale.
 Elles jouent un rôle essentiel dans la conservation des espèces et des
@@ -867,10 +868,10 @@ moyens de subsistance, reflétant une prise de conscience mondiale sur la
 nécessité de préserver les ressources naturelles. Les graphiques
 indiquent une moyenne plus élevée des zones protégées pour les pays
 membres de l'OCDE. Toutefois, selon le pays, les zones sont plus ou
-moins difficile à protéger.En Amazonie par exemple où le président du
-Brésil laisse portes ouvertes aux industriels, car elle represente un
-des atouts majeurs pour s'enrichir et développer le pays, il es
-compliqué de rendre complétement protéger cette mine d'or.
+moins difficiles à protéger.En Amazonie par exemple où le président du
+Brésil laisse porte ouverte aux industriels, car elle represente un des
+atouts majeurs pour s'enrichir et développer le pays, il est compliqué
+de rendre complétement protégée cette mine d'or.
 
 # **III- Vulnérabilités et stratégies adaptives**
 
@@ -991,7 +992,7 @@ partiellement les variations. Malgré un lien entre la hausse de la
 migration et l'accroissement des pressions environnementales, ce lien
 est limité. Les conditions climatiques extrêmes rendent inévitable la
 migration forcée, prévoyant 216 millions de personnes contraintes de
-migrer à l'intérieur de leurs pays d'ici 2050. Une réduction des
+migrer à l'intérieur de leur pays d'ici 2050. Une réduction des
 émissions de gaz à effet de serre pourrait atténuer ces migrations de
 80%.
 
@@ -1088,3 +1089,36 @@ Hauteur moyenne des précipitations (mm par an)
 # Hauteur moyenne des précipitations (mm par an)
 
 ```
+
+Pour conclure, afin de répondre à notre question de recherche intitulée
+"Comment la transition écologique a-t-elle évolué entre 1990 et 2020
+pour les groupes de pays de l’OCDE et ceux hors de cette organisation? "
+nous nous sommes basés sur 3 grand aspects. Le découplage de la
+croissance économique par rapport à l'impact environnementale à travers
+des an
+
+## Bibliographie
+
+Organisation de Coopération et de Développement Économiques (OCDE).
+(2012). Perspectives de l'environnement de l'OCDE à l'horizon 2050. OECD
+Publishing.
+<https://read.oecd-ilibrary.org/environment/perspectives-de-l-environnement-de-l-ocde-a-l-horizon-2050_env_outlook-2012-fr#page15>
+
+Banque mondiale. (2021, 13 septembre). Le changement climatique pourrait
+contraindre 216 millions de personnes à migrer à l'intérieur de leur
+propre pays d'ici 2050. Communiqué de presse.
+<https://www.banquemondiale.org/fr/news/press-release/2021/09/13/climate-change-could-force-216-million-people-to-migrate-within-their-own-countries-by-2050>
+
+OCDE. (année). Exposition à la pollution de l'air \[Graphique\].
+Data.OECD.
+<https://data.oecd.org/fr/air/exposition-a-la-pollution-de-l-air.htm#indicator-chart>
+
+Santé Publique France. (année). Impacts de l'exposition chronique aux
+particules fines sur la mortalité en France continentale et analyse des
+gains en santé de plusieurs scénarios \[Rapport de synthèse\].
+<https://www.santepubliquefrance.fr/determinants-de-sante/pollution-et-sante/air/documents/rapport-synthese/impacts-de-l-exposition-chronique-aux-particules-fines-sur-la-mortalite-en-france-continentale-et-analyse-des-gains-en-sante-de-plusieurs-scenarios>
+
+Alternatives Économiques. (2017, 1er février). Population urbaine et
+population rurale dans le monde : les milliards de projections selon le
+scénario médian.
+<https://www.alternatives-economiques.fr/population-urbaine-population-rurale-monde-milliards-projections-selon-scenario-median-0102201777461.html>
