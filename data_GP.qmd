@@ -1,27 +1,53 @@
 ---
 title: "Data Group Project"
-author: "Victoire Truchon Bartes & Emmanuel de MOREL"
+author: "Victoire Truchon-Bartès & Emmanuel de MOREL"
 format: html
+echo : false
 ---
-
-Here the link to the github project : https://github.com/EmmDM/M1_QE_data_group_project
-
-Here the links to the original sources : For the OECD : https://stats.oecd.org/index.aspx?lang=fr&datasetcode=green_growth
-
-And for the World Bank : https://donnees.banquemondiale.org/theme/changement-climatique
+### Analyse des tendances de la transition écologique: une étude comparative des pays de l'OCDE et des pays non membres (1990-2020)
 
 
-```{r}
-#Séléction des librairies
-library(here)
-library(dplyr)
+**Lien vers le projet GitHub :** https://github.com/EmmDM/M1_QE_data_group_project
+
+
+![Présentation OCDE](OCDE_logo.jpg) **Lien de la base de donées de l'OCDE :** https://stats.oecd.org/index.aspx?lang=fr&datasetcode=green_growth
+
+### **Description des sources** 
+
+-   OCDE : La base de donnée provient de l'Organisation de coopération et de développement économique,crée en 1961, qui regroupe 38 pays membres. Elle leur permet de pouvoir partager des données, des analyses et des recommandation visant a améliorer les performances dans diverses domaines.Son but étant de favoriser la croissance économique inclusive et le progrès durable. Elle travaille en collaboration avec les pouvoirs publics, les acteurs économiques et sociaux, et les representants de la sociétée civile.Cette plateforme que nous avons choisis pour notre première base de donnée, est choisis par de nombreux dirigeants grâce à sa qualité et sa fiabilité. L'accès à des données sur lesquel nous pouvons nous aider, offrent des perspectives approfondies sur les défis mondiaux et facilite les prises de décisions.Ces données proviennent de ses pays membres qui partagent des normes communes en matières de collecte de donnée, facilitant ainsi la comptabilité de celles-ci.Elle réalise aussi des analyses appronfondies sur de nombreux sujets économiques, sociaux et environnementaux et publie des rapports, des études et des statistiques qui sont regulièrement mis à jourpour refléter l'évolution des tendances des pays membres.
+
+
+![Présenation de la World Bank](world_bank_logo.jpg) **Lien vers la base de donnée de la World Bank :** https://donnees.banquemondiale.org/theme/changement-climatique
+
+-   World bank : La Banque Mondiale est une Institution financière internationale ,crée en 1944, qui a financé plus de 12000 projets de développement. Elle offre des services de financements, d'expertise et de recherche afin de soutenir le developpement économique, et la reduction de la pauvreté. Elle se compose de 5 Institutions dont les deux plus importantes sont la Banque internationale pour la reconstruction et le développement (BIRD) et l'Association internationale de développement (IDA). Elle collabore avec les pays membres, les ONG, le secteur privé, et d'autres partenaires. En plus de sa mission de financement, la Banque mondiale collecte et publie des donnés. Sa base apellé World Development Indicators (WDI) contient des informations sur les pays du monde entiers couvrants des sujets tels que la croissance économique, la pauvreté, l'éducation ..etc A l'image de l'OCDE, cette mine d'information est utilisé par de nombreux dirigeants ainsi que des chercheurs afin de d'informer les prises de décisions en matière de développement assuré par des normes rigoureuses de collecte. Ses données sont également régulièrement mises à jour afin de réfleter les évolutions des pays concernés.
+
+## **Question de recherche** 
+
+Dans la quête d\'un développement durable et d\'un équilibre harmonieux entre croissance économique et préservation de l\'environnement, l\'analyse des tendances de transition écologique parmi différents groupes de pays devient un domaine d\'investigation crucial. Dès lors, le cadre de notre recherche vise à examiner la dynamique environnementale et économique des pays sélectionnés couvrant différentes régions et affiliations en considérant les pays membres et non membres de l\'Organisation de Coopération et de Développement Économiques (OCDE). La période d\'intérêt que nous considérons couvre les années 1990 à 2020, permettant un examen complet des tendances à long terme et des développements récents.  De plus, l\'OCDE en tant que consortium de pays économiquement avancés, devrait présenter certains modèles de transition écologique qui pourraient différer de ceux observés dans les pays non membres de l\'OCDE. En examinant les tendances au sein et entre ces groupes, nous chercherons à démêler l\'interaction complexe des facteurs économiques, environnementaux et politiques qui ont façonné leurs trajectoires respectives. Ainsi, la question de recherche qui guidera notre étude et à laquelle nous tâcherons de répondre est la suivante :
+
+*Comment la transition écologique a-t-elle évolué entre 1990 et 2020 pour les groupes de pays de l\'OCDE et ceux hors de cette organisation?*
+
+Dans un premier temps, nous chercherons à présenter un état des lieux en déterminant les liens fondamentaux entre les principaux agrégats économiques et environnementaux tels que le PIB, et les émissions de CO2 pour notamment étudier dans quelle mesure la croissance économique s\'est découplée de l\'impact environnemental. Nous nous intéresserons à la notion de découplage, signifiant une croissance économique sans augmentation proportionnelle de la pression environnementale.  Nous analyserons aussi les tendances en matière d'intensité carbone et d'efficacité énergétique.
+
+Dans un second temps, nous étudierons les pressions environnementales, analysant les tendances liées à l'intensité de l\'eau, à la qualité de l'air, et à l'adoption de sources d'énergie renouvelable. Cette partie examinera également les politiques telles que les taxes, les subventions, et les efforts en R&D visant à favoriser la transition écologique. Elles nous permettront également d'observer le lien de corrélation entre les mesures politiques et les résultats écologiques.
+
+Enfin, nous évaluerons la vulnérabilité des pays aux événements liés au réchauffement climatique, tels que les inondations, les incendies et les températures extrêmes. Nous examinerons également le rôle des facteurs géographiques et démographiques dans l'influence de cette vulnérabilité. Les schémas de migrations de populations seront également examinés en tant que potentielles stratégies d'adaptation aux changements environnementaux.
+
+
+## **Nettoyage de notre Base de Donnée**
+
+```{r, echo=FALSE}
+# Sélection des librairies
+suppressWarnings({suppressMessages(library(here))
+suppressMessages(library(dplyr))
 library(tidyr)
 library(knitr)
 library(ggplot2)
 library(readr)
 library(stringr)
-library(readxl)
+library(readxl)})
 ```
+
 
 ```{r}
 here :: i_am("M1_QE_data_group_project.Rproj")
@@ -43,6 +69,7 @@ Worldbank <- Worldbank %>% rename ("COU" = "Country Code", "Pays" = "Country Nam
 
 ```
 
+
 ```{r}
 # On détermine le nombre de colonnes, de lignes, de pays et de variables dans chacune des bases de données initiales
 info_OCDE_GG <- OCDE_GG %>% summarise(ligne = nrow(.), colonne = ncol(.), Pays = n_distinct(COU, na.rm = TRUE), Variables = n_distinct(Variable, na.rm = TRUE))
@@ -51,6 +78,7 @@ info_Worldbank <- Worldbank %>% summarise("ligne" = nrow(Worldbank),"colonne" = 
 knitr :: kable(info_OCDE_GG, caption = "Information tableau de l'OCDE")
 knitr :: kable(info_Worldbank, caption = "Information tableau de la World Bank")
 ```
+
 
 ```{r} 
 # Tri des variables base de données OCDE
@@ -141,25 +169,122 @@ indicators_to_select <- c(
   "Terres agricoles (% du territoire)",
   "Population vivant sur des terres dont l’altitude est inférieure à 5 mètres (en % de la population totale)",
   "Zones urbaines dont l’altitude est < à 5 m (% de la superficie totale)",
-  "Superficie des terres dont l’altitude est inférieure à 5 mètres (en % de la superficie totale des terres)",
-  "Rendement des céréales (kg par hectare)"
+  "Superficie des terres dont l’altitude est inférieure à 5 mètres (en % de la superficie totale des terres)"
 )
 
 # Filter the worldbank dataset
 Worldbank <- Worldbank %>%
   filter(`Variable` %in% indicators_to_select)
 
-
 ```
+
 
 ```{r}
 #Verification du nombre de variable pour chaque base de données
  WB_variable <- Worldbank %>% distinct(`Variable`) %>% summarize(`Variable` = n())
  OCDE_variable <- OCDE_GG %>% distinct(Variable) %>% summarize(`Variable` = n())
- print(WB_variable)
- print(OCDE_variable)
+ 
+info_OCDE_variable <- OCDE_GG %>% summarise(Variables = n_distinct(Variable, na.rm = TRUE))
+info_Worldbank_variable <- Worldbank %>% summarise(Variables = n_distinct(Variable, na.rm = TRUE))
 
+knitr :: kable(info_OCDE_variable, caption = "Nombre de variables de l'OCDE sélectionnées",align = "c")
+knitr :: kable(info_Worldbank_variable, caption = "Nombre de variable de la World Bank selectionnées",align = "c")
 ```
+
+
+
+|  Nom des variables | Description des variables  |
+|---|---|
+| Productivité CO2 induite par la production | Mesure de l'efficacité dans la réduction des émissions de CO2 pendant les processus de fabrication.  |
+| PIB par unité d'émission de CO2 liée à l'énergie| Évaluation de la performance économique relative à l'émission de CO2 associée à la production d'énergie. |
+| Intensité CO2 induite par la production, émissions de CO2 liées à l'énergie, par habitant | Indicateur de la quantité de CO2 émise par habitant due à la production et à la consommation d'énergie.  |
+|  Émissions de CO2 induites par la production | Mesure totale des gaz à effet de serre générés lors des processus de production. |
+|  Intensité énergétique, ATE par habitant | Évaluation de la consommation énergétique par habitant, ajustée en fonction de l'efficacité énergétique. |
+|  Intensité énergétique, ATE par habitant | Évaluation de la consommation énergétique par habitant, ajustée en fonction de l'efficacité énergétique. |
+| Approvisionnement total en énergie en énergies renouvelables| Quantité globale d'énergie provenant de sources renouvelables |
+| Production électrique totale en énergies renouvelables |Évaluation de la production d'électricité issue de sources d'énergie renouvelables.  |
+| Exposition moyenne de la population aux PM2.5  |Niveau moyen d'exposition de la population aux particules fines PM2.5.  |
+|  Pourcentage de la population exposée à plus de 10 microgrammes/m3 | Proportion de la population confrontée à des niveaux élevés de PM2.5.  |
+|  Développement de technologies liées à l'environnement, % inventions mondiales | Représente la part des inventions dans le monde consacrées au développement de technologies environnementales, offrant un indicateur de l'engagement mondial dans ce domaine  |
+|  Développement de technologies liées à l'environnement, inventions par habitant | Mesure le nombre d'inventions liées à l'environnement par habitant, fournissant un indice du niveau d'innovation environnementale par individu dans une population donnée. |
+|  Recettes provenant des taxes liées à l'environnement | Montant des revenus générés par les taxes environnementales.  |
+|  Soutien aux consommateurs de combustibles fossiles |  Indicateur des subventions allouées aux consommateurs de combustibles fossiles. |
+| Soutien au pétrole, % soutien total aux combustibles fossiles| Montant des subventions spécifiquement attribuées au secteur pétrolier. |
+| Soutien à l'électricité, % soutien total aux combustibles fossiles | Niveau de soutien financier accordé au secteur de l'électricité.  |
+| Soutien total aux combustibles fossiles| Somme des subventions allouées aux consommateurs et producteurs de combustibles fossiles |
+| Zone marine protégée,% zone économique exclusive totale |Étendue océanique légalement préservée pour la conservation de la biodiversité |
+| Zone terrestre protégée, % surface terrestre  | Surface terrestre réservée légalement à la protection de la faune et de la flore  |
+|  PIB réel | Mesure ajustée de la production économique, tenant compte de l'inflation  |
+|PIB réel par habitant|  PIB réel divisé par la population, indiquant le niveau de vie moyen |
+|Migration nette  | Différence entre le nombre d'immigrants et d'émigrants influençant la croissance démographique  |
+| Consommation d'énergie | Quantité totale d'énergie consommée dans une économie.  |
+|  Émissions de CO2 induites par la production | Mesure des émissions de CO2 attribuables aux activités de production  |
+| Productivité énergétique | Efficacité dans l'utilisation de l'énergie pour la production économique.  |
+|  PIB par unité d'ATE | Évaluation de la productivité économique par unité d'ATE (énergie ajustée au travail). |
+| Approvisionnements totaux en énergie|  Total de l'énergie disponible pour une économie. |
+| Prélèvements bruts d'eau douce par habitant | Quantité totale d'eau douce prélevée par habitant.|
+|  Stress hydrique, total des prélèvements d'eau douce |Mesure de la pression exercée sur les ressources hydriques en raison des prélèvements totaux d'eau douce. |
+| Pourcentage de la population exposée à plus de 35 microgrammes/m3| Proportion de la population confrontée à des niveaux élevés de PM2.5.|
+|Mortalité due à l'exposition aux PM2.5 | Nombre de décès attribués à l'exposition aux particules fines PM2.5. |
+| Coûts en bien-être dus à l'exposition aux PM2.5 | Évaluation des impacts économiques négatifs liés à la santé dus à l'exposition aux PM2.5.  |
+| PIB équivalent  | Mesure agrégée du bien-être économique, prenant en compte des facteurs tels que l'environnement et la santé.   |
+| Pourcentage de la population exposée aux journées chaudes | Proportion de la population subissant des températures élevées.|
+| Pourcentage de la population exposée aux journées glacées  | Mesure la part de la population susceptible d'être affectée par des conditions météorologiques extrêmement froides, offrant un indicateur de la vulnérabilité de la population aux épisodes de gel.  |
+| Pourcentage de la population exposée aux inondations fluviales |Part de la population résidant dans des zones exposées aux inondations fluviales. |
+| Pourcentage de la population exposée aux inondations fluviales| Part de la population résidant dans des zones exposées aux inondations fluviales.  |
+| Pourcentage de la population exposée aux incendies incontrôlés | Indique la proportion de la population qui pourrait être impactée par des incendies incontrôlés, fournissant une mesure de la vulnérabilité de la population face à ce risque spécifique.|
+
+: Description des variables sélectionnées de l'OCDE {.striped .hover}
+
+
+
+| Noms des variables  |  Description des variables |
+|---|---|
+|Population urbaine (% du total)  | Pourcentage de la population résidant en milieu urbain par rapport à la population totale.   |
+|Population urbaine (% du total)   | Pourcentage de la population résidant en milieu urbain par rapport à la population totale.  |
+|Population urbaine |  Nombre total d'habitants vivant en milieu urbain. |
+| Croissance de la population urbaine (% annuel)  |  Taux de croissance annuel de la population urbaine.  |
+| Population, total  | Nombre total d'habitants, incluant les zones urbaines et rurales. |
+|  Croissance de la population (% annuel) |  Taux de croissance annuel de la population totale.  |
+|  Agriculture, valeur ajoutée (% du PIB)| Contribution de la valeur ajoutée de l'agriculture au produit intérieur brut (PIB).   |
+|  Zones terrestres et marines protégées (% du territoire total) | Pourcentage du territoire total réservé aux zones terrestres et marines protégées. |
+| Zones marines protégées (% des eaux du territoire)  | Proportion des eaux territoriales réservée aux zones marines protégées. |
+|  Émissions/éliminations nettes de GES attribuables au changement d'affectation des terres et à la foresterie (Mt d’équivalents CO2) |  Quantité nette d'émissions ou de séquestration de gaz à effet de serre résultant des changements dans l'utilisation des terres et de la foresterie. |
+| Note sur les progrès de réduction des risques de catastrophes (échelle de 1 à 5, 5 étant la meilleure note)  | Évaluation des progrès dans la réduction des risques de catastrophes naturelles sur une échelle de 1 à 5.  |
+| Émissions totales de GES (variation depuis 1990, %) | Variation en pourcentage des émissions totales de gaz à effet de serre depuis 1990.   |
+| Émissions totales de GES (kt d’équivalent CO2) |Total des émissions de gaz à effet de serre mesurées en milliers de tonnes d'équivalents CO2.   |
+|  Zones protégées à l'échelle nationale (% du territoire total) | Pourcentage du territoire national réservé à des zones protégées.  |
+| Retraits annuels d’eau douce, total (% des ressources internes)| Pourcentage des ressources internes utilisé par les retraits annuels d'eau douce.   |
+|  Retraits annuels d’eau douce, total (milliards de mètres cubes)| Volume total des retraits annuels d'eau douce mesuré en milliards de mètres cubes.  |
+| Autres émissions de gaz à effet de serre, HFC, PFC et SF6 (milliers de tonnes métriques d’équivalent CO2) |  Émissions de gaz à effet de serre autres que le dioxyde de carbone, mesurées en milliers de tonnes métriques d'équivalent CO2.   |
+|  Émissions de CO2 (tonnes métriques par habitant)| Quantité de CO2 émise par habitant, mesurée en tonnes métriques.   |
+| Sécheresses, inondations, températures extrêmes (en % de la population, moyenne de 1990 à 2009) | Pourcentage moyen de la population exposée à des événements climatiques extrêmes entre 1990 et 2009.  |
+| Émissions de CO2 (kg par $ US de 2010 de PIB)  |   Intensité des émissions de CO2 par unité de PIB, mesurée en kilogrammes par dollar américain de 2010. |
+|  Intensité en CO2 (kg par kg d’utilisation d’énergie en équivalent pétrole)| Mesure de l'intensité des émissions de CO2 par unité d'utilisation d'énergie, convertie en équivalent pétrole.  |
+|Utilisation d’énergie (kg d’équivalent pétrole par habitant)  |Quantité d'énergie utilisée par habitant, mesurée en kilogrammes d'équivalent pétrole.   |
+|  Consommation d’électricité (KWh par habitant) | Quantité d'électricité consommée par habitant, mesurée en kilowattheures. |
+| Utilisation d’énergie (en kg d’équivalent pétrole) pour 1 000 $ de PIB (PPA constants de 2011) |Consommation d'énergie par unité de PIB, ajustée en parité de pouvoir d'achat constante de 2011.  |
+| Consommation d’énergies renouvelables (% de la consommation totale d’énergie) |Pourcentage de la consommation totale d'énergie provenant de sources renouvelables.   |
+|  Production d’électricité à partir de sources d’énergie renouvelables, hors énergie hydroélectrique (% du total) | Pourcentage de la production totale d'électricité provenant de sources d'énergie renouvelables, excluant l'hydroélectricité.  |
+|  Production d’électricité à partir de sources d’énergie renouvelables, hors énergie hydroélectrique (kWh) | Quantité d'électricité produite à partir de sources d'énergie renouvelables, excluant l'hydroélectricité, mesurée en kilowattheures.  |
+|Accès à l’électricité (% de la population)| Pourcentage de la population ayant accès à l'électricité |
+| Hauteur moyenne des précipitations (mm par an)  | Moyenne annuelle de la hauteur des précipitations mesurée en millimètres.  |
+| Terres agricoles (km carrés) |Surface totale utilisée pour l'agriculture, mesurée en kilomètres carrés.   |
+|  Émissions de CO2 (kg par $ PPA de 2011 de PIB) | Intensité des émissions de CO2 par unité de PIB, ajustée en parité de pouvoir d'achat constante de 2011 et mesurée en kilogrammes par dollar.  |
+|  Émissions de CO2 (kt) |Total des émissions de CO2 mesuré en milliers de tonnes. |
+| Production d’électricité renouvelable (% de la production totale d’électricité) | Pourcentage de la production totale d'électricité provenant de sources d'énergie renouvelables.   |
+| Production d’électricité à partir de sources pétrolières (% du total)|  Pourcentage de la production totale d'électricité provenant de sources pétrolières. |
+|Production d’électricité à partir de sources nucléaires (% du total)  | Pourcentage de la production totale d'électricité provenant de sources nucléaires.  |
+| Production d’électricité à partir de sources de gaz naturel (% du total) |  Pourcentage de la production totale d'électricité provenant de sources de gaz naturel.   |
+| Production d’électricité à partir de sources hydroélectriques (% du total)  | Proportion de la production totale d'électricité générée à partir de sources hydroélectriques.   |
+| Production d’électricité à partir de sources de charbon (% du total)| Pourcentage de la production totale d'électricité provenant de sources de charbon. |
+| Surface forestière (% du territoire) | Pourcentage du territoire couvert par des surfaces forestières.    |
+| Terres agricoles (% du territoire) | Proportion du territoire utilisée à des fins agricoles.   |
+|  Population vivant sur des terres dont l’altitude est inférieure à 5 mètres (en % de la population totale | Mesure la part de la population résidant à une altitude inférieure à 5 mètres, offrant un indicateur de la concentration démographique en zones basses.   |
+|  Zones urbaines dont l’altitude est < à 5 m (% de la superficie totale) |  Représente le pourcentage de la superficie totale occupée par des zones urbaines à moins de 5 mètres d'altitude, offrant des insights sur la répartition spatiale des zones urbaines dans des zones de basse altitude.  |
+| Superficie des terres dont l’altitude est inférieure à 5 mètres (en % de la superficie totale des terres) | Exprime la proportion de la superficie totale des terres situées à une altitude inférieure à 5 mètres, fournissant une perspective concise sur la géographie physique du territoire.   |
+
+: Description des variables sélectionnées de la World Bank {.striped .hover}
 
 
 ```{r}
@@ -184,8 +309,11 @@ WB_count_ry <- Worldbank %>% distinct(`COU`) %>% summarize(`COU` = n())
 
 
 
+knitr :: kable(OCDE_count_ry, caption = "Nombre de pays dans la base de données l'OCDE après nettoyage",align = "c", col.names = "Pays")
+knitr :: kable(WB_count_ry, caption = "Nombre de pays dans la base de données de la World Bank après nettoyage",align = "c", col.names = "Pays")
 ```
 
+Il y a bien le même nombre de pays.
 ```{r}
 #On compare les noms des pays afin de les renommer si leur nom est différent
 #Je fusionne les deux dataframe contenant les codes pays
@@ -218,10 +346,7 @@ WB_variable <- Worldbank %>% distinct(`Variable`) %>% summarize(`Variable` = n()
 OCDE_variable <- OCDE_GG %>% distinct(Variable) %>% summarize(`Variable` = n())
 dataframe_variable <- dataframe %>% distinct(Variable) %>% summarize(`Variable` = n())
 dataframe_new_variable <- dataframe_new %>% distinct(Variable) %>% summarize(`Variable` = n())
-print(WB_variable)
-print(OCDE_variable)
-print(dataframe_variable)
-print(dataframe_new_variable)
+
 ```
 
 ```{r}
@@ -232,7 +357,8 @@ OCDE_pays <- dataframe_new %>% filter(`Pays` %in% OCDE_to_select)
 
 # On effectue une base de données des pays non membres de l'OCDE
 non_OCDE_pays <- dataframe_new %>%  filter(!(`Pays` %in% OCDE_to_select))
-
+non_OCDE_pays <- non_OCDE_pays %>%
+  filter(Pays != "Amérique latine et Caraïbes (hors revenu élevé)" & Pays != "Monde")
 ```
 
 
@@ -241,8 +367,8 @@ non_OCDE_pays <- dataframe_new %>%  filter(!(`Pays` %in% OCDE_to_select))
 info_OCDE_pays <- OCDE_pays %>% summarise(ligne = nrow(.), colonne = ncol(.), Pays = n_distinct(COU, na.rm = TRUE), Variables = n_distinct(Variable, na.rm = TRUE))
 info_non_OCDE_pays <- non_OCDE_pays %>% summarise(ligne = nrow(.),colonne = ncol(.), Pays = n_distinct(COU, na.rm = TRUE), Variables = n_distinct(Variable, na.rm = TRUE))
 
-knitr :: kable(info_OCDE_pays, caption = "Information tableau des pays membres l'OCDE")
-knitr :: kable(info_non_OCDE_pays, caption = "Information tableau des pays non membres de l'OCDE")
+knitr :: kable(info_OCDE_pays, caption = "Information tableau final des pays membres l'OCDE")
+knitr :: kable(info_non_OCDE_pays, caption = "Information tableau final des pays non membres de l'OCDE")
 ```
 
 ```{r}
@@ -253,9 +379,27 @@ var_non_OCDE <- non_OCDE_pays %>% select(`Variable`) %>% distinct (`Variable`, .
 var_manquants_OCDE <- anti_join(var_OCDE,var_non_OCDE, by = c("Variable" = "Variable"))
 var_manquants_non_OCDE <- anti_join(var_non_OCDE ,var_OCDE, by = c("Variable" = "Variable" ))
 
-knitr :: kable(var_manquants_OCDE)
-knitr :: kable(var_manquants_non_OCDE)
+knitr :: kable(var_manquants_OCDE, caption = "Variables manquantes dans la base de données des pays non membres de l'OCDE")
 
-# On constate que certaines variables ne sont présentes que pour les pays de l'OCDE (Pourcentage de la population exposée aux incendies incontrôlés,Pourcentage de la population exposée aux journées chaudes, Pourcentage de la population exposée aux journées glacées, Pourcentage de la population exposée aux inondations fluviales, Stress hydrique, total des prélèvements d’eau douce en % des ressources internes renouvelables). Elles pourront pas être utilisées comme comparaison avec les pays non membre de l'organisation
 ```
+
+```{r}
+#Je sauvegarde les bases de données OCDE_pays et non_OCDE_pays 
+saveRDS(list(OCDE_pays = OCDE_pays, non_OCDE_pays = non_OCDE_pays), "donnees_partage.RDS")
+```
+
+On constate que certaines variables sont seulement présentes pour les pays de l'OCDE (Pourcentage de la population exposée aux incendies incontrôlés,Pourcentage de la population exposée aux journées chaudes, Pourcentage de la population exposée aux journées glacées, Pourcentage de la population exposée aux inondations fluviales, Stress hydrique, total des prélèvements d’eau douce en % des ressources internes renouvelables). Elles ne pourront pas être utilisées comme comparaison avec les pays non membre de l'organisation, mais pourraient être utilisées pour des comparaisons au sein de l'organisation.
+
+## **Description du data cleaning et data joining**
+
+**1ère étape** : Récupération des données à partir des sites de la world bank et de l'OCDE
+
+**2ème étape** : Nous avons supprimé des colonnes sur le document .csv  de l'OCDE : "Flags", "Flag Codes". Sur le document .csv de la World Bank, nous avons mis en forme le tableau en supprimant des éléments extérieurs : "Data Source", "Last Updated Date",  "26/10/2023","Indicateurs du développement dans le monde". Puis on a  deplacé le tableau excel pour que la première case soit en AA. 
+
+**3ème étape** : Nous avons ensuite commencé le traitement des bases de données sur R, en supprimant en premier lieu des colonnes qui ne nous étaient pas utile ( Pour l'OCDE : -\`YEA\`,-\`PowerCode.Code\`, -\`Reference.Period.Code\`,-\`Reference.Period\`, -\`Unit.Code. Pour la Worldbank :  -\`1960\`,-\`1961\`,-\`1962\`,-\`1963\`,-\`1964\`,-\`1965\`,-\`1966\`,-\`1967\`,-\`1968\`,-\`1969\`,-\`1970\`,-\`1971\`,-\`1972\`,-\`1973\`,-\`1974\`,-\`1975\`,-\`1976\`,-\`1977\`,-\`1978\`,-\`1979\`,-\`1980\`,-\`1981\`,-\`1982\`,-\`1983\`,-\`1984\`,-\`1985\`,-\`1986\`,-\`1987\`,-\`1988\`,-\`1989\`,-\`2021\`, -\`2022\`). 
+On conserve seulement période de 1990 à 2020 afin de faire des comparaisons avec les données de l'OCDE. On supprime les données 2021 et 2022 car il y a un manque de données. Nous avons aussi transformé la colonne \`Année\` de l'OCDE en colonne pour chaque année, afin d'avoir une meilleure présentation visuelle et aussi similaire à la base de données de la Worldbank. Enfin, on renomme les colonnes qui ont la même fonction mais des noms différents
+
+**4ème étape** : Nous avons trié les variables de l'OCDE et de la World Bank en conservant nos variables d'intérêt 41 pour la World Bank et 34 pour l'OCDE
+
+**5ème étape** : Nous avons fait la sélection des pays. Premièrement, nous avons cherché si certains pays n'apparaissaient pas dans l'une des bases de données en utilisant le code pays qui est une norme internationale et qui se trouvait dans les deux bases de données. Si un des codes pays n'apparaissait pas dans l'une des bases de données alors on supprimait ce pays. On obtient 206 pays. Deuxièmement, les pays n'avaient pas le même nom selon la base de données. Donc on a comparé les noms des pays afin de conserver un seul nom si leur nom était différent. Pour ce faire, nous avons utilisé une base de données créée par la fusion des colonnes codes pays et des colonnes pays des deux sources, puis on a identifié si les codes pays apparaissent deux fois dans cette base alors on supprimait une des lignes où le code pays apparaissait deux fois. On a ensuite fusionné les deux bases de données de l'OCDE et de la World Bank et on a fusionné avec la base finale des codes pays pour obtenir les mêmes noms de pays. Finalement, on crée deux bases de données, la première avec les pays membres de l'OCDE et la seconde avec les pays qui n'en sont pas membres.
 
